@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_no_limit"
+        android:title="@string/no_limit"/>
+
+    <item android:id="@+id/menu_one_day_todo"
+        android:title="@string/one_day"/>
+
+    <item android:id="@+id/menu_two_day_todo"
+        android:title="@string/two_day"/>
+
+    <item android:id="@+id/menu_three_day_todo"
+        android:title="@string/three_day"/>
+
+    <item android:id="@+id/menu_one_week_todo"
+        android:title="@string/one_week"/>
+
+    <item android:id="@+id/menu_one_month_todo"
+        android:title="@string/one_month"/>
+
+    <item android:id="@+id/menu_one_year_todo"
+        android:title="@string/one_year"/>
+</menu>

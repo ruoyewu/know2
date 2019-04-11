@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">知了</string>
+    <string name="review">复习</string>
+    <string name="record">记录</string>
+    <string name="user">用户</string>
+    <string name="back">返回</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="alpha">A</string>
+    <string name="red">R</string>
+    <string name="green">G</string>
+    <string name="blue">B</string>
+
+    <string name="text">文本内容</string>
+    <string name="text_size">文本大小</string>
+    <string name="text_color">文本颜色</string>
+    <string name="hint">提示内容</string>
+    <string name="hint_size">提示内容大小</string>
+    <string name="hint_color">提示内容颜色</string>
+    <string name="width">宽度</string>
+    <string name="height">高度</string>
+    <string name="bg_color">背景颜色</string>
+    <string name="fg_color">前景颜色</string>
+    <string name="margin">外边距</string>
+    <string name="padding">内边距</string>
+    <string name="gravity">位置</string>
+    <string name="text_style">文本样式</string>
+    <string name="input_type">输入格式</string>
+    <string name="editable">是否可编辑</string>
+    <string name="min_line">最少行数</string>
+    <string name="max_line">最多行数</string>
+    <string name="orientation">方向</string>
+    <string name="scale_type">显示方式</string>
+    <string name="shape">形状</string>
+    <string name="tint">颜色涂层</string>
+    <string name="blur">模糊</string>
+
+    <string name="record_type">记录类型</string>
+    <string name="create_time">创建日期</string>
+
+    <string name="one_day">一天内</string>
+    <string name="two_day">两天内</string>
+    <string name="three_day">三天内</string>
+    <string name="one_week">一周内</string>
+    <string name="one_month">一月内</string>
+    <string name="one_year">一年内</string>
+    <string name="no_limit">不限</string>
+
+    <string name="default_date">2019-04-01 19:00</string>
+</resources>

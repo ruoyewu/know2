@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="10dp"
+    android:background="@color/romance"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="NewApi">
+
+    <TextView
+        android:id="@+id/tv_title_dlg_bottom_alert"
+        android:text="@string/confirm"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:id="@+id/btn_confirm_top_dlg_bottom_alert"
+        android:text="@string/confirm"
+        android:textColor="@color/monsoon"
+        android:textStyle="bold"
+        android:background="@color/transparent"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/tv_msg_dlg_bottom_alert"
+        android:text="@string/confirm"
+        android:textSize="15sp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/ll_content_dlg_bottom_alert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <LinearLayout
+        android:id="@+id/ll_btn_dlg_bottom_alert"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <Button
+            android:id="@+id/btn_cancel_dlg_bottom_alert"
+            android:text="@string/cancel"
+            android:textColor="@color/monsoon"
+            android:textStyle="bold"
+            android:background="@color/transparent"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_confirm_dlg_bottom_alert"
+            android:text="@string/confirm"
+            android:textColor="@color/monsoon"
+            android:textStyle="bold"
+            android:background="@color/transparent"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
