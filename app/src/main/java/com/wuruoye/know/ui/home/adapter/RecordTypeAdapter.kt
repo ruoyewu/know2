@@ -22,7 +22,7 @@ class RecordTypeAdapter(private val type: Int) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_select_type, parent, false))
+            .inflate(R.layout.item_select_text, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -83,7 +83,7 @@ class RecordTypeAdapter(private val type: Int) :
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val tv = itemView.findViewById<TextView>(R.id.tv_select_type)!!
+        val tv = itemView.findViewById<TextView>(R.id.tv_select_text)!!
     }
 
     private class RecordTypeDiffCallback : DiffUtil.ItemCallback<RecordType>() {

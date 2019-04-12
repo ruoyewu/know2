@@ -48,9 +48,6 @@ public class WConfig {
     public static String RECORD_PATH;
     public static String PROVIDER_AUTHORITY;
 
-    // net related
-    public static final int CONNECT_TIME_OUT = 30;
-
     // permission related
     public static final String[] FILE_PERMISSION = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -70,10 +67,10 @@ public class WConfig {
             Manifest.permission.RECORD_AUDIO
     };
 
-    public static final int CODE_CHOOSE_PHOTO = 1;
-    public static final int CODE_TAKE_PHOTO = 2;
-    public static final int CODE_CROP_PHOTO = 3;
+    public static final int CODE_CHOOSE_PHOTO = 1<<15-1;
+    public static final int CODE_TAKE_PHOTO = 1<<15-2;
+    public static final int CODE_CROP_PHOTO = 1<<15-3;
 
-    public static final int CODE_PERMISSION_FILE = 1;
-    public static final int CODE_PERMISSION_CAMERA = 2;
+    public static final int CODE_PERMISSION_FILE = 1<<15-1;
+    public static final int CODE_PERMISSION_CAMERA = 1<<15-2;
 }

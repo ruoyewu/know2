@@ -3,13 +3,15 @@ package com.wuruoye.know.util.orm.table
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Created at 2019/4/9 19:28 by wuruoye
  * Description:
  */
-@Entity(tableName = "image_view")
+@Entity(tableName = "image_view",
+    indices = [Index("createTime")])
 class RecordImageView(
     @PrimaryKey(autoGenerate = true)
     override var id: Long?,

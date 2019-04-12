@@ -15,8 +15,9 @@ object Repository {
     @Volatile private var recordTypeDao: RecordTypeDao? = null
     @Volatile private var textViewDao: TextViewDao? = null
     @Volatile private var recordViewDao: RecordViewDao? = null
+    @Volatile private var recordTagDao: RecordTagDao? = null
 
-    fun getImageView(context: Context): ImageViewDao {
+    private fun getImageView(context: Context): ImageViewDao {
         if (imageViewDao == null) {
             synchronized(this) {
                 if (imageViewDao == null) {
@@ -27,7 +28,7 @@ object Repository {
         return imageViewDao!!
     }
 
-    fun getLayoutView(context: Context): LayoutViewDao {
+    private fun getLayoutView(context: Context): LayoutViewDao {
         if (layoutViewDao == null) {
             synchronized(this) {
                 if (layoutViewDao == null) {
@@ -71,7 +72,7 @@ object Repository {
         return recordTypeDao!!
     }
 
-    fun getTextView(context: Context): TextViewDao {
+    private fun getTextView(context: Context): TextViewDao {
         if (textViewDao == null) {
             synchronized(this) {
                 if (textViewDao == null) {
@@ -94,5 +95,16 @@ object Repository {
             }
         }
         return recordViewDao!!
+    }
+
+    fun getRecordTag(context: Context): RecordTagDao {
+        if (recordTagDao == null) {
+            synchronized(this) {
+                if (recordTagDao == null) {
+                    recordTagDao = AppDB.getInstance(context).recordTag()
+                }
+            }
+        }
+        return recordTagDao!!
     }
 }

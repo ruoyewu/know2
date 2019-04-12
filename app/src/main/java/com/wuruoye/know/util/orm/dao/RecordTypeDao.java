@@ -17,7 +17,7 @@ public interface RecordTypeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(RecordType table);
 
-    @Query("SELECT * FROM record_type")
+    @Query("SELECT * FROM record_type ORDER BY createTime DESC")
     List<RecordType> queryAll();
 
     @Query("SELECT * FROM record_type WHERE id = :id LIMIT 0,1")

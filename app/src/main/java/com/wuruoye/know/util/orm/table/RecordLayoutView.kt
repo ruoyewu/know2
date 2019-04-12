@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.Gravity
 import android.widget.LinearLayout
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 
@@ -12,7 +13,8 @@ import com.wuruoye.know.util.model.beans.RealRecordLayoutView
  * Created at 2019/4/9 20:05 by wuruoye
  * Description:
  */
-@Entity(tableName = "layout_view")
+@Entity(tableName = "layout_view",
+    indices = [Index("createTime")])
 class RecordLayoutView(
     @PrimaryKey(autoGenerate = true)
     override var id: Long?,

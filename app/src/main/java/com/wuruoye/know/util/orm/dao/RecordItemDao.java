@@ -23,7 +23,7 @@ public interface RecordItemDao {
     @Query("SELECT * FROM record_item WHERE recordId = :recordId AND type = :type")
     RecordItem queryByType(long recordId, int type);
 
-    @Query("SELECT * FROM record_item WHERE recordId = :recordId")
+    @Query("SELECT * FROM record_item WHERE recordId = :recordId ORDER BY createTime DESC")
     List<RecordItem> queryByRecord(long recordId);
 
     @Query("DELETE FROM record_item WHERE id = :id")

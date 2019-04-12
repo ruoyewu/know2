@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:ignore="NewApi">
 
     <include
         layout="@layout/toolbar"/>
+
+    <LinearLayout
+            android:id="@+id/ll_tag_record_edit"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:text="@string/record_tag"
+                android:textSize="14sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/tv_tag_record_edit"
+                android:text="@string/default_"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"

@@ -19,6 +19,7 @@ import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.RecordEditActivity
 import com.wuruoye.know.ui.edit.RecordTypeEditActivity
 import com.wuruoye.know.ui.home.adapter.RecordListAdapter
+import com.wuruoye.know.ui.home.adapter.RecordTagAdapter
 import com.wuruoye.know.ui.home.adapter.RecordTypeAdapter
 import com.wuruoye.know.ui.home.adapter.TimeLimitAdapter
 import com.wuruoye.know.ui.home.vm.IRecordVM
@@ -26,6 +27,7 @@ import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.model.beans.TimeLimitItem
+import com.wuruoye.know.util.orm.table.RecordTag
 import com.wuruoye.know.util.orm.table.RecordType
 
 /**
@@ -38,7 +40,7 @@ class RecordFragment : Fragment(),
     RecordTypeAdapter.OnLongClickListener,
     TimeLimitAdapter.OnClickListener,
     RecordListAdapter.OnClickListener,
-    RecordListAdapter.OnLongClickListener {
+    RecordListAdapter.OnLongClickListener, RecordTagAdapter.OnClickListener {
 
     private lateinit var dlgSelectType: BottomSheetDialog
     private lateinit var rvSelect: RecyclerView
@@ -49,8 +51,12 @@ class RecordFragment : Fragment(),
     private lateinit var dlgLimitTime: BottomSheetDialog
     private lateinit var rvTimeLimit: RecyclerView
 
+    private lateinit var dlgLimitTag: BottomSheetDialog
+    private lateinit var rvTagLimit: RecyclerView
+
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var tvTimeLimit: TextView
+    private lateinit var tvTagLimit: TextView
     private lateinit var tvTypeLimit: TextView
     private lateinit var rvRecord: RecyclerView
 
@@ -76,6 +82,7 @@ class RecordFragment : Fragment(),
     private fun bindView(view: View) {
         fabAdd = view.findViewById(R.id.fab_record)
         tvTimeLimit = view.findViewById(R.id.tv_time_limit_record)
+        tvTagLimit = view.findViewById(R.id.tv_type_limit_tag)
         tvTypeLimit = view.findViewById(R.id.tv_type_limit_record)
         rvRecord = view.findViewById(R.id.rv_record)
     }
@@ -83,6 +90,7 @@ class RecordFragment : Fragment(),
     private fun bindListener() {
         fabAdd.setOnClickListener(this)
         tvTimeLimit.setOnClickListener(this)
+        tvTagLimit.setOnClickListener(this)
         tvTypeLimit.setOnClickListener(this)
     }
 
@@ -115,6 +123,16 @@ class RecordFragment : Fragment(),
         dlgLimitType.setContentView(rvTypeLimit)
         dlgLimitType.setTitle("选择记录类型：")
 
+        rvTagLimit = LayoutInflater.from(context)
+            .inflate(R.layout.dlg_record_type, null) as RecyclerView
+        rvTagLimit.layoutManager = LinearLayoutManager(context)
+        val tagLimitAdapter = RecordTagAdapter()
+        tagLimitAdapter.setOnClickListener(this)
+        rvTagLimit.adapter = tagLimitAdapter
+        dlgLimitTag = BottomSheetDialog(context!!)
+        dlgLimitTag.setContentView(rvTagLimit)
+        dlgLimitTag.setTitle("选择记录标签：")
+
         rvTimeLimit = LayoutInflater.from(context)
             .inflate(R.layout.dlg_record_type, null) as RecyclerView
         rvTimeLimit.layoutManager = LinearLayoutManager(context)
@@ -136,15 +154,15 @@ class RecordFragment : Fragment(),
 
     private fun subscribeUI() {
         vm.recordTypeList.observe(this, Observer {
-            val selectAdapter = rvSelect.adapter as RecordTypeAdapter
-            selectAdapter.submitList(it)
+            (rvSelect.adapter as RecordTypeAdapter).submitList(it)
 
-            val limitAdapter = rvTypeLimit.adapter as RecordTypeAdapter
-            limitAdapter.submitList(it)
+            (rvTypeLimit.adapter as RecordTypeAdapter).submitList(it)
         })
         vm.timeLimitList.observe(this, Observer {
-            val adapter = rvTimeLimit.adapter as TimeLimitAdapter
-            adapter.submitList(it)
+            (rvTimeLimit.adapter as TimeLimitAdapter).submitList(it)
+        })
+        vm.recordTagList.observe(this, Observer {
+            (rvTagLimit.adapter as RecordTagAdapter).submitList(it)
         })
         vm.recordList.observe(this, Observer {
             (rvRecord.adapter as RecordListAdapter).submitList(it)
@@ -152,7 +170,10 @@ class RecordFragment : Fragment(),
         vm.recordTypeTitle.observe(this, Observer {
             tvTypeLimit.text = it
         })
-        vm.recordTypeTime.observe(this, Observer {
+        vm.recordTagTitle.observe(this, Observer {
+            tvTagLimit.text = it
+        })
+        vm.recordLimitTitle.observe(this, Observer {
             tvTimeLimit.text = it
         })
     }
@@ -167,6 +188,9 @@ class RecordFragment : Fragment(),
             }
             R.id.tv_type_limit_record -> {
                 dlgLimitType.show()
+            }
+            R.id.tv_type_limit_tag -> {
+                dlgLimitTag.show()
             }
         }
     }
@@ -204,6 +228,11 @@ class RecordFragment : Fragment(),
 
     override fun onLongClick(item: RecordListItem) {
         vm.removeRecord(item.record.id!!)
+    }
+
+    override fun onClick(item: RecordTag) {
+        dlgLimitTag.dismiss()
+        vm.setTagLimit(item.id ?: -1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

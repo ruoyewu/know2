@@ -1,6 +1,7 @@
 package com.wuruoye.know.util.orm.table
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.wuruoye.know.util.model.beans.RealRecordType
 
@@ -8,7 +9,8 @@ import com.wuruoye.know.util.model.beans.RealRecordType
  * Created at 2019/4/9 20:10 by wuruoye
  * Description:
  */
-@Entity(tableName = "record_type")
+@Entity(tableName = "record_type",
+    indices = [Index("createTime")])
 class RecordType(
         @PrimaryKey(autoGenerate = true)
         override var id: Long?,

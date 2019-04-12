@@ -8,7 +8,7 @@ import android.content.SharedPreferences
  * Description:
  */
 class AppCache private constructor(context: Context) {
-    private lateinit var sp: SharedPreferences
+    private var sp: SharedPreferences
 
     init {
         sp = context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
@@ -22,10 +22,20 @@ class AppCache private constructor(context: Context) {
         get() = sp.getLong(TYPE_LIMIT_TYPE, -1)
         set(value) = sp.edit().putLong(TYPE_LIMIT_TYPE, value).apply()
 
+    var typeTagLimit: Long
+        get() = sp.getLong(TYPE_LIMIT_TAG, -1)
+        set(value) = sp.edit().putLong(TYPE_LIMIT_TAG, value).apply()
+
+    var initRecordTag: Boolean
+        get() = sp.getBoolean(TAG_INIT, false)
+        set(value) = sp.edit().putBoolean(TAG_INIT, value).apply()
+
     companion object {
         private const val NAME = "com.wuruoye.know.sp"
+        private const val TAG_INIT = "tag_init"
         private const val TYPE_LIMIT_TIME = "type_limit_time"
         private const val TYPE_LIMIT_TYPE = "type_limit_type"
+        private const val TYPE_LIMIT_TAG = "type_limit_tag"
 
         @Volatile
         private var sInstance: AppCache? = null

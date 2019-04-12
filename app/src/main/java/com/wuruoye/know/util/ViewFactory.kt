@@ -211,9 +211,9 @@ object ViewFactory {
                 lp.width = lengthToPx(context, width)
                 lp.height = lengthToPx(context, height)
                 lp.setMargins(DensityUtil.dp2px(context, marginLeft.toFloat()).toInt(),
-                        DensityUtil.dp2px(context, marginTop.toFloat()).toInt(),
-                        DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
-                        DensityUtil.dp2px(context, marginBottom.toFloat()).toInt())
+                    DensityUtil.dp2px(context, marginTop.toFloat()+10).toInt(),
+                    DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginBottom.toFloat()+10).toInt())
                 view.layoutParams = lp
 
                 if (attach) {
@@ -249,9 +249,9 @@ object ViewFactory {
             lp.width = lengthToPx(context, width)
             lp.height = lengthToPx(context, height)
             lp.setMargins(DensityUtil.dp2px(context, marginLeft.toFloat()).toInt(),
-                    DensityUtil.dp2px(context, marginTop.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginTop.toFloat()+10).toInt(),
                     DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
-                    DensityUtil.dp2px(context, marginBottom.toFloat()).toInt())
+                    DensityUtil.dp2px(context, marginBottom.toFloat()+10).toInt())
             view.layoutParams = lp
 
             for (v in items) {

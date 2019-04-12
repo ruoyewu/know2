@@ -7,13 +7,15 @@ import android.os.Parcelable
 import android.text.InputType
 import android.view.Gravity
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Created at 2019/4/9 20:00 by wuruoye
  * Description:
  */
-@Entity(tableName = "text_view")
+@Entity(tableName = "text_view",
+    indices = [Index("createTime")])
 class RecordTextView(
     @PrimaryKey(autoGenerate = true)
     override var id: Long?,

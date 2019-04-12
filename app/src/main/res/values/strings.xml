@@ -10,6 +10,10 @@
     <string name="red">R</string>
     <string name="green">G</string>
     <string name="blue">B</string>
+    <string name="default_">默认</string>
+    <string name="tag_edit">标签编辑</string>
+    <string name="tag_title">标签名称</string>
+    <string name="tag_comment">标签备注</string>
 
     <string name="text">文本内容</string>
     <string name="text_size">文本大小</string>
@@ -37,6 +41,7 @@
 
     <string name="record_type">记录类型</string>
     <string name="create_time">创建日期</string>
+    <string name="record_tag">记录标签</string>
 
     <string name="one_day">一天内</string>
     <string name="two_day">两天内</string>
@@ -46,5 +51,5 @@
     <string name="one_year">一年内</string>
     <string name="no_limit">不限</string>
 
-    <string name="default_date">2019-04-01 19:00</string>
+    <string name="default_date">2019–04–01 19:00</string>
 </resources>

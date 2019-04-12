@@ -1,6 +1,7 @@
 package com.wuruoye.know.ui.edit.vm
 
 import android.util.ArrayMap
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,14 +9,8 @@ import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RealRecordType
 import com.wuruoye.know.util.model.beans.RecordTypeItem
-import com.wuruoye.know.util.orm.dao.RecordDao
-import com.wuruoye.know.util.orm.dao.RecordItemDao
-import com.wuruoye.know.util.orm.dao.RecordTypeDao
-import com.wuruoye.know.util.orm.dao.RecordViewDao
-import com.wuruoye.know.util.orm.table.Record
-import com.wuruoye.know.util.orm.table.RecordItem
-import com.wuruoye.know.util.orm.table.RecordLayoutView
-import com.wuruoye.know.util.orm.table.RecordView
+import com.wuruoye.know.util.orm.dao.*
+import com.wuruoye.know.util.orm.table.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -28,8 +23,15 @@ class RecordEditViewModel(
     private val recordTypeDao: RecordTypeDao,
     private val recordDao: RecordDao,
     private val recordItemDao: RecordItemDao,
-    private val recordViewDao: RecordViewDao
+    private val recordViewDao: RecordViewDao,
+    private val recordTagDao: RecordTagDao
 ) : ViewModel(), IRecordEditVM {
+
+    override var recordTagList: MutableLiveData<List<RecordTag>> =
+        MediatorLiveData<List<RecordTag>>().apply {
+            updateRecordTagList()
+        }
+
     override var recordData: MutableLiveData<ArrayMap<String, RecordItem>> =
             MutableLiveData()
 
@@ -37,7 +39,11 @@ class RecordEditViewModel(
 
     override var submitResult: MutableLiveData<Boolean> = MutableLiveData()
 
+    override var recordTagTitle: MutableLiveData<String> = MutableLiveData()
+
     private var recordId: Long? = null
+
+    private var recordTagId: Long = 0
 
 
     override fun saveRecordItems(items: ArrayList<RecordItem>) {
@@ -49,6 +55,7 @@ class RecordEditViewModel(
                 } else {
                     recordDao.query(id)!!
                 }
+            record.tag = recordTagId
             if (record.createTime > 0) record.updateTime = System.currentTimeMillis()
             else record.createTime = System.currentTimeMillis()
 
@@ -77,6 +84,7 @@ class RecordEditViewModel(
             }
 
             recordData.postValue(map)
+            setRecordTag(recordDao.query(id).tag)
             recordId = id
         }
     }
@@ -87,6 +95,19 @@ class RecordEditViewModel(
                 queryRealRecordType(id)
             )
         }
+    }
+
+    override fun setRecordTag(tag: Long) {
+        recordTagId = tag
+        GlobalScope.launch {
+            recordTagTitle.postValue(
+                recordTagDao.query(tag).title
+            )
+        }
+    }
+
+    override fun updateRecordTagList() {
+        GlobalScope.launch { recordTagList.postValue(recordTagDao.queryAll()) }
     }
 
     private fun queryRealRecordType(id: Long): RealRecordType {
@@ -138,10 +159,12 @@ class RecordEditViewModel(
         private val recordTypeDao: RecordTypeDao,
         private val recordDao: RecordDao,
         private val recordItemDao: RecordItemDao,
-        private val recordViewDao: RecordViewDao
+        private val recordViewDao: RecordViewDao,
+        private val recordTagDao: RecordTagDao
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return RecordEditViewModel(recordTypeDao, recordDao, recordItemDao, recordViewDao) as T
+            return RecordEditViewModel(recordTypeDao, recordDao,
+                recordItemDao, recordViewDao, recordTagDao) as T
         }
     }
 }

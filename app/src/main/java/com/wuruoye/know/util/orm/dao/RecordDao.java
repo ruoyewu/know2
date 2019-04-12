@@ -17,7 +17,7 @@ public interface RecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Record record);
 
-    @Query("SELECT * FROM record")
+    @Query("SELECT * FROM record ORDER BY createTime DESC")
     List<Record> queryAll();
 
     @Query("SELECT * FROM record WHERE id = :id")
@@ -29,8 +29,17 @@ public interface RecordDao {
     @Query("SELECT * FROM record WHERE createTime > :time ORDER BY createTime DESC")
     List<Record> queryByTime(long time);
 
+    @Query("SELECT * FROM record WHERE tag = :tag ORDER BY createTime DESC")
+    List<Record> queryByTag(long tag);
+
+    @Query("SELECT * FROM record WHERE tag = :tag AND createTime > :time ORDER BY createTime DESC")
+    List<Record> queryByTagTime(long tag, long time);
+
     @Query("SELECT * FROM record WHERE type = :type AND createTime > :time ORDER BY createTime DESC")
     List<Record> queryByTimeType(long time, long type);
+
+    @Query("SELECT * FROM record WHERE type = :type AND tag = :tag AND createTime > :time ORDER BY createTime DESC")
+    List<Record> queryByTypeTagTime(long type, long tag, long time);
 
     @Query("DELETE FROM record WHERE id = :id")
     int delete(long id);

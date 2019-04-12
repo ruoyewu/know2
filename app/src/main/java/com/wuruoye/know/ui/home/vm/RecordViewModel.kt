@@ -9,7 +9,9 @@ import com.wuruoye.know.util.model.beans.RecordTypeSelect
 import com.wuruoye.know.util.model.beans.TimeLimitItem
 import com.wuruoye.know.util.orm.dao.RecordDao
 import com.wuruoye.know.util.orm.dao.RecordItemDao
+import com.wuruoye.know.util.orm.dao.RecordTagDao
 import com.wuruoye.know.util.orm.dao.RecordTypeDao
+import com.wuruoye.know.util.orm.table.RecordTag
 import com.wuruoye.know.util.orm.table.RecordType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,52 +20,66 @@ import kotlinx.coroutines.launch
  * Created at 2019/4/9 21:28 by wuruoye
  * Description:
  */
+@Suppress("UNUSED_EXPRESSION")
 class RecordViewModel(
     private val recordTypeDao: RecordTypeDao,
     private val recordDao: RecordDao,
     private val recordItemDao: RecordItemDao,
+    private val recordTagDao: RecordTagDao,
     private val cache: AppCache
 ) : ViewModel(), IRecordVM{
 
-    override var typeTimeLimit
-            = MutableLiveData<Int>().apply { value = cache.typeTimeLimit }
+    private var typeTimeLimit: MutableLiveData<Int> =
+        MutableLiveData<Int>().apply { value = cache.typeTimeLimit }
 
-    override var typeTypeLimit
-            = MutableLiveData<Long>().apply { value = cache.typeTypeLimit }
+    private var typeTypeLimit: MutableLiveData<Long> =
+        MutableLiveData<Long>().apply { value = cache.typeTypeLimit }
+
+    private var typeTagLimit: MutableLiveData<Long> =
+        MutableLiveData<Long>().apply { value = cache.typeTagLimit }
 
     override var recordTypeList: MutableLiveData<List<RecordType>>
             = MutableLiveData<List<RecordType>>().apply {
-        GlobalScope.launch {
-            postValue(recordTypeDao.queryAll())
-        }
-    }
-
-    override var recordList: MutableLiveData<List<RecordListItem>> =
-        MediatorLiveData<List<RecordListItem>>().apply {
-        addSource(typeTimeLimit) {
-            updateRecord()
-        }
-        addSource(typeTypeLimit) {
-            updateRecord()
-        }
+        GlobalScope.launch { postValue(recordTypeDao.queryAll()) }
     }
 
     override var timeLimitList
-            = MutableLiveData<List<TimeLimitItem>>().apply {
-        value = TIME_LIMIT_ITEM
-    }
+            = MutableLiveData<List<TimeLimitItem>>().apply { value = TIME_LIMIT_ITEM }
+
+    override var recordTagList: MutableLiveData<List<RecordTag>> =
+        MutableLiveData<List<RecordTag>>().apply {
+            GlobalScope.launch {
+                postValue(recordTagDao.queryAll())
+            }
+        }
+
+    override var recordList: MutableLiveData<List<RecordListItem>> =
+        MediatorLiveData<List<RecordListItem>>().apply {
+            addSource(typeTimeLimit) { updateRecord() }
+            addSource(typeTypeLimit) { updateRecord() }
+            addSource(typeTagLimit) { updateRecord() }
+        }
 
     override var recordTypeTitle
             = MediatorLiveData<String>().apply {
         addSource(typeTypeLimit) {
             GlobalScope.launch {
-                val type = recordTypeDao.query(it)
-                postValue(type?.title ?: "不限")
+                postValue(if (it < 0) "不限" else recordTypeDao.query(it).title)
             }
         }
     }
 
-    override var recordTypeTime = Transformations.map(typeTimeLimit) {
+    override var recordTagTitle: MutableLiveData<String> =
+        MediatorLiveData<String>().apply {
+            addSource(typeTagLimit) {
+                GlobalScope.launch {
+                    postValue(if (it < 0) "不限" else recordTagDao.query(it).title)
+                }
+            }
+        }
+
+    override var recordLimitTitle
+            = Transformations.map(typeTimeLimit) {
         TIME_LIMIT_TITLE[it]
     } as LiveData<String>
 
@@ -85,15 +101,30 @@ class RecordViewModel(
         cache.typeTypeLimit = limit
     }
 
+    override fun setTagLimit(limit: Long) {
+        typeTagLimit.value = limit
+        cache.typeTagLimit = limit
+    }
+
     override fun updateRecord() {
         GlobalScope.launch {
-            val timeLimit = typeTimeLimit.value!!
+            val timeLimit = getTimeLimit(typeTimeLimit.value!!)
             val typeLimit = typeTypeLimit.value!!
-            val records = if (typeLimit < 0) {
-                recordDao.queryByTime(getTimeLimit(timeLimit))
+            val tagLimit = typeTagLimit.value!!
+            val records =
+                if (typeLimit < 0) {
+                    if (tagLimit < 0) {
+                        recordDao.queryByTime(timeLimit)
+                    } else {
+                        recordDao.queryByTagTime(tagLimit, timeLimit)
+                    }
             } else {
-                recordDao.queryByTimeType(getTimeLimit(timeLimit), typeLimit)
-            }
+                    if (tagLimit < 0) {
+                        recordDao.queryByTimeType(timeLimit, typeLimit)
+                    } else {
+                        recordDao.queryByTypeTagTime(typeLimit, tagLimit, timeLimit)
+                    }
+                }
             val recordListItems = ArrayList<RecordListItem>()
             for (record in records) {
                 val title = recordTypeDao.query(record.type).title
@@ -137,10 +168,11 @@ class RecordViewModel(
         private val recordTypeDao: RecordTypeDao,
         private val recordDao: RecordDao,
         private val recordItemDao: RecordItemDao,
+        private val recordTagDao: RecordTagDao,
         private val cache: AppCache
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return RecordViewModel(recordTypeDao, recordDao, recordItemDao, cache) as T
+            return RecordViewModel(recordTypeDao, recordDao, recordItemDao, recordTagDao, cache) as T
         }
     }
 

@@ -1,13 +1,15 @@
 package com.wuruoye.know.util.orm.table
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Created at 2019/4/9 20:27 by wuruoye
  * Description:
  */
-@Entity(tableName = "record_item")
+@Entity(tableName = "record_item",
+    indices = [Index("createTime", "recordId", "type", "typeId")])
 class RecordItem(
         @PrimaryKey(autoGenerate = true)
         override var id: Long?,
