@@ -251,7 +251,7 @@ class RecordFragment : Fragment(),
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        val newInstance = RecordFragment()
+        var newInstance: RecordFragment = RecordFragment()
 
         const val FOR_TYPE_RESULT = 1
         const val FOR_RECORD_RESULT = 2

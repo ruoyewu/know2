@@ -9,6 +9,7 @@ import com.wuruoye.know.util.orm.table.Record
 class RecordListItem(
     var record: Record,
     var title: String,
+    var tag: String,
     var content: String?,
     var imgPath: ImagePath?
 )

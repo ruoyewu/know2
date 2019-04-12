@@ -128,6 +128,7 @@ class RecordViewModel(
             val recordListItems = ArrayList<RecordListItem>()
             for (record in records) {
                 val title = recordTypeDao.query(record.type).title
+                val tag = recordTagDao.query(record.tag).title
                 val content = recordItemDao.queryByType(record.id!!, RecordTypeSelect.TYPE_TEXT)?.content
                 val path = recordItemDao.queryByType(record.id!!, RecordTypeSelect.TYPE_IMG)?.content
                 val imgPath = if (path == null) {
@@ -135,7 +136,7 @@ class RecordViewModel(
                 } else {
                     GsonFactory.getInstance().fromJson(path, ImagePath::class.java)
                 }
-                recordListItems.add(RecordListItem(record, title, content, imgPath))
+                recordListItems.add(RecordListItem(record, title, tag, content, imgPath))
             }
             recordList.postValue(recordListItems)
         }

@@ -63,7 +63,6 @@ class RecordEditActivity :
     private lateinit var ivBack: ImageView
     private lateinit var ivMore: ImageView
     private lateinit var llContent: LinearLayout
-    private lateinit var llTag: LinearLayout
     private lateinit var tvTag: TextView
 
     private lateinit var mPhotoGet: WPhoto
@@ -94,14 +93,13 @@ class RecordEditActivity :
         ivBack = findViewById(R.id.iv_back_toolbar)
         ivMore = findViewById(R.id.iv_more_toolbar)
         llContent = findViewById(R.id.ll_record_edit)
-        llTag = findViewById(R.id.ll_tag_record_edit)
         tvTag = findViewById(R.id.tv_tag_record_edit)
     }
 
     private fun bindListener() {
         ivBack.setOnClickListener(this)
         ivMore.setOnClickListener(this)
-        llTag.setOnClickListener(this)
+        tvTag.setOnClickListener(this)
     }
 
     @SuppressLint("InflateParams")
@@ -179,7 +177,7 @@ class RecordEditActivity :
             R.id.iv_more_toolbar -> {
                 saveRecord()
             }
-            R.id.ll_tag_record_edit -> {
+            R.id.tv_tag_record_edit -> {
                 dlgRecordTag.show()
             }
         }

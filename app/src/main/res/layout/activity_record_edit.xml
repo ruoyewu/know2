@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:ignore="NewApi">
-
-    <include
-        layout="@layout/toolbar"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:ignore="NewApi">
 
     <LinearLayout
-            android:id="@+id/ll_tag_record_edit"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:orientation="vertical"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <include
+                layout="@layout/toolbar"/>
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:id="@+id/ll_record_edit"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+        </ScrollView>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+            app:cardElevation="10dp"
+            app:cardBackgroundColor="@color/romance"
+            android:layout_margin="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-        <TextView
-                android:text="@string/record_tag"
-                android:textSize="14sp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
-
         <TextView
                 android:id="@+id/tv_tag_record_edit"
                 android:text="@string/default_"
-                android:textSize="14sp"
+                android:textColor="@color/monsoon"
                 android:textStyle="bold"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:layout_width="150dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/ll_record_edit"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
-</LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

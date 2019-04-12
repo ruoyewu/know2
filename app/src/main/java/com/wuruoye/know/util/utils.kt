@@ -1,6 +1,7 @@
 package com.wuruoye.know.util
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.wuruoye.know.util.orm.table.BaseTable
 
@@ -19,4 +20,8 @@ fun BaseTable.update() {
     } else {
         updateTime = System.currentTimeMillis()
     }
+}
+
+fun Any.log(msg: String) {
+    Log.e(this.javaClass.name, msg)
 }

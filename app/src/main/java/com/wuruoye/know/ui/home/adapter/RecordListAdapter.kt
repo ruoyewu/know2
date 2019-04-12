@@ -1,5 +1,6 @@
 package com.wuruoye.know.ui.home.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -33,10 +34,11 @@ class RecordListAdapter : ListAdapter<RecordListItem, RecordListAdapter.ViewHold
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         with(holder) {
-            tvTitle.text = item.title
+            tvTitle.text = "${item.title}-${item.tag}"
             tvContent.text = item.content
             tvDate.text = DateUtil.milli2Date(item.record.createTime)
             if (item.imgPath == null

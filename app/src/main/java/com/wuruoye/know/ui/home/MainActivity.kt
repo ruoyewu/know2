@@ -2,17 +2,18 @@ package com.wuruoye.know.ui.home
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.home.adapter.FragmentAdapter
 
 class MainActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var tvTitle: TextView
-    private lateinit var flContent: FrameLayout
+    private lateinit var vpMain: ViewPager
     private lateinit var bnvBottom: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,13 +23,11 @@ class MainActivity : AppCompatActivity(),
         bindView()
         bindListener()
         initView()
-
-        bnvBottom.selectedItemId = R.id.menu_record_main
     }
 
     private fun bindView() {
         tvTitle = findViewById(R.id.tv_title_toolbar)
-        flContent = findViewById(R.id.fl_content_main)
+        vpMain = findViewById(R.id.vp_main)
         bnvBottom = findViewById(R.id.bnv_main)
     }
 
@@ -37,33 +36,35 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initView() {
+        val adapter = FragmentAdapter(supportFragmentManager,
+            arrayOf(
+                ReviewFragment.newInstance,
+                RecordFragment.newInstance,
+                UserFragment.newInstance
+            ))
+        vpMain.adapter = adapter
+
         bnvBottom.inflateMenu(R.menu.menu_main)
+        bnvBottom.selectedItemId = R.id.menu_record_main
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId) {
             R.id.menu_review_main -> {
-                tvTitle.text = getString(R.string.review)
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fl_content_main, ReviewFragment.newInstance)
-                    .commit()
+                setViewItem(0, getString(R.string.review))
             }
             R.id.menu_record_main -> {
-                tvTitle.text = getString(R.string.record)
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fl_content_main, RecordFragment.newInstance)
-                    .commit()
+                setViewItem(1, getString(R.string.record))
             }
             R.id.menu_user_main -> {
-                tvTitle.text = getString(R.string.user)
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fl_content_main, UserFragment.newInstance)
-                    .commit()
+                setViewItem(2, getString(R.string.user))
             }
         }
         return true
+    }
+
+    private fun setViewItem(position: Int, title: String) {
+        tvTitle.text = title
+        vpMain.setCurrentItem(position, false)
     }
 }

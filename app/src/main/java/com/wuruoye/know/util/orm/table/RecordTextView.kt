@@ -47,9 +47,9 @@ class RecordTextView(
 ) : RecordView, Parcelable {
     constructor(editable: Boolean) :
             this(
-                null, "", 15, Color.BLACK, "", 15, 0,
+                null, "", 15, Color.BLACK, "", 15, Color.GRAY,
                 0, Gravity.CENTER, Typeface.NORMAL,
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
+                InputType.TYPE_CLASS_TEXT,
                 1, 1, editable, -1, -2,
                 0, 0, 0, 0, 0,
                 0, 0, 0, -1, -1
