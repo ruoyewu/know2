@@ -17,4 +17,7 @@ class Record(
         var lastReview: Long,
         override var createTime: Long,
         override var updateTime: Long
-) : BaseTable
+) : BaseTable {
+    constructor(type: Long):
+            this(null, type, 0, 0, -1, -1, -1)
+}

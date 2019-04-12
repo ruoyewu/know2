@@ -21,11 +21,14 @@ public interface RecordItemDao {
     RecordItem query(long recordId, long typeId, int type);
 
     @Query("SELECT * FROM record_item WHERE recordId = :recordId AND type = :type")
-    RecordItem queryByTime(long recordId, int type);
+    RecordItem queryByType(long recordId, int type);
 
     @Query("SELECT * FROM record_item WHERE recordId = :recordId")
     List<RecordItem> queryByRecord(long recordId);
 
     @Query("DELETE FROM record_item WHERE id = :id")
     int delete(long id);
+
+    @Query("DELETE FROM record_item WHERE recordId = :recordId")
+    int deleteByRecord(long recordId);
 }

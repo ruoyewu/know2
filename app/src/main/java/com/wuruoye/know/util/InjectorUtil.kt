@@ -2,6 +2,7 @@ package com.wuruoye.know.util
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
+import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.util.model.AppCache
@@ -15,13 +16,22 @@ object InjectorUtil {
     fun recordViewModelFactory(context: Context): ViewModelProvider.Factory {
         val recordTypeDao = Repository.getRecordType(context)
         val recordDao = Repository.getRecord(context)
+        val recordItemDao = Repository.getRecordItem(context)
         val cache = AppCache.getInstance(context)
-        return RecordViewModel.Factory(recordTypeDao, recordDao, cache)
+        return RecordViewModel.Factory(recordTypeDao, recordDao, recordItemDao, cache)
     }
 
     fun recordTypeEditViewModelFactory(context: Context): ViewModelProvider.Factory {
         val recordTypeDao = Repository.getRecordType(context)
         val recordViewDao = Repository.getRecordView(context)
         return RecordTypeEditViewModel.Factory(recordTypeDao, recordViewDao)
+    }
+
+    fun recordEdiViewModelFactory(context: Context): ViewModelProvider.Factory {
+        val recordTypeDao = Repository.getRecordType(context)
+        val recordDao = Repository.getRecord(context)
+        val recordItemDao = Repository.getRecordItem(context)
+        val recordViewDao = Repository.getRecordView(context)
+        return RecordEditViewModel.Factory(recordTypeDao, recordDao, recordItemDao, recordViewDao)
     }
 }

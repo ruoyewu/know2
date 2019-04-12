@@ -3,8 +3,8 @@ package com.wuruoye.know.ui.home.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.model.beans.TimeLimitItem
-import com.wuruoye.know.util.orm.table.Record
 import com.wuruoye.know.util.orm.table.RecordType
 
 /**
@@ -13,7 +13,7 @@ import com.wuruoye.know.util.orm.table.RecordType
  */
 interface IRecordVM {
     var recordTypeList: MutableLiveData<List<RecordType>>
-    var recordList: MutableLiveData<List<Record>>
+    var recordList: MutableLiveData<List<RecordListItem>>
     var timeLimitList: MutableLiveData<List<TimeLimitItem>>
 
     var recordTypeTitle: MediatorLiveData<String>
@@ -22,6 +22,8 @@ interface IRecordVM {
     var typeTypeLimit: MutableLiveData<Long>
 
     fun updateRecordType()
+    fun updateRecord()
+    fun removeRecord(id: Long)
 
     fun setTimeLimit(limit: Int)
     fun setTypeLimit(limit: Long)

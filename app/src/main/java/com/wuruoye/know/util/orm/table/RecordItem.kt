@@ -20,4 +20,7 @@ class RecordItem(
 ) : BaseTable {
     constructor():
             this(null, -1, -1, -1, "", -1, -1)
+
+    constructor(recordId: Long, typeId: Long, type: Int):
+            this(null, recordId, type, typeId, "", -1, -1)
 }

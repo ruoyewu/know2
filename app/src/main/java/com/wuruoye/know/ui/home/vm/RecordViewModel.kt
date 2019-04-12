@@ -1,11 +1,15 @@
 package com.wuruoye.know.ui.home.vm
 
 import androidx.lifecycle.*
+import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.model.AppCache
+import com.wuruoye.know.util.model.beans.ImagePath
+import com.wuruoye.know.util.model.beans.RecordListItem
+import com.wuruoye.know.util.model.beans.RecordTypeSelect
 import com.wuruoye.know.util.model.beans.TimeLimitItem
 import com.wuruoye.know.util.orm.dao.RecordDao
+import com.wuruoye.know.util.orm.dao.RecordItemDao
 import com.wuruoye.know.util.orm.dao.RecordTypeDao
-import com.wuruoye.know.util.orm.table.Record
 import com.wuruoye.know.util.orm.table.RecordType
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,6 +21,7 @@ import kotlinx.coroutines.launch
 class RecordViewModel(
     private val recordTypeDao: RecordTypeDao,
     private val recordDao: RecordDao,
+    private val recordItemDao: RecordItemDao,
     private val cache: AppCache
 ) : ViewModel(), IRecordVM{
 
@@ -33,13 +38,13 @@ class RecordViewModel(
         }
     }
 
-    override var recordList: MutableLiveData<List<Record>> =
-        MediatorLiveData<List<Record>>().apply {
+    override var recordList: MutableLiveData<List<RecordListItem>> =
+        MediatorLiveData<List<RecordListItem>>().apply {
         addSource(typeTimeLimit) {
-            updateRecordWithLimit()
+            updateRecord()
         }
         addSource(typeTypeLimit) {
-            updateRecordWithLimit()
+            updateRecord()
         }
     }
 
@@ -80,17 +85,36 @@ class RecordViewModel(
         cache.typeTypeLimit = limit
     }
 
-    private fun updateRecordWithLimit() {
+    override fun updateRecord() {
         GlobalScope.launch {
             val timeLimit = typeTimeLimit.value!!
             val typeLimit = typeTypeLimit.value!!
-            recordList.postValue(
-                if (typeLimit < 0) {
-                    recordDao.queryByTime(getTimeLimit(timeLimit))
+            val records = if (typeLimit < 0) {
+                recordDao.queryByTime(getTimeLimit(timeLimit))
+            } else {
+                recordDao.queryByTimeType(getTimeLimit(timeLimit), typeLimit)
+            }
+            val recordListItems = ArrayList<RecordListItem>()
+            for (record in records) {
+                val title = recordTypeDao.query(record.type).title
+                val content = recordItemDao.queryByType(record.id!!, RecordTypeSelect.TYPE_TEXT)?.content
+                val path = recordItemDao.queryByType(record.id!!, RecordTypeSelect.TYPE_IMG)?.content
+                val imgPath = if (path == null) {
+                    null
                 } else {
-                    recordDao.queryByTimeType(getTimeLimit(timeLimit), typeLimit)
+                    GsonFactory.getInstance().fromJson(path, ImagePath::class.java)
                 }
-            )
+                recordListItems.add(RecordListItem(record, title, content, imgPath))
+            }
+            recordList.postValue(recordListItems)
+        }
+    }
+
+    override fun removeRecord(id: Long) {
+        GlobalScope.launch {
+            recordDao.delete(id)
+            recordItemDao.deleteByRecord(id)
+            updateRecord()
         }
     }
 
@@ -108,15 +132,15 @@ class RecordViewModel(
         return System.currentTimeMillis() - time
     }
 
-
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val recordTypeDao: RecordTypeDao,
         private val recordDao: RecordDao,
+        private val recordItemDao: RecordItemDao,
         private val cache: AppCache
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return RecordViewModel(recordTypeDao, recordDao, cache) as T
+            return RecordViewModel(recordTypeDao, recordDao, recordItemDao, cache) as T
         }
     }
 

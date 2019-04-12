@@ -35,7 +35,7 @@ class RecordLayoutView(
 ) : RecordView, Parcelable {
     constructor() :
             this(
-                null, LinearLayout.HORIZONTAL, "", 0, Gravity.CENTER_VERTICAL,
+                null, LinearLayout.HORIZONTAL, "", 0, Gravity.CENTER,
                 -1, -2, 0, 0, 0, 0,
                 16, 16, 10, 10,
                 -1, -1

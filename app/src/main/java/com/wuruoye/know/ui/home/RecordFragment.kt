@@ -16,12 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.edit.RecordEditActivity
 import com.wuruoye.know.ui.edit.RecordTypeEditActivity
+import com.wuruoye.know.ui.home.adapter.RecordListAdapter
 import com.wuruoye.know.ui.home.adapter.RecordTypeAdapter
 import com.wuruoye.know.ui.home.adapter.TimeLimitAdapter
 import com.wuruoye.know.ui.home.vm.IRecordVM
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.util.InjectorUtil
+import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.model.beans.TimeLimitItem
 import com.wuruoye.know.util.orm.table.RecordType
 
@@ -32,7 +35,10 @@ import com.wuruoye.know.util.orm.table.RecordType
 class RecordFragment : Fragment(),
     View.OnClickListener,
     RecordTypeAdapter.OnClickListener,
-    RecordTypeAdapter.OnLongClickListener, TimeLimitAdapter.OnClickListener {
+    RecordTypeAdapter.OnLongClickListener,
+    TimeLimitAdapter.OnClickListener,
+    RecordListAdapter.OnClickListener,
+    RecordListAdapter.OnLongClickListener {
 
     private lateinit var dlgSelectType: BottomSheetDialog
     private lateinit var rvSelect: RecyclerView
@@ -63,6 +69,7 @@ class RecordFragment : Fragment(),
         bindView(view)
         bindListener()
         initDlg()
+        initView()
         subscribeUI()
     }
 
@@ -99,8 +106,8 @@ class RecordFragment : Fragment(),
         val typeLimitAdapter = RecordTypeAdapter(RecordTypeAdapter.TYPE_TYPE_LIMIT)
         typeLimitAdapter.setOnClickListener(object : RecordTypeAdapter.OnClickListener {
             override fun onClick(recordType: RecordType) {
-                dlgLimitTime.dismiss()
-                vm.setTypeLimit(recordType.id!!)
+                dlgLimitType.dismiss()
+                vm.setTypeLimit(recordType.id ?: -1)
             }
         })
         rvTypeLimit.adapter = typeLimitAdapter
@@ -119,6 +126,14 @@ class RecordFragment : Fragment(),
         dlgLimitTime.setTitle("选择时间：")
     }
 
+    private fun initView() {
+        val adapter = RecordListAdapter()
+        adapter.setOnClickListener(this)
+        adapter.setOnLongClickListener(this)
+        rvRecord.layoutManager = LinearLayoutManager(context)
+        rvRecord.adapter = adapter
+    }
+
     private fun subscribeUI() {
         vm.recordTypeList.observe(this, Observer {
             val selectAdapter = rvSelect.adapter as RecordTypeAdapter
@@ -132,7 +147,7 @@ class RecordFragment : Fragment(),
             adapter.submitList(it)
         })
         vm.recordList.observe(this, Observer {
-
+            (rvRecord.adapter as RecordListAdapter).submitList(it)
         })
         vm.recordTypeTitle.observe(this, Observer {
             tvTypeLimit.text = it
@@ -160,6 +175,10 @@ class RecordFragment : Fragment(),
         dlgSelectType.dismiss()
         if (recordType.id == null) {
             onLongClick(recordType)
+        } else {
+            val intent = Intent(context, RecordEditActivity::class.java)
+            intent.putExtra(RecordEditActivity.RECORD_TYPE, recordType.id!!)
+            startActivityForResult(intent, FOR_RECORD_RESULT)
         }
     }
 
@@ -176,6 +195,17 @@ class RecordFragment : Fragment(),
         vm.setTimeLimit(item.id)
     }
 
+    override fun onClick(item: RecordListItem) {
+        val intent = Intent(context, RecordEditActivity::class.java)
+        intent.putExtra(RecordEditActivity.RECORD_TYPE, item.record.type)
+        intent.putExtra(RecordEditActivity.RECORD, item.record.id)
+        startActivityForResult(intent, FOR_RECORD_RESULT)
+    }
+
+    override fun onLongClick(item: RecordListItem) {
+        vm.removeRecord(item.record.id!!)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
@@ -184,7 +214,7 @@ class RecordFragment : Fragment(),
                     vm.updateRecordType()
                 }
                 FOR_RECORD_RESULT -> {
-
+                    vm.updateRecord()
                 }
             }
         }
@@ -194,7 +224,7 @@ class RecordFragment : Fragment(),
         @SuppressLint("StaticFieldLeak")
         val newInstance = RecordFragment()
 
-        val FOR_TYPE_RESULT = 1
-        val FOR_RECORD_RESULT = 2
+        const val FOR_TYPE_RESULT = 1
+        const val FOR_RECORD_RESULT = 2
     }
 }

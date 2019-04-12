@@ -21,12 +21,8 @@ class RecordTypeSelect(
 
         fun getType(recordView: RecordView): Int {
             return when (recordView) {
-                is RecordTextView -> {
-                    if (recordView.editable)
-                        TYPE_EDIT
-                    else
-                        TYPE_TEXT
-                }
+                is RecordTextView -> TYPE_TEXT
+                is RealRecordLayoutView,
                 is RecordLayoutView -> TYPE_LAYOUT
                 is RecordImageView -> TYPE_IMG
                 else -> 0

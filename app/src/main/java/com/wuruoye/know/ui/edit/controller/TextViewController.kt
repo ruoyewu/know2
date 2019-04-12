@@ -36,8 +36,6 @@ class TextViewController(private val mView: RecordTextView) :
     private lateinit var tvTextStyle: TextView
     private lateinit var llBgColor: LinearLayout
     private lateinit var tvBgColor: TextView
-    private lateinit var llFgColor: LinearLayout
-    private lateinit var tvFgColor: TextView
     private lateinit var llGravity: LinearLayout
     private lateinit var tvGravity: TextView
     private lateinit var llMinLine: LinearLayout
@@ -64,7 +62,6 @@ class TextViewController(private val mView: RecordTextView) :
             llTextSize = findViewById(R.id.ll_text_size_layout_text)
             llTextColor = findViewById(R.id.ll_text_color_layout_text)
             llBgColor = findViewById(R.id.ll_bg_color_layout_text)
-            llFgColor = findViewById(R.id.ll_fg_color_layout_text)
             llMargin = findViewById(R.id.ll_margin_layout_text)
             llPadding = findViewById(R.id.ll_padding_layout_text)
             llTextStyle = findViewById(R.id.ll_text_style_layout_text)
@@ -81,7 +78,6 @@ class TextViewController(private val mView: RecordTextView) :
             tvPadding = findViewById(R.id.tv_padding_layout_text)
             tvTextStyle = findViewById(R.id.tv_text_style_layout_text)
             tvBgColor = findViewById(R.id.tv_bg_color_layout_text)
-            tvFgColor = findViewById(R.id.tv_fg_color_layout_text)
             tvGravity = findViewById(R.id.tv_gravity_layout_text)
             tvMinLine = findViewById(R.id.tv_min_line_layout_text)
             tvMaxLine = findViewById(R.id.tv_max_line_layout_text)
@@ -93,7 +89,6 @@ class TextViewController(private val mView: RecordTextView) :
         llTextSize.setOnClickListener(this)
         llTextColor.setOnClickListener(this)
         llBgColor.setOnClickListener(this)
-        llFgColor.setOnClickListener(this)
         llTextStyle.setOnClickListener(this)
         llGravity.setOnClickListener(this)
         llMinLine.setOnClickListener(this)
