@@ -28,7 +28,7 @@ class RecordEditViewModel(
 ) : ViewModel(), IRecordEditVM {
 
     override var recordTagList: MutableLiveData<List<RecordTag>> =
-        MediatorLiveData<List<RecordTag>>().apply {
+        MediatorLiveData<List<RecordTag>>().also {
             updateRecordTagList()
         }
 

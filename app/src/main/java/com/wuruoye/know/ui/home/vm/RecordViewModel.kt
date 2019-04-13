@@ -29,13 +29,13 @@ class RecordViewModel(
     private val cache: AppCache
 ) : ViewModel(), IRecordVM{
 
-    private var typeTimeLimit: MutableLiveData<Int> =
+    override var typeTimeLimit: MutableLiveData<Int> =
         MutableLiveData<Int>().apply { value = cache.typeTimeLimit }
 
-    private var typeTypeLimit: MutableLiveData<Long> =
+    override var typeTypeLimit: MutableLiveData<Long> =
         MutableLiveData<Long>().apply { value = cache.typeTypeLimit }
 
-    private var typeTagLimit: MutableLiveData<Long> =
+    override var typeTagLimit: MutableLiveData<Long> =
         MutableLiveData<Long>().apply { value = cache.typeTagLimit }
 
     override var recordTypeList: MutableLiveData<List<RecordType>>

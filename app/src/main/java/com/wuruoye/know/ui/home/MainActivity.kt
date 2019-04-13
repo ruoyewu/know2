@@ -2,7 +2,6 @@ package com.wuruoye.know.ui.home
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -12,7 +11,6 @@ import com.wuruoye.know.ui.home.adapter.FragmentAdapter
 class MainActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var tvTitle: TextView
     private lateinit var vpMain: ViewPager
     private lateinit var bnvBottom: BottomNavigationView
 
@@ -26,7 +24,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun bindView() {
-        tvTitle = findViewById(R.id.tv_title_toolbar)
         vpMain = findViewById(R.id.vp_main)
         bnvBottom = findViewById(R.id.bnv_main)
     }
@@ -51,20 +48,19 @@ class MainActivity : AppCompatActivity(),
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId) {
             R.id.menu_review_main -> {
-                setViewItem(0, getString(R.string.review))
+                setViewItem(0)
             }
             R.id.menu_record_main -> {
-                setViewItem(1, getString(R.string.record))
+                setViewItem(1)
             }
             R.id.menu_user_main -> {
-                setViewItem(2, getString(R.string.user))
+                setViewItem(2)
             }
         }
         return true
     }
 
-    private fun setViewItem(position: Int, title: String) {
-        tvTitle.text = title
+    private fun setViewItem(position: Int) {
         vpMain.setCurrentItem(position, false)
     }
 }

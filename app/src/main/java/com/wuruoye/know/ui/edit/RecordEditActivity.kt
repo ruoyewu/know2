@@ -79,13 +79,15 @@ class RecordEditActivity :
             .get(RecordEditViewModel::class.java)
         mPhotoGet = WPhoto(this)
 
-        vm.setRecordTypeId(intent!!.getLongExtra(RECORD_TYPE, -1))
-
         bindView()
         bindListener()
         initDlg()
         initView()
         subscribeUI()
+
+        vm.setRecordTypeId(intent!!.getLongExtra(RECORD_TYPE, -1))
+        val tag = intent.getLongExtra(RECORD_TAG, -1)
+        if (tag >= 0) vm.setRecordTag(tag)
     }
 
     private fun bindView() {
@@ -194,7 +196,7 @@ class RecordEditActivity :
         path.localPath = result
         path.remotePath = ""
         item.content = GsonFactory.getInstance().toJson(path)
-        mView.setTag(R.id.tag_text, item)
+        mView.setTag(R.id.tag_image, item)
         loadImage(path, mView, generateOption(mRecordView as RecordImageView, mView))
     }
 
@@ -345,6 +347,7 @@ class RecordEditActivity :
     companion object {
         const val RECORD_TYPE = "type"
         const val RECORD = "record"
+        const val RECORD_TAG = "record_tag"
         const val FOR_TAG_RESULT = 1
 
         val ITEM_PHOTO = arrayOf("相册选择", "相机拍照", "相册选择&剪裁", "相机拍照&剪裁")

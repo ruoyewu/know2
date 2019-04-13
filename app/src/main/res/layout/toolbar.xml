@@ -32,6 +32,7 @@
             <ImageView
                 android:id="@+id/iv_back_toolbar"
                 android:padding="15dp"
+                android:tint="@color/light_slate_gray"
                 android:layout_centerVertical="true"
                 android:layout_width="50dp"
                 android:layout_height="50dp" />
@@ -47,6 +48,7 @@
             <ImageView
                 android:id="@+id/iv_more_toolbar"
                 android:padding="15dp"
+                android:tint="@color/light_slate_gray"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_width="50dp"

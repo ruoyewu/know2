@@ -10,8 +10,8 @@ import com.wuruoye.know.util.orm.table.BaseTable
  * Description:
  */
 
-fun Context.toast(msg: String) {
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+fun Context.toast(msg: Any) {
+    Toast.makeText(this, msg.toString(), Toast.LENGTH_SHORT).show()
 }
 
 fun BaseTable.update() {
@@ -22,6 +22,6 @@ fun BaseTable.update() {
     }
 }
 
-fun Any.log(msg: String) {
-    Log.e(this.javaClass.name, msg)
+fun Any.log(msg: Any) {
+    Log.e(this.javaClass.name, msg.toString())
 }

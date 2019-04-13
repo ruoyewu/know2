@@ -11,6 +11,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <include
+            layout="@layout/toolbar"/>
+
         <HorizontalScrollView android:layout_width="match_parent"
                               android:layout_height="wrap_content">
 
@@ -32,9 +35,9 @@
                         android:id="@+id/tv_type_limit_record"
                         android:textSize="13sp"
                         android:layout_marginStart="5dp"
-                        android:textColor="@color/monsoon"
+                        android:textColor="@color/light_slate_gray"
                         android:drawableEnd="@drawable/ic_arrow_down"
-                        android:drawableTint="@color/monsoon"
+                        android:drawableTint="@color/light_slate_gray"
                         android:foreground="?android:attr/selectableItemBackgroundBorderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -51,9 +54,9 @@
                         android:id="@+id/tv_type_limit_tag"
                         android:textSize="13sp"
                         android:layout_marginStart="5dp"
-                        android:textColor="@color/monsoon"
+                        android:textColor="@color/light_slate_gray"
                         android:drawableEnd="@drawable/ic_arrow_down"
-                        android:drawableTint="@color/monsoon"
+                        android:drawableTint="@color/light_slate_gray"
                         android:foreground="?android:attr/selectableItemBackgroundBorderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -70,9 +73,9 @@
                         android:id="@+id/tv_time_limit_record"
                         android:textSize="13sp"
                         android:layout_marginStart="5dp"
-                        android:textColor="@color/monsoon"
+                        android:textColor="@color/light_slate_gray"
                         android:drawableEnd="@drawable/ic_arrow_down"
-                        android:drawableTint="@color/monsoon"
+                        android:drawableTint="@color/light_slate_gray"
                         android:foreground="?android:attr/selectableItemBackgroundBorderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

@@ -40,7 +40,8 @@ class RecordFragment : Fragment(),
     RecordTypeAdapter.OnLongClickListener,
     TimeLimitAdapter.OnClickListener,
     RecordListAdapter.OnClickListener,
-    RecordListAdapter.OnLongClickListener, RecordTagAdapter.OnClickListener {
+    RecordListAdapter.OnLongClickListener,
+    RecordTagAdapter.OnClickListener {
 
     private lateinit var dlgSelectType: BottomSheetDialog
     private lateinit var rvSelect: RecyclerView
@@ -54,6 +55,7 @@ class RecordFragment : Fragment(),
     private lateinit var dlgLimitTag: BottomSheetDialog
     private lateinit var rvTagLimit: RecyclerView
 
+    private lateinit var tvTitle: TextView
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var tvTimeLimit: TextView
     private lateinit var tvTagLimit: TextView
@@ -80,6 +82,7 @@ class RecordFragment : Fragment(),
     }
 
     private fun bindView(view: View) {
+        tvTitle = view.findViewById(R.id.tv_title_toolbar)
         fabAdd = view.findViewById(R.id.fab_record)
         tvTimeLimit = view.findViewById(R.id.tv_time_limit_record)
         tvTagLimit = view.findViewById(R.id.tv_type_limit_tag)
@@ -145,6 +148,8 @@ class RecordFragment : Fragment(),
     }
 
     private fun initView() {
+        tvTitle.text = getString(R.string.record)
+
         val adapter = RecordListAdapter()
         adapter.setOnClickListener(this)
         adapter.setOnLongClickListener(this)
@@ -181,7 +186,7 @@ class RecordFragment : Fragment(),
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fab_record -> {
-                dlgSelectType.show()
+                startAddRecord(vm.typeTypeLimit.value!!, vm.typeTagLimit.value!!)
             }
             R.id.tv_time_limit_record -> {
                 dlgLimitTime.show()
@@ -200,9 +205,7 @@ class RecordFragment : Fragment(),
         if (recordType.id == null) {
             onLongClick(recordType)
         } else {
-            val intent = Intent(context, RecordEditActivity::class.java)
-            intent.putExtra(RecordEditActivity.RECORD_TYPE, recordType.id!!)
-            startActivityForResult(intent, FOR_RECORD_RESULT)
+            startAddRecord(recordType.id!!, vm.typeTagLimit.value!!)
         }
     }
 
@@ -233,6 +236,17 @@ class RecordFragment : Fragment(),
     override fun onClick(item: RecordTag) {
         dlgLimitTag.dismiss()
         vm.setTagLimit(item.id ?: -1)
+    }
+
+    private fun startAddRecord(type: Long, tag: Long) {
+        if (type < 0) {
+            dlgSelectType.show()
+        } else {
+            val intent = Intent(context, RecordEditActivity::class.java)
+            intent.putExtra(RecordEditActivity.RECORD_TYPE, type)
+            if (tag >= 0) intent.putExtra(RecordEditActivity.RECORD_TAG, tag)
+            startActivityForResult(intent, FOR_RECORD_RESULT)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
