@@ -41,6 +41,9 @@ public interface RecordDao {
     @Query("SELECT * FROM record WHERE type = :type AND tag = :tag AND createTime > :time ORDER BY createTime DESC")
     List<Record> queryByTypeTagTime(long type, long tag, long time);
 
+    @Query("SELECT COUNT(*) FROM record")
+    long queryCount();
+
     @Query("DELETE FROM record WHERE id = :id")
     int delete(long id);
 }

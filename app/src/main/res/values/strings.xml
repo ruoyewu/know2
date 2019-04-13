@@ -43,7 +43,7 @@
     <string name="create_time">创建日期</string>
     <string name="record_tag">记录标签</string>
 
-    <string name="info">信息</string>
+    <string name="record_info">记录</string>
     <string name="setting">设置</string>
     <string name="no_login">未登录</string>
     <string name="sign_default">我是一颗小小的石头</string>
@@ -55,6 +55,7 @@
     <string name="set_record_type">编辑记录类型</string>
     <string name="set_record_tag">编辑标签</string>
     <string name="set_backup">记录备份</string>
+    <string name="delete_record_type">删除</string>
 
     <string name="one_day">一天内</string>
     <string name="two_day">两天内</string>

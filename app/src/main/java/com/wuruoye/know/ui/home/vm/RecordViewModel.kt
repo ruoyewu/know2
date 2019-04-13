@@ -39,19 +39,12 @@ class RecordViewModel(
         MutableLiveData<Long>().apply { value = cache.typeTagLimit }
 
     override var recordTypeList: MutableLiveData<List<RecordType>>
-            = MutableLiveData<List<RecordType>>().apply {
-        GlobalScope.launch { postValue(recordTypeDao.queryAll()) }
-    }
+            = MutableLiveData<List<RecordType>>()
 
     override var timeLimitList
             = MutableLiveData<List<TimeLimitItem>>().apply { value = TIME_LIMIT_ITEM }
 
-    override var recordTagList: MutableLiveData<List<RecordTag>> =
-        MutableLiveData<List<RecordTag>>().apply {
-            GlobalScope.launch {
-                postValue(recordTagDao.queryAll())
-            }
-        }
+    override var recordTagList: MutableLiveData<List<RecordTag>> = MutableLiveData()
 
     override var recordList: MutableLiveData<List<RecordListItem>> =
         MediatorLiveData<List<RecordListItem>>().apply {
@@ -82,6 +75,13 @@ class RecordViewModel(
             = Transformations.map(typeTimeLimit) {
         TIME_LIMIT_TITLE[it]
     } as LiveData<String>
+
+    init {
+        GlobalScope.launch {
+            recordTypeList.postValue(recordTypeDao.queryAll())
+            recordTagList.postValue(recordTagDao.queryAll())
+        }
+    }
 
     override fun updateRecordType() {
         GlobalScope.launch {

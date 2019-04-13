@@ -25,6 +25,9 @@ import com.wuruoye.know.ui.home.adapter.TimeLimitAdapter
 import com.wuruoye.know.ui.home.vm.IRecordVM
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.util.InjectorUtil
+import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
+import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.model.beans.TimeLimitItem
 import com.wuruoye.know.util.orm.table.RecordTag
@@ -214,7 +217,7 @@ class RecordFragment : Fragment(),
 
         val intent = Intent(context, RecordTypeEditActivity::class.java)
         intent.putExtra(RecordTypeEditActivity.RECORD_TYPE, recordType.id)
-        startActivityForResult(intent, FOR_TYPE_RESULT)
+        startActivityForResult(intent, RECORD_FOR_TYPE)
     }
 
     override fun onClick(item: TimeLimitItem) {
@@ -226,7 +229,7 @@ class RecordFragment : Fragment(),
         val intent = Intent(context, RecordEditActivity::class.java)
         intent.putExtra(RecordEditActivity.RECORD_TYPE, item.record.type)
         intent.putExtra(RecordEditActivity.RECORD, item.record.id)
-        startActivityForResult(intent, FOR_RECORD_RESULT)
+        startActivityForResult(intent, RECORD_FOR_RECORD)
     }
 
     override fun onLongClick(item: RecordListItem) {
@@ -245,19 +248,22 @@ class RecordFragment : Fragment(),
             val intent = Intent(context, RecordEditActivity::class.java)
             intent.putExtra(RecordEditActivity.RECORD_TYPE, type)
             if (tag >= 0) intent.putExtra(RecordEditActivity.RECORD_TAG, tag)
-            startActivityForResult(intent, FOR_RECORD_RESULT)
+            startActivityForResult(intent, RECORD_FOR_RECORD)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when(requestCode) {
-                FOR_TYPE_RESULT -> {
+                RECORD_FOR_TYPE -> {
                     vm.updateRecordType()
                 }
-                FOR_RECORD_RESULT -> {
+                RECORD_FOR_RECORD -> {
                     vm.updateRecord()
+                }
+                USER_FOR_RECORD_TYPE -> {
+                    vm.updateRecord()
+                    vm.updateRecordType()
                 }
             }
         }
@@ -266,8 +272,5 @@ class RecordFragment : Fragment(),
     companion object {
         @SuppressLint("StaticFieldLeak")
         var newInstance: RecordFragment = RecordFragment()
-
-        const val FOR_TYPE_RESULT = 1
-        const val FOR_RECORD_RESULT = 2
     }
 }

@@ -23,6 +23,9 @@ public interface RecordTypeDao {
     @Query("SELECT * FROM record_type WHERE id = :id LIMIT 0,1")
     RecordType query(long id);
 
+    @Query("SELECT COUNT(*) FROM record_type")
+    long queryCount();
+
     @Query("DELETE FROM record_type WHERE id = :id")
     void delete(long id);
 }

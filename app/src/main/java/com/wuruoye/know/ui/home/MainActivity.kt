@@ -1,8 +1,10 @@
 package com.wuruoye.know.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.wuruoye.know.R
@@ -13,6 +15,11 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var vpMain: ViewPager
     private lateinit var bnvBottom: BottomNavigationView
+    private var fragments = arrayListOf<Fragment>(
+        ReviewFragment.newInstance,
+        RecordFragment.newInstance,
+        UserFragment.newInstance
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +40,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initView() {
-        val adapter = FragmentAdapter(supportFragmentManager,
-            arrayOf(
-                ReviewFragment.newInstance,
-                RecordFragment.newInstance,
-                UserFragment.newInstance
-            ))
+        val adapter = FragmentAdapter(supportFragmentManager, fragments.toTypedArray())
         vpMain.adapter = adapter
 
         bnvBottom.inflateMenu(R.menu.menu_main)
@@ -58,6 +60,15 @@ class MainActivity : AppCompatActivity(),
             }
         }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        fragments.filter {
+            fragments.indexOf(it) != vpMain.currentItem
+        }.forEach {
+            it.onActivityResult(requestCode and 0xffff, resultCode, data)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun setViewItem(position: Int) {

@@ -27,6 +27,8 @@ import com.wuruoye.know.ui.edit.vm.IRecordTypeEditVM
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
+import com.wuruoye.know.util.model.RequestCode.RECORD_TYPE_EDIT_FOR_ADD
+import com.wuruoye.know.util.model.RequestCode.RECORD_TYPE_EDIT_FOR_UPDATE
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
 import com.wuruoye.know.util.orm.table.RecordImageView
@@ -178,7 +180,7 @@ class RecordTypeEditActivity :
                                     } else {
                                         recordView
                                     })
-                                startActivityForResult(intent, FOR_UPDATE_RESULT)
+                                startActivityForResult(intent, RECORD_TYPE_EDIT_FOR_UPDATE)
                             }
                             1 -> {  // remove
                                 parentView.remove(recordView)
@@ -224,7 +226,7 @@ class RecordTypeEditActivity :
         dlgSelectItem.dismiss()
         val intent = Intent(this, TypeItemEditActivity::class.java)
         intent.putExtra(TypeItemEditActivity.RECORD_TYPE, item.id)
-        startActivityForResult(intent, FOR_ADD_RESULT)
+        startActivityForResult(intent, RECORD_TYPE_EDIT_FOR_ADD)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -232,12 +234,12 @@ class RecordTypeEditActivity :
         if (resultCode == Activity.RESULT_OK) {
             val view = data!!.getParcelableExtra<RecordView>(TypeItemEditActivity.RECORD_VIEW)
             when (requestCode) {
-                FOR_ADD_RESULT -> {
+                RECORD_TYPE_EDIT_FOR_ADD -> {
                     mParentViews.add(if (view is RecordLayoutView) {
                         RealRecordLayoutView(view, arrayListOf())
                     } else view)
                 }
-                FOR_UPDATE_RESULT -> {
+                RECORD_TYPE_EDIT_FOR_UPDATE -> {
                     when (view) {
                         is RecordLayoutView -> {
                             (mUpdateView as RealRecordLayoutView).setInfo(view)
@@ -270,8 +272,6 @@ class RecordTypeEditActivity :
     companion object {
         const val MAX_TITLE_LENGTH = 10
         const val RECORD_TYPE = "type"
-        val FOR_ADD_RESULT = 1
-        val FOR_UPDATE_RESULT = 2
 
         val ITEM_VIEW = arrayOf("修改控件", "删除控件")
         val ITEM_LAYOUT = arrayOf("修改控件", "删除控件", "增加子控件")

@@ -25,6 +25,7 @@
         <activity android:name=".ui.edit.TypeItemEditActivity"/>
         <activity android:name=".ui.edit.RecordEditActivity"/>
         <activity android:name=".ui.edit.RecordTagEditActivity"/>
+        <activity android:name=".ui.setting.RecordTypeSetActivity"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"

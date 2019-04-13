@@ -26,6 +26,9 @@ public interface RecordTagDao {
     @Query("SELECT * FROM record_tag WHERE title = :title")
     RecordTag queryByTitle(String title);
 
+    @Query("SELECT COUNT(*) FROM record_tag")
+    long queryCount();
+
     @Query("DELETE FROM record_tag WHERE id = :id")
     int delete(long id);
 }

@@ -37,6 +37,7 @@ import com.wuruoye.know.util.base.WConfig
 import com.wuruoye.know.util.base.media.IWPhoto
 import com.wuruoye.know.util.base.media.WPhoto
 import com.wuruoye.know.util.base.permission.WPermission
+import com.wuruoye.know.util.model.RequestCode.RECORD_EDIT_FOR_TAG
 import com.wuruoye.know.util.model.beans.ImagePath
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
@@ -88,6 +89,8 @@ class RecordEditActivity :
         vm.setRecordTypeId(intent!!.getLongExtra(RECORD_TYPE, -1))
         val tag = intent.getLongExtra(RECORD_TAG, -1)
         if (tag >= 0) vm.setRecordTag(tag)
+
+        vm.updateRecordTagList()
     }
 
     private fun bindView() {
@@ -210,7 +213,7 @@ class RecordEditActivity :
             vm.setRecordTag(item.id!!)
         } else {
             val intent = Intent(this, RecordTagEditActivity::class.java)
-            startActivityForResult(intent, FOR_TAG_RESULT)
+            startActivityForResult(intent, RECORD_EDIT_FOR_TAG)
         }
     }
 
@@ -219,7 +222,7 @@ class RecordEditActivity :
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when(requestCode) {
-                FOR_TAG_RESULT -> {
+                RECORD_EDIT_FOR_TAG -> {
                     val tag = data!!.getParcelableExtra<RecordTag>(RecordTagEditActivity.RECORD_TAG)
                     vm.setRecordTag(tag.id!!)
                     vm.updateRecordTagList()
@@ -348,7 +351,6 @@ class RecordEditActivity :
         const val RECORD_TYPE = "type"
         const val RECORD = "record"
         const val RECORD_TAG = "record_tag"
-        const val FOR_TAG_RESULT = 1
 
         val ITEM_PHOTO = arrayOf("相册选择", "相机拍照", "相册选择&剪裁", "相机拍照&剪裁")
     }

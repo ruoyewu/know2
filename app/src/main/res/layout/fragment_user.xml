@@ -14,7 +14,7 @@
             android:layout_height="250dp">
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:minHeight="50dp"
-                app:layout_scrollFlags="snap|scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+                app:layout_scrollFlags="snap|scroll|enterAlwaysCollapsed|exitUntilCollapsed|enterAlways"
                 app:contentScrim="@color/romance"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

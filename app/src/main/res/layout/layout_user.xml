@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-            android:text="@string/info"
+            android:text="@string/record_info"
             android:textColor="@color/light_slate_gray"
             android:textSize="14sp"
             android:textStyle="bold"
