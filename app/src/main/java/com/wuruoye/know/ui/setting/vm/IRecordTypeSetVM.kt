@@ -11,5 +11,6 @@ interface IRecordTypeSetVM {
     val recordTypeList: MutableLiveData<List<RecordType>>
 
     fun updateTypeList()
-    fun deleteRecordType(vararg types: RecordType)
+    fun deleteRecordType(type: RecordType)
+    fun deleteRecordType(types: Array<RecordType>)
 }

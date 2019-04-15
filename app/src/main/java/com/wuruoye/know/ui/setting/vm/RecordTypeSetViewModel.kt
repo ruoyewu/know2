@@ -34,7 +34,14 @@ class RecordTypeSetViewModel(
         updateTypeList()
     }
 
-    override fun deleteRecordType(vararg types: RecordType) {
+    override fun deleteRecordType(type: RecordType) {
+        GlobalScope.launch {
+            deleteRecordTypeWith(type)
+            updateTypeList()
+        }
+    }
+
+    override fun deleteRecordType(types: Array<RecordType>) {
         GlobalScope.launch {
             for (type in types) {
                 deleteRecordTypeWith(type)

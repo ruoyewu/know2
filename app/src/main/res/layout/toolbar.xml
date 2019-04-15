@@ -7,7 +7,6 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         app:contentInsetStart="0dp"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">

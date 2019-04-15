@@ -1,5 +1,6 @@
 package com.wuruoye.know.widgets
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -10,6 +11,8 @@ import android.widget.HorizontalScrollView
  * Description:
  */
 class EventHorizontalScrollView : HorizontalScrollView {
+    var isScrollEnable: Boolean = true
+
     private var onEventListener: OnEventListener? = null
     private var onScrollChangedListener: OnScrollChangedListener? = null
 
@@ -19,6 +22,15 @@ class EventHorizontalScrollView : HorizontalScrollView {
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (ev != null) onEventListener?.onEvent(ev)
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        return isScrollEnable && super.onInterceptTouchEvent(ev)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        return isScrollEnable && super.onTouchEvent(ev)
     }
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {

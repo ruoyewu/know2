@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:scrollbars="none"
-                      android:layout_width="match_parent"
-                      android:layout_height="80dp">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        tools:ignore="NewApi">
 
     <com.wuruoye.know.widgets.EventHorizontalScrollView
             android:id="@+id/hsv_record_type_set"
@@ -16,6 +18,18 @@
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
+
+            <FrameLayout
+                    android:id="@+id/fl_select_record_type_set"
+                    android:layout_width="1px"
+                    android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_record_type_set"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </FrameLayout>
 
             <TextView
                     android:id="@+id/tv_record_type_set"

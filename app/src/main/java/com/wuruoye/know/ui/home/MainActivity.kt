@@ -63,10 +63,16 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        fragments.filter {
-            fragments.indexOf(it) != vpMain.currentItem
-        }.forEach {
-            it.onActivityResult(requestCode and 0xffff, resultCode, data)
+//        fragments.filter {
+//            fragments.indexOf(it) != vpMain.currentItem
+//        }.forEach {
+//            it.onActivityResult(requestCode and 0xffff, resultCode, data)
+//        }
+
+        for (i in 0 until fragments.size) {
+            if (i != vpMain.currentItem) {
+                fragments[i].onActivityResult(requestCode and 0xffff, resultCode, data)
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
