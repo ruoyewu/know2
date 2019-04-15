@@ -7,9 +7,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,24 +17,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
-import com.wuruoye.know.ui.edit.RecordTypeEditActivity
-import com.wuruoye.know.ui.setting.adapter.RecordTypeSetAdapter
-import com.wuruoye.know.ui.setting.vm.IRecordTypeSetVM
-import com.wuruoye.know.ui.setting.vm.RecordTypeSetViewModel
+import com.wuruoye.know.ui.edit.RecordTagEditActivity
+import com.wuruoye.know.ui.setting.adapter.RecordTagSetAdapter
+import com.wuruoye.know.ui.setting.vm.IRecordTagSetVM
+import com.wuruoye.know.ui.setting.vm.RecordTagSetViewModel
 import com.wuruoye.know.util.InjectorUtil
-import com.wuruoye.know.util.model.RequestCode.RECORD_TYPE_SET_FOR_ADD
-import com.wuruoye.know.util.model.RequestCode.RECORD_TYPE_SET_FOR_UPDATE
-import com.wuruoye.know.util.orm.table.RecordType
+import com.wuruoye.know.util.model.RequestCode.RECORD_TAG_SET_FOR_ADD
+import com.wuruoye.know.util.model.RequestCode.RECORD_TAG_SET_FOR_UPDATE
+import com.wuruoye.know.util.orm.table.RecordTag
+import com.wuruoye.know.util.toast
 
 /**
- * Created at 2019/4/13 14:48 by wuruoye
+ * Created at 2019/4/15 16:41 by wuruoye
  * Description:
  */
-class RecordTypeSetActivity :
+class RecordTagSetActivity :
     AppCompatActivity(),
     View.OnClickListener,
-    RecordTypeSetAdapter.OnClickListener, PopupMenu.OnMenuItemClickListener {
-
+    PopupMenu.OnMenuItemClickListener,
+    RecordTagSetAdapter.OnClickListener {
     private lateinit var popupMenu: PopupMenu
 
     private lateinit var toolbar: Toolbar
@@ -44,7 +45,7 @@ class RecordTypeSetActivity :
     private lateinit var rv: RecyclerView
     private lateinit var fab: FloatingActionButton
 
-    private lateinit var vm: IRecordTypeSetVM
+    private lateinit var vm: IRecordTagSetVM
     private var mMoreType: Int = MORE_TYPE_ADD
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,8 +53,8 @@ class RecordTypeSetActivity :
         setContentView(R.layout.activity_record_type_set)
 
         vm = ViewModelProviders.of(this,
-            InjectorUtil.recordTypeSetViewModelFactory(applicationContext!!))
-            .get(RecordTypeSetViewModel::class.java)
+            InjectorUtil.recordTagSetViewModelFactory(applicationContext!!))
+            .get(RecordTagSetViewModel::class.java)
 
         bindView()
         bindListener()
@@ -84,19 +85,22 @@ class RecordTypeSetActivity :
     }
 
     private fun initView() {
-        tvTitle.text = "记录类型"
+        tvTitle.text = "标签"
         ivBack.setImageResource(R.drawable.ic_left)
         ivMore.setImageResource(R.drawable.ic_menu)
 
-        val adapter = RecordTypeSetAdapter()
+        val adapter = RecordTagSetAdapter()
         adapter.setOnClickListener(this)
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
     }
 
     private fun subscribeUI() {
-        vm.recordTypeList.observe(this, Observer {
-            (rv.adapter as RecordTypeSetAdapter).submitList(it)
+        vm.recordTagList.observe(this, Observer {
+            (rv.adapter as RecordTagSetAdapter).submitList(it)
+        })
+        vm.recordTagSignal.observe(this, Observer {
+            toast("默认标签不可删除")
         })
     }
 
@@ -105,12 +109,12 @@ class RecordTypeSetActivity :
             R.id.fab_setting -> {
                 when(mMoreType) {
                     MORE_TYPE_ADD -> {
-                        val intent = Intent(this, RecordTypeEditActivity::class.java)
-                        startActivityForResult(intent, RECORD_TYPE_SET_FOR_ADD)
+                        val intent = Intent(this, RecordTagEditActivity::class.java)
+                        startActivityForResult(intent, RECORD_TAG_SET_FOR_ADD)
                     }
                     MORE_TYPE_DELETE -> {
-                        val deleteSet = (rv.adapter as RecordTypeSetAdapter).getSelectSet()
-                        vm.deleteRecordType(deleteSet.toTypedArray())
+                        val deleteSet = (rv.adapter as RecordTagSetAdapter).getSelectSet()
+                        vm.deleteRecordTag(deleteSet.toTypedArray())
                     }
                 }
             }
@@ -123,14 +127,14 @@ class RecordTypeSetActivity :
         }
     }
 
-    override fun onClick(item: RecordType) {
-        val intent = Intent(this, RecordTypeEditActivity::class.java)
-        intent.putExtra(RecordTypeEditActivity.RECORD_TYPE, item.id)
-        startActivityForResult(intent, RECORD_TYPE_SET_FOR_UPDATE)
+    override fun onClick(item: RecordTag) {
+        val intent = Intent(this, RecordTagEditActivity::class.java)
+        intent.putExtra(RecordTagEditActivity.RECORD_TAG, item)
+        startActivityForResult(intent, RECORD_TAG_SET_FOR_UPDATE)
     }
 
-    override fun onDelClick(item: RecordType) {
-        vm.deleteRecordType(item)
+    override fun onDelClick(item: RecordTag) {
+        vm.deleteRecordTag(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -143,12 +147,12 @@ class RecordTypeSetActivity :
             R.id.menu_add_record_type_set -> {
                 mMoreType = MORE_TYPE_ADD
                 fab.setImageResource(R.drawable.ic_add)
-                (rv.adapter as RecordTypeSetAdapter).setSelectable(false)
+                (rv.adapter as RecordTagSetAdapter).setSelectable(false)
             }
             R.id.menu_delete_record_type_set -> {
                 mMoreType = MORE_TYPE_DELETE
                 fab.setImageResource(R.drawable.ic_check)
-                (rv.adapter as RecordTypeSetAdapter).setSelectable(true)
+                (rv.adapter as RecordTagSetAdapter).setSelectable(true)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -159,12 +163,12 @@ class RecordTypeSetActivity :
             R.id.menu_add_record_type_set -> {
                 mMoreType = MORE_TYPE_ADD
                 fab.setImageResource(R.drawable.ic_add)
-                (rv.adapter as RecordTypeSetAdapter).setSelectable(false)
+                (rv.adapter as RecordTagSetAdapter).setSelectable(false)
             }
             R.id.menu_delete_record_type_set -> {
                 mMoreType = MORE_TYPE_DELETE
                 fab.setImageResource(R.drawable.ic_check)
-                (rv.adapter as RecordTypeSetAdapter).setSelectable(true)
+                (rv.adapter as RecordTagSetAdapter).setSelectable(true)
             }
         }
         return true
@@ -173,7 +177,7 @@ class RecordTypeSetActivity :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            vm.updateTypeList()
+            vm.updateTagList()
         }
     }
 

@@ -7,6 +7,7 @@ import com.wuruoye.know.ui.edit.vm.RecordTagEditViewModel
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.ui.home.vm.UserViewModel
+import com.wuruoye.know.ui.setting.vm.RecordTagSetViewModel
 import com.wuruoye.know.ui.setting.vm.RecordTypeSetViewModel
 import com.wuruoye.know.util.model.AppCache
 import com.wuruoye.know.util.orm.Repository
@@ -61,5 +62,11 @@ object InjectorUtil {
         val recordItemDao = Repository.getRecordItem(context)
         val recordViewDao = Repository.getRecordView(context)
         return RecordTypeSetViewModel.Factory(recordTypeDao, recordDao, recordItemDao, recordViewDao)
+    }
+
+    fun recordTagSetViewModelFactory(context: Context): ViewModelProvider.Factory {
+        val recordTagDao = Repository.getRecordTag(context)
+        val recordDao = Repository.getRecord(context)
+        return RecordTagSetViewModel.Factory(recordTagDao, recordDao)
     }
 }

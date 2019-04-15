@@ -12,20 +12,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.wuruoye.know.R
 import com.wuruoye.know.util.DensityUtil
-import com.wuruoye.know.util.orm.table.RecordType
+import com.wuruoye.know.util.orm.table.RecordTag
 import com.wuruoye.know.widgets.EventHorizontalScrollView
 
 /**
- * Created at 2019/4/13 15:00 by wuruoye
+ * Created at 2019/4/15 17:13 by wuruoye
  * Description:
  */
-class RecordTypeSetAdapter :
-    ListAdapter<RecordType, RecordTypeSetAdapter.ViewHolder>(Callback()) {
+class RecordTagSetAdapter :
+    ListAdapter<RecordTag, RecordTagSetAdapter.ViewHolder>(Callback()) {
     private var onClickListener: OnClickListener? = null
     private var mLastMoveVH: ViewHolder? = null
     private var mSelectable: Boolean = false
     private var mVHs: ArrayList<ViewHolder> = ArrayList()
-    private var mSelectSet: HashSet<RecordType> = HashSet()
+    private var mSelectSet: HashSet<RecordTag> = HashSet()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val vh = ViewHolder(
@@ -99,7 +99,7 @@ class RecordTypeSetAdapter :
     }
 
     // 获取选择的所有项
-    fun getSelectSet(): HashSet<RecordType> {
+    fun getSelectSet(): HashSet<RecordTag> {
         return mSelectSet
     }
 
@@ -225,7 +225,7 @@ class RecordTypeSetAdapter :
                 if (newX == maxWidth) {
                     val item = hsv.tag
                     if (item != null) {
-                        onClickListener?.onDelClick(item as RecordType)
+                        onClickListener?.onDelClick(item as RecordTag)
                     }
                 }
             }
@@ -249,18 +249,19 @@ class RecordTypeSetAdapter :
         }
     }
 
-    class Callback : DiffUtil.ItemCallback<RecordType>() {
-        override fun areItemsTheSame(oldItem: RecordType, newItem: RecordType): Boolean {
+    class Callback : DiffUtil.ItemCallback<RecordTag>() {
+        override fun areItemsTheSame(oldItem: RecordTag, newItem: RecordTag): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: RecordType, newItem: RecordType): Boolean {
+        override fun areContentsTheSame(oldItem: RecordTag, newItem: RecordTag): Boolean {
             return false
         }
+
     }
 
     interface OnClickListener {
-        fun onClick(item: RecordType)
-        fun onDelClick(item: RecordType)
+        fun onClick(item: RecordTag)
+        fun onDelClick(item: RecordTag)
     }
 }

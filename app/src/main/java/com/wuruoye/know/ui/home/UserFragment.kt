@@ -1,6 +1,7 @@
 package com.wuruoye.know.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,8 +18,12 @@ import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.home.vm.IUserVM
 import com.wuruoye.know.ui.home.vm.UserViewModel
+import com.wuruoye.know.ui.setting.RecordTagSetActivity
 import com.wuruoye.know.ui.setting.RecordTypeSetActivity
 import com.wuruoye.know.util.InjectorUtil
+import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
+import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -136,7 +141,8 @@ class UserFragment : Fragment(), View.OnClickListener {
                     USER_FOR_RECORD_TYPE)
             }
             R.id.ll_edit_record_tag_user -> {
-
+                startActivityForResult(Intent(context, RecordTagSetActivity::class.java),
+                    USER_FOR_RECORD_TAG)
             }
             R.id.ll_backup_user -> {
 
@@ -144,13 +150,24 @@ class UserFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        vm.updateInfo()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when(requestCode) {
+                USER_FOR_RECORD_TYPE -> {
+                    vm.updateInfo()
+                }
+                USER_FOR_RECORD_TAG -> {
+                    vm.updateInfo()
+                }
+                RECORD_FOR_RECORD -> {
+                    vm.updateInfo()
+                }
+                RECORD_FOR_TYPE -> {
+                    vm.updateInfo()
+                }
+            }
+        }
     }
 
     companion object {
