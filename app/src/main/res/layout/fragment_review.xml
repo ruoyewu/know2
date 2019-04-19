@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" tools:ignore="NewApi">
 
+    <include
+        layout="@layout/toolbar"/>
+
+    <com.wuruoye.know.widgets.scrollview.ScrollItemView
+            app:left_max="0.5"
+            app:right_max="0.5"
+            app:left_color="@color/light_slate_gray"
+            app:right_color="@color/light_slate_gray"
+            app:left_view="@layout/view_delete"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+        <TextView
+                android:text="@string/review"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </com.wuruoye.know.widgets.scrollview.ScrollItemView>
 </LinearLayout>

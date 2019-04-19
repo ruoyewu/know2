@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -13,19 +15,18 @@ import android.os.Looper;
  */
 
 public class WConfig {
-    public static String PACKAGE_NAME;
-    public static Handler sMainHandler;
-    public static Context sAppContext;
+    private static Handler sMainHandler;
+    private static Context sAppContext;
 
-    public static void init(Context context) {
-        PACKAGE_NAME = context.getPackageName();
+    public static void init(@NotNull Context context) {
+        String packageName = context.getPackageName();
         APP_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/" + PACKAGE_NAME + "/";
+                "/" + packageName + "/";
         FILE_PATH = APP_PATH + "file/";
         IMAGE_PATH = APP_PATH + "image/";
         VIDEO_PATH = APP_PATH + "video/";
         RECORD_PATH = APP_PATH + "record/";
-        PROVIDER_AUTHORITY = PACKAGE_NAME + ".fileprovider";
+        PROVIDER_AUTHORITY = packageName + ".fileprovider";
 
         sMainHandler = new Handler(Looper.getMainLooper());
         sAppContext = context;
@@ -37,7 +38,8 @@ public class WConfig {
         }
     }
 
-    public static Context getApp() {
+    @Contract(pure = true)
+    public static Context getAppContext() {
         return sAppContext;
     }
 

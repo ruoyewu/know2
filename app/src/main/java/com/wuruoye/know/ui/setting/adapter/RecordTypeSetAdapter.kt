@@ -1,26 +1,27 @@
 package com.wuruoye.know.ui.setting.adapter
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.wuruoye.know.R
 import com.wuruoye.know.util.DensityUtil
 import com.wuruoye.know.util.orm.table.RecordType
-import com.wuruoye.know.widgets.EventHorizontalScrollView
+import com.wuruoye.know.widgets.scrollview.ScrollItemView
 
 /**
- * Created at 2019/4/13 15:00 by wuruoye
+ * Created at 2019-04-19 15:57 by wuruoye
  * Description:
  */
 class RecordTypeSetAdapter :
-    ListAdapter<RecordType, RecordTypeSetAdapter.ViewHolder>(Callback()) {
+    ListAdapter<RecordType, RecordTypeSetAdapter.ViewHolder>(Callback()){
+
     private var onClickListener: OnClickListener? = null
     private var mLastMoveVH: ViewHolder? = null
     private var mSelectable: Boolean = false
@@ -30,7 +31,7 @@ class RecordTypeSetAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val vh = ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_record_type_set, parent, false)
+                .inflate(R.layout.item_record_type_s, parent, false)
         )
         mVHs.add(vh)
         return vh
@@ -39,20 +40,30 @@ class RecordTypeSetAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         with(holder) {
-            // 基础设置
             tvTitle.text = item.title
 
-            hsv.tag = item
-            hsv.scrollTo(0, 0)
-            tvTitle.setOnClickListener {
-                onClickListener?.onClick(item)
+            siv.closeDirectly()
+            siv.setOnClickListener {
+                when(it.id) {
+                    R.id.tv_title_record_type_set -> onClickListener?.onClick(item)
+                    R.id.ll_view_del -> siv.deleteRight()
+                }
             }
-            llDel.setOnClickListener {
-                delete()
-            }
-            rb.setOnClickListener {
+            siv.setOnScrollListener(object : ScrollItemView.OnScrollListener {
+                override fun onLeft() {
+
+                }
+                override fun onRight() {
+                    if (mLastMoveVH == holder) {
+                        mLastMoveVH = null
+                    }
+                    onClickListener?.onDelClick(item)
+                }
+            })
+
+            rbSelect.setOnClickListener {
                 val contain = mSelectSet.contains(item)
-                rb.isChecked = !contain
+                rbSelect.isChecked = !contain
                 if (contain) {
                     mSelectSet.remove(item)
                 } else {
@@ -60,21 +71,20 @@ class RecordTypeSetAdapter :
                 }
             }
 
-            // 设置是否可以选择，用于多选情况
             if (mSelectable) {
                 val lp = flSelect.layoutParams
                 lp.width = DensityUtil.dp2px(flSelect.context, 50F).toInt()
                 flSelect.layoutParams = lp
 
                 tvTitle.isClickable = false
-                hsv.isScrollEnable = false
+                siv.isScrollable = false
             } else {
                 val lp = flSelect.layoutParams
                 lp.width = 0
                 flSelect.layoutParams = lp
 
                 tvTitle.isClickable = true
-                hsv.isScrollEnable = true
+                siv.isScrollable = true
             }
         }
     }
@@ -83,24 +93,15 @@ class RecordTypeSetAdapter :
         this.onClickListener = listener
     }
 
-    /**
-     * 设置是否处于选择状态
-     */
     fun setSelectable(selectable: Boolean) {
         if (mSelectable != selectable) {
             mSelectable = selectable
-//            mSelectSet.clear()
             if (selectable) {
                 openSelect()
             } else {
                 closeSelect()
             }
         }
-    }
-
-    // 获取选择的所有项
-    fun getSelectSet(): HashSet<RecordType> {
-        return mSelectSet
     }
 
     private val animator = ValueAnimator().apply {
@@ -125,7 +126,7 @@ class RecordTypeSetAdapter :
                 with(vh) {
                     close()
                     tvTitle.isClickable = false
-                    hsv.isScrollEnable = false
+                    siv.isScrollable = false
                 }
             }
         }
@@ -139,113 +140,41 @@ class RecordTypeSetAdapter :
             for (vh in mVHs) {
                 with(vh) {
                     tvTitle.isClickable = true
-                    hsv.isScrollEnable = true
+                    siv.isScrollable = true
                 }
             }
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val hsv: EventHorizontalScrollView = view.findViewById(R.id.hsv_record_type_set)
-        val tvTitle : TextView = view.findViewById(R.id.tv_record_type_set)
-        val llDel: LinearLayout = view.findViewById(R.id.ll_del_record_type_set)
-        val flSelect: FrameLayout = view.findViewById(R.id.fl_select_record_type_set)
-        val rb : AppCompatRadioButton = view.findViewById(R.id.rb_record_type_set)
-        val v: View = view.findViewById(R.id.v_record_type_set)
+    fun getSelectSet(): HashSet<RecordType> {
+        return mSelectSet
+    }
 
-        private var maxMove: Int = 0
-        private var deleteMove: Int = 0
-        private var maxWidth: Int = 0
-        private var isOnePass: Boolean = false
-        private var moveAdapter = ViewMoveAdapter(llDel)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val siv: ScrollItemView = view.findViewById(R.id.siv_record_type_set)
+        val tvTitle: TextView = view.findViewById(R.id.tv_title_record_type_set)
+        val flSelect: FrameLayout = view.findViewById(R.id.fl_select_record_type_set)
+        val rbSelect: RadioButton = view.findViewById(R.id.rb_select_record_type_set)
 
         init {
-            // 初始化各个控件位置、大小
-            view.post {
-                val width = hsv.width
-
-                var lp = tvTitle.layoutParams
-                lp.width = width
-                tvTitle.layoutParams = lp
-                lp = v.layoutParams
-                lp.width = width
-                v.layoutParams = lp
-
-                llDel.post { llDel.x = (width).toFloat() }
-
-                maxWidth = width
-                deleteMove = width / 2
-                maxMove = llDel.width
-            }
-
-            // 设置 HSV（HorizontalScrollView）事件监听
-            hsv.setOnEventListener { event ->
-                if (event.action == MotionEvent.ACTION_UP ||
-                    event.action == MotionEvent.ACTION_CANCEL) {
-                    val move = hsv.scrollX
-                    when {
-                        move > deleteMove -> delete()
-                        move > maxMove/2 -> open()
-                        else -> close()
-                    }
-                } else if (event.action == MotionEvent.ACTION_DOWN) {
-                    isOnePass = false
-                    if (mLastMoveVH != null && mLastMoveVH != this) {
-                        mLastMoveVH!!.close()
-                    }
+            siv.setOnTouchDownListener {
+                if (mLastMoveVH != this) {
+                    mLastMoveVH?.siv?.close()
                 }
-            }
-
-            hsv.setOnScrollChangedListener { oldX, _, newX, _ ->
-                if (!isOnePass) {
-                    if (newX < maxMove) {
-                        val end = (maxWidth - newX).toFloat()
-                        moveAdapter.moveTo(end)
-                    } else if (oldX < deleteMove && newX >= deleteMove) {
-                        val end = deleteMove.toFloat()
-                        moveAdapter.moveTo(end)
-                        llDel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                    } else if (newX < deleteMove && oldX >= deleteMove) {
-                        val end = (maxWidth - llDel.width).toFloat()
-                        moveAdapter.moveTo(end)
-                        llDel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                    } else if (newX > deleteMove) {
-                        val end = (maxWidth - newX).toFloat()
-                        moveAdapter.moveTo(end)
-                    } else {
-                        val end = (maxWidth - maxMove).toFloat()
-                        moveAdapter.moveTo(end)
-                    }
-                } else {
-                    val end = (maxWidth - newX).toFloat()
-                    moveAdapter.moveTo(end)
-                }
-
-                if (newX == maxWidth) {
-                    val item = hsv.tag
-                    if (item != null) {
-                        onClickListener?.onDelClick(item as RecordType)
-                    }
-                }
+                mLastMoveVH = this
             }
         }
 
-        // 关闭右侧
         fun close() {
-            hsv.post { hsv.smoothScrollTo(0, 0) }
+            siv.close()
         }
 
-        // 打开右侧
         fun open() {
-            hsv.post { hsv.smoothScrollTo(maxMove, 0) }
-            mLastMoveVH = this
+            siv.openRight()
         }
 
-        // 执行删除动画
         fun delete() {
-            hsv.post { hsv.smoothScrollTo(maxWidth, 0) }
-            isOnePass = true
+            siv.deleteRight()
         }
     }
 

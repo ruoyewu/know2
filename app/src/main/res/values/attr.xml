@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScrollItemView">
+        <attr name="left_color" format="color"/>
+        <attr name="right_color" format="color"/>
+        <attr name="left_max" format="float"/>
+        <attr name="right_max" format="float"/>
+        <attr name="left_view" format="reference"/>
+        <attr name="right_view" format="reference"/>
+    </declare-styleable>
+</resources>

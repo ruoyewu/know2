@@ -21,7 +21,7 @@ class RecordTagEditViewModel(
 
     override fun saveRecordTag(recordTag: RecordTag?, title: String, comment: String) {
         GlobalScope.launch {
-            if (recordTagDao.queryByTitle(title) != null) {
+            if (recordTag == null && recordTagDao.queryByTitle(title) != null) {
                 submitResult.postValue(Result(false, "已有同名标签"))
             } else {
                 val tag = recordTag ?: RecordTag()
