@@ -31,7 +31,7 @@ class RecordTagSetAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val vh = ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_record_type_s, parent, false)
+                .inflate(R.layout.item_record_type_set, parent, false)
         )
         mVHs.add(vh)
         return vh

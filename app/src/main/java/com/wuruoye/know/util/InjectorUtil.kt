@@ -6,6 +6,7 @@ import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.edit.vm.RecordTagEditViewModel
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
 import com.wuruoye.know.ui.home.vm.RecordViewModel
+import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.vm.RecordTagSetViewModel
 import com.wuruoye.know.ui.setting.vm.RecordTypeSetViewModel
@@ -68,5 +69,13 @@ object InjectorUtil {
         val recordTagDao = Repository.getRecordTag(context)
         val recordDao = Repository.getRecord(context)
         return RecordTagSetViewModel.Factory(recordTagDao, recordDao)
+    }
+
+    fun reviewViewModelFactory(context: Context): ViewModelProvider.Factory {
+        val recordDao = Repository.getRecord(context)
+        val recordTypeDao = Repository.getRecordType(context)
+        val recordItemDao = Repository.getRecordItem(context)
+        val recordTagDao = Repository.getRecordTag(context)
+        return ReviewViewModel.Factory(recordDao, recordTypeDao, recordItemDao, recordTagDao)
     }
 }

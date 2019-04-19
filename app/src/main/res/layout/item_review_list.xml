@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wuruoye.know.widgets.scrollview.ScrollItemView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/siv_review_list"
+        app:left_color="@color/light_slate_gray"
+        app:left_max="0.4"
+        app:left_view="@layout/view_remember"
+        app:right_color="@color/monsoon"
+        app:right_max="0.4"
+        app:right_view="@layout/view_not_remember"
+        android:minHeight="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/ll_review_list"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="@color/romance"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="NewApi">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/tv_title_review_list"
+                    android:text="@string/app_name"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/light_slate_gray"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:id="@+id/tv_content_review_list"
+                    android:text="@string/app_name"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:id="@+id/tv_date_review_list"
+                    android:text="@string/default_date"
+                    android:textSize="12sp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <ImageView
+                android:id="@+id/iv_review_list"
+                android:src="@drawable/ic_record"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:layout_marginStart="10dp"
+                android:layout_width="150dp"
+                android:layout_height="100dp" />
+    </LinearLayout>
+</com.wuruoye.know.widgets.scrollview.ScrollItemView>
