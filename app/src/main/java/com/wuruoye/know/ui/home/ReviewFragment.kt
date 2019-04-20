@@ -52,6 +52,8 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
     }
 
     private fun initView() {
+        tvTitle.text = "复习"
+
         val adapter = ReviewListAdapter()
         adapter.setOnActionListener(this)
         rv.adapter = adapter
