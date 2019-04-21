@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.edit.vm.RecordTagEditViewModel
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
+import com.wuruoye.know.ui.edit.vm.ReviewStrategyEditViewModel
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.ui.home.vm.UserViewModel
@@ -77,5 +78,10 @@ object InjectorUtil {
         val recordItemDao = Repository.getRecordItem(context)
         val recordTagDao = Repository.getRecordTag(context)
         return ReviewViewModel.Factory(recordDao, recordTypeDao, recordItemDao, recordTagDao)
+    }
+
+    fun reviewStrategyEditViewModel(context: Context): ViewModelProvider.Factory {
+        val reviewStrategyDao = Repository.getReviewStrategy(context)
+        return ReviewStrategyEditViewModel.Factory(reviewStrategyDao)
     }
 }

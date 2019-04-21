@@ -43,6 +43,13 @@
     <string name="create_time">创建日期</string>
     <string name="record_tag">记录标签</string>
 
+    <string name="review_strategy_title">复习策略名称</string>
+    <string name="remember_time">记忆完成次数</string>
+    <string name="gap_time">间隔记忆时间</string>
+    <string name="day">日</string>
+    <string name="hour">时</string>
+    <string name="minute">分</string>
+
     <string name="record_info">记录</string>
     <string name="setting">设置</string>
     <string name="no_login">未登录</string>
@@ -55,6 +62,7 @@
     <string name="set_record_type">编辑记录类型</string>
     <string name="set_record_tag">编辑标签</string>
     <string name="set_backup">记录备份</string>
+    <string name="set_review_strategy">编辑复习策略</string>
     <string name="delete_record_type">删除</string>
     <string name="remember">记住了</string>
     <string name="not_remember">没记住</string>

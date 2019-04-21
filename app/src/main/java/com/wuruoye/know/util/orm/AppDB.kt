@@ -18,7 +18,8 @@ import com.wuruoye.know.util.orm.table.*
     RecordType::class,
     Record::class,
     RecordItem::class,
-    RecordTag::class], version = 1)
+    RecordTag::class,
+    ReviewStrategy::class], version = 1)
 abstract class AppDB : RoomDatabase(){
     abstract fun imageView(): ImageViewDao
     abstract fun textView(): TextViewDao
@@ -27,6 +28,7 @@ abstract class AppDB : RoomDatabase(){
     abstract fun record(): RecordDao
     abstract fun recordItem(): RecordItemDao
     abstract fun recordTag(): RecordTagDao
+    abstract fun reviewStrategy(): ReviewStrategyDao
 
     companion object {
         private const val DATABASE_NAME = "com.wuruoye.know.database"

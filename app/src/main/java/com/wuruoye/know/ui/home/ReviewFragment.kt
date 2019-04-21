@@ -1,6 +1,8 @@
 package com.wuruoye.know.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,9 @@ import com.wuruoye.know.ui.home.adapter.ReviewListAdapter
 import com.wuruoye.know.ui.home.vm.IReviewVM
 import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.util.InjectorUtil
+import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
+import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
 
 /**
@@ -76,6 +81,17 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
 
     override fun onRemember(item: RecordListItem) {
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when(requestCode) {
+                RECORD_FOR_TYPE,
+                RECORD_FOR_RECORD,
+                USER_FOR_RECORD_TYPE -> vm.updateRecordList()
+            }
+        }
     }
 
     companion object {

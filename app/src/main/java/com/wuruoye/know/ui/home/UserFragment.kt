@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.edit.ReviewStrategyEditActivity
 import com.wuruoye.know.ui.home.vm.IUserVM
 import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.RecordTagSetActivity
@@ -25,6 +26,7 @@ import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_REVIEW_STRATEGY
 import com.wuruoye.know.util.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -48,6 +50,7 @@ class UserFragment : Fragment(), View.OnClickListener {
     private lateinit var tvRecordTagSize: TextView
     private lateinit var llUserInfo: LinearLayout
     private lateinit var llEdiRecordType: LinearLayout
+    private lateinit var llEditReviewStrategy: LinearLayout
     private lateinit var llEditRecordTag: LinearLayout
     private lateinit var llBackup: LinearLayout
 
@@ -89,6 +92,7 @@ class UserFragment : Fragment(), View.OnClickListener {
             tvRecordTagSize = findViewById(R.id.tv_record_tag_size_user)
             llUserInfo = findViewById(R.id.ll_user_info_user)
             llEdiRecordType = findViewById(R.id.ll_edit_record_type_user)
+            llEditReviewStrategy = findViewById(R.id.ll_edit_review_strategy_user)
             llEditRecordTag = findViewById(R.id.ll_edit_record_tag_user)
             llBackup = findViewById(R.id.ll_backup_user)
         }
@@ -107,6 +111,7 @@ class UserFragment : Fragment(), View.OnClickListener {
         llRecordTagSize.setOnClickListener(this)
         llUserInfo.setOnClickListener(this)
         llEdiRecordType.setOnClickListener(this)
+        llEditReviewStrategy.setOnClickListener(this)
         llEditRecordTag.setOnClickListener(this)
         llBackup.setOnClickListener(this)
     }
@@ -139,6 +144,10 @@ class UserFragment : Fragment(), View.OnClickListener {
             R.id.ll_edit_record_type_user -> {
                 startActivityForResult(Intent(context, RecordTypeSetActivity::class.java),
                     USER_FOR_RECORD_TYPE)
+            }
+            R.id.ll_edit_review_strategy_user -> {
+                startActivityForResult(Intent(context, ReviewStrategyEditActivity::class.java),
+                    USER_FOR_REVIEW_STRATEGY)
             }
             R.id.ll_edit_record_tag_user -> {
                 startActivityForResult(Intent(context, RecordTagSetActivity::class.java),

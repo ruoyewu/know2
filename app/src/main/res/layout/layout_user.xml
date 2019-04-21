@@ -171,6 +171,33 @@
     </LinearLayout>
 
     <LinearLayout
+            android:id="@+id/ll_edit_review_strategy_user"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+
+        <TextView
+                android:text="@string/set_review_strategy"
+                android:textSize="15sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:src="@drawable/ic_right"
+                android:padding="7dp"
+                android:layout_marginEnd="15dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+    </LinearLayout>
+
+    <LinearLayout
             android:id="@+id/ll_edit_record_tag_user"
             android:orientation="horizontal"
             android:paddingTop="10dp"

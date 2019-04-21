@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:background="@color/romance"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" tools:ignore="NewApi">
+
+    <include
+        layout="@layout/toolbar"/>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_title_review_strategy_edit"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:counterMaxLength="10"
+                    android:hint="@string/review_strategy_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_title_review_strategy_edit"
+                        android:inputType="text"
+                        android:textColor="@color/onyx"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                    android:id="@+id/ll_remember_time_review_strategy_edit"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                <TextView
+                        android:text="@string/remember_time"
+                        android:textSize="16sp"
+                        android:textColor="@color/onyx"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                <TextView
+                        android:id="@+id/tv_remember_time_review_strategy_edit"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:textColor="@color/onyx"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/ll_gap_time_review_strategy_edit"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                <TextView
+                        android:text="@string/gap_time"
+                        android:textSize="16sp"
+                        android:textColor="@color/onyx"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                <TextView
+                        android:id="@+id/tv_gap_time_review_strategy_edit"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:textColor="@color/onyx"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:minWidth="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btn_review_strategy_edit"
+                    android:text="@string/confirm"
+                    android:textColor="@color/romance"
+                    android:background="@color/light_slate_gray"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
