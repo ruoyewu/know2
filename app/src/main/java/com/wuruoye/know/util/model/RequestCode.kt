@@ -17,4 +17,6 @@ object RequestCode {
     const val RECORD_TYPE_SET_FOR_UPDATE = 9
     const val RECORD_TAG_SET_FOR_ADD = 10
     const val RECORD_TAG_SET_FOR_UPDATE = 11
+    val REVIEW_STRATEGY_SET_FOR_ADD = 13
+    val REVIEW_STRATEGY_SET_FOR_UPDATE = 14
 }

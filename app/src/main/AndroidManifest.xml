@@ -28,6 +28,7 @@
         <activity android:name=".ui.setting.RecordTypeSetActivity"/>
         <activity android:name=".ui.setting.RecordTagSetActivity"/>
         <activity android:name=".ui.edit.ReviewStrategyEditActivity"/>
+        <activity android:name=".ui.setting.ReviewStrategySetActivity"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"

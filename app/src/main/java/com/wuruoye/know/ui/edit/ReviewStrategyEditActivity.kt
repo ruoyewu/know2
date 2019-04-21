@@ -129,7 +129,9 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun subscribeUI() {
         vm.reviewStrategy.observe(this, Observer {
-            etTitle.setText(it.title)
+            if (etTitle.text!!.isEmpty()) {
+                etTitle.setText(it.title)
+            }
             tvRemTime.text = it.rememberTime.toString()
             tvGapTime.text = getGapTime(it.gapTime)
         })

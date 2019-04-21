@@ -12,11 +12,12 @@ class RealRecordType(
     override var id: Long?,
     var title: String,
     var items: ArrayList<RecordView>,
+    var strategy: Long,
     override var createTime: Long,
     override var updateTime: Long
 ) : BaseTable {
-    constructor(title: String): this(null, title, arrayListOf(), -1, -1)
+    constructor(title: String): this(null, title, arrayListOf(), 0, -1, -1)
 
     constructor(type: RecordType, views: ArrayList<RecordView>):
-            this(type.id, type.title, views, type.createTime, type.updateTime)
+            this(type.id, type.title, views, 0, type.createTime, type.updateTime)
 }

@@ -11,6 +11,7 @@ import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.vm.RecordTagSetViewModel
 import com.wuruoye.know.ui.setting.vm.RecordTypeSetViewModel
+import com.wuruoye.know.ui.setting.vm.ReviewStrategySetViewModel
 import com.wuruoye.know.util.model.AppCache
 import com.wuruoye.know.util.orm.Repository
 
@@ -83,5 +84,11 @@ object InjectorUtil {
     fun reviewStrategyEditViewModel(context: Context): ViewModelProvider.Factory {
         val reviewStrategyDao = Repository.getReviewStrategy(context)
         return ReviewStrategyEditViewModel.Factory(reviewStrategyDao)
+    }
+
+    fun reviewStrategySetViewModel(context: Context): ViewModelProvider.Factory {
+        val reviewStrategyDao = Repository.getReviewStrategy(context)
+        val recordTypeDao = Repository.getRecordType(context)
+        return ReviewStrategySetViewModel.Factory(reviewStrategyDao, recordTypeDao)
     }
 }

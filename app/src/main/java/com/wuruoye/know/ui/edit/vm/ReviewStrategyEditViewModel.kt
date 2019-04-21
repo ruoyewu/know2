@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.model.beans.Result
 import com.wuruoye.know.util.orm.dao.ReviewStrategyDao
 import com.wuruoye.know.util.orm.table.ReviewStrategy
+import com.wuruoye.know.util.update
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -37,6 +38,7 @@ class ReviewStrategyEditViewModel(
                 submitResult.postValue(Result(false, "已存在同名策略"))
             } else {
                 strategy.title = title
+                strategy.update()
                 val id = reviewStrategyDao.insert(strategy)
                 strategy.id = id
                 submitResult.postValue(Result(true, "", strategy))

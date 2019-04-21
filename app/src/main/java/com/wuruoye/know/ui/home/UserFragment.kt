@@ -16,11 +16,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
-import com.wuruoye.know.ui.edit.ReviewStrategyEditActivity
 import com.wuruoye.know.ui.home.vm.IUserVM
 import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.RecordTagSetActivity
 import com.wuruoye.know.ui.setting.RecordTypeSetActivity
+import com.wuruoye.know.ui.setting.ReviewStrategySetActivity
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
@@ -146,7 +146,7 @@ class UserFragment : Fragment(), View.OnClickListener {
                     USER_FOR_RECORD_TYPE)
             }
             R.id.ll_edit_review_strategy_user -> {
-                startActivityForResult(Intent(context, ReviewStrategyEditActivity::class.java),
+                startActivityForResult(Intent(context, ReviewStrategySetActivity::class.java),
                     USER_FOR_REVIEW_STRATEGY)
             }
             R.id.ll_edit_record_tag_user -> {
