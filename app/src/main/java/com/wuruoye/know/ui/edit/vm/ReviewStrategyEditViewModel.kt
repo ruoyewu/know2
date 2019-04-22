@@ -33,8 +33,7 @@ class ReviewStrategyEditViewModel(
 
     override fun saveReviewStrategy(title: String) {
         GlobalScope.launch {
-            val contain = reviewStrategyDao.queryByTitle(title) != null
-            if (contain) {
+            if (strategy.id == null && reviewStrategyDao.queryByTitle(title) != null) {
                 submitResult.postValue(Result(false, "已存在同名策略"))
             } else {
                 strategy.title = title

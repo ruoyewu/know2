@@ -48,7 +48,6 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var npHour: NumberPicker
     private lateinit var npMinute: NumberPicker
 
-    private var mType: Int = TYPE_REM
     private lateinit var vm: IReviewStrategyEditVM
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +114,6 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
         dlgGap = BottomAlertDialog.Builder(this)
             .setTitle("选择间隔时间")
             .setContentView(gapView)
-            .setCancelListener(this)
             .setConfirmListener(this, Gravity.TOP)
             .build()
     }
@@ -154,10 +152,7 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
                 onBackPressed()
             }
             R.id.btn_cancel_dlg_bottom_alert -> {
-                when(mType) {
-                    TYPE_REM -> dlgEdit.dismiss()
-                    TYPE_GAP -> dlgGap.dismiss()
-                }
+                dlgEdit.dismiss()
             }
             R.id.btn_confirm_dlg_bottom_alert -> {
                 try {
@@ -166,10 +161,10 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
                         tilEdit.error = "次数需要大于 0"
                     } else {
                         vm.setRemTime(time)
-                        dlgEdit.dismiss()
                         etEdit.text.clear()
+                        dlgEdit.dismiss()
                     }
-                } finally {
+                } catch (e: Exception) {
                     tilEdit.error = "输入有误"
                 }
             }
@@ -182,13 +177,11 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
                 vm.setGapTime(milli)
             }
             R.id.ll_remember_time_review_strategy_edit -> {
-                mType = TYPE_REM
                 etEdit.setText(vm.remTime.toString())
                 etEdit.setSelection(etEdit.text.length-1)
                 dlgEdit.show()
             }
             R.id.ll_gap_time_review_strategy_edit -> {
-                mType = TYPE_GAP
                 val date = getDate(vm.gapTime)
                 npDay.value = date.day
                 npHour.value = date.hour
@@ -256,9 +249,7 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
     )
 
     companion object {
-        val REVIEW_STRATEGY = "review_strategy"
-        val TYPE_REM = 1
-        val TYPE_GAP = 2
+        const val REVIEW_STRATEGY = "review_strategy"
 
         val MINUTE_VALUE = arrayOf("0", "5", "10", "15", "20",
             "25", "30", "35", "40", "45", "50", "55")

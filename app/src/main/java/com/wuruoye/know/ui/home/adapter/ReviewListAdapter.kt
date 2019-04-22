@@ -17,45 +17,63 @@ import com.wuruoye.know.widgets.scrollview.ScrollItemView
  * Created at 2019-04-19 22:52 by wuruoye
  * Description:
  */
-class ReviewListAdapter : ListAdapter<RecordListItem, ReviewListAdapter.ViewHolder>(Callback()){
+class ReviewListAdapter : ListAdapter<RecordListItem, RecyclerView.ViewHolder>(Callback()){
     private var mLastVH: ViewHolder? = null
     private var mListener: OnActionListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_review_list, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_NORMAL) {
+            ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_review_list, parent, false)
+            )
+        } else {
+            TailViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_tail, parent, false)
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (getItemViewType(position) == TYPE_NORMAL) {
+            val item = getItem(position)
+            holder as ViewHolder
+            with(holder) {
+                // init content
+                tvTitle.text = item.title
+                tvContent.text = item.content
+                tvDate.text = DateUtil.milli2Date(item.record.createTime)
 
-        with(holder) {
-            // init content
-            tvTitle.text = item.title
-            tvContent.text = item.content
-            tvDate.text = DateUtil.milli2Date(item.record.createTime)
-
-            siv.closeDirectly()
-            siv.setOnClickListener {
-                when(it.id) {
-                    R.id.ll_view_remember -> siv.deleteLeft()
-                    R.id.ll_view_not_remember -> siv.deleteRight()
-                    R.id.ll_review_list -> mListener?.onClick(item)
+                siv.closeDirectly()
+                siv.setOnClickListener {
+                    when(it.id) {
+                        R.id.ll_view_remember -> siv.deleteLeft()
+                        R.id.ll_view_not_remember -> siv.deleteRight()
+                        R.id.ll_review_list -> mListener?.onClick(item)
+                    }
                 }
+                siv.setOnScrollListener(object : ScrollItemView.OnScrollListener {
+                    override fun onLeft() {
+                        mLastVH = null
+                        mListener?.onRemember(item)
+                    }
+                    override fun onRight() {
+                        mLastVH = null
+                        mListener?.onNotRemember(item)
+                    }
+                })
             }
-            siv.setOnScrollListener(object : ScrollItemView.OnScrollListener {
-                override fun onLeft() {
-                    mLastVH = null
-                    mListener?.onRemember(item)
-                }
-                override fun onRight() {
-                    mLastVH = null
-                    mListener?.onNotRemember(item)
-                }
-            })
         }
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount() + 1
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position < super.getItemCount()) TYPE_NORMAL
+                else TYPE_TAIL
     }
 
     fun setOnActionListener(listener: OnActionListener) {
@@ -79,6 +97,10 @@ class ReviewListAdapter : ListAdapter<RecordListItem, ReviewListAdapter.ViewHold
         }
     }
 
+    class TailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tv: TextView = view as TextView
+    }
+
     class Callback : DiffUtil.ItemCallback<RecordListItem>() {
         override fun areItemsTheSame(oldItem: RecordListItem, newItem: RecordListItem): Boolean {
             return oldItem.record.id == newItem.record.id
@@ -93,5 +115,10 @@ class ReviewListAdapter : ListAdapter<RecordListItem, ReviewListAdapter.ViewHold
         fun onClick(item: RecordListItem)
         fun onRemember(item: RecordListItem)
         fun onNotRemember(item: RecordListItem)
+    }
+
+    companion object {
+        const val TYPE_NORMAL = 1
+        const val TYPE_TAIL = 2
     }
 }

@@ -1,6 +1,7 @@
 package com.wuruoye.know.util
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.text.method.ScrollingMovementMethod
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,12 +12,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.BaseRequestOptions
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.orm.table.RecordImageView
 import com.wuruoye.know.util.orm.table.RecordTextView
 import com.wuruoye.know.util.orm.table.RecordView
+import jp.wasabeef.glide.transformations.BlurTransformation
+import jp.wasabeef.glide.transformations.ColorFilterTransformation
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 /**
  * Created at 2019/3/17 21:52 by wuruoye
@@ -189,6 +199,8 @@ object ViewFactory {
         }
     }
 
+
+
     fun generateEditView(context: Context, recordView: RecordView, parent: ViewGroup,
                          parentView: ArrayList<RecordView>, attach: Boolean,
                          listener: OnLongClickListener?): View? {
@@ -272,6 +284,154 @@ object ViewFactory {
         }
     }
 
+
+    fun generateShowView(context: Context, view: RecordView, parent: ViewGroup,
+                         attach: Boolean): View? {
+        return when (view) {
+            is RecordTextView -> generateShowTextView(context, view, parent, attach)
+            is RealRecordLayoutView -> generateShowLayoutView(context, view, parent, attach)
+            is RecordImageView -> generateShowImageView(context, view, parent, attach)
+            else -> null
+        }
+    }
+
+    private fun generateShowTextView(context: Context, textView: RecordTextView,
+                                     parent: ViewGroup, attach: Boolean): View {
+        with(textView) {
+            if (editable) {
+                val viewLayout = LayoutInflater.from(context)
+                    .inflate(R.layout.view_edit, parent, false) as TextInputLayout
+
+                viewLayout.hint = hint
+                // TODO set hint size and color using reflect
+                viewLayout.setBackgroundColor(bgColor)
+
+                viewLayout.setPadding(DensityUtil.dp2px(context, paddingLeft.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, paddingTop.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, paddingRight.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, paddingBottom.toFloat()).toInt())
+                val params = ViewGroup.MarginLayoutParams(viewLayout.layoutParams)
+                params.setMargins(DensityUtil.dp2px(context, marginLeft.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginTop.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginBottom.toFloat()).toInt())
+                params.width = lengthToPx(context, width)
+                params.height = lengthToPx(context, height)
+                viewLayout.layoutParams = params
+
+                val view = viewLayout.findViewById<EditText>(R.id.et_view_edit)
+                view.setTextColor(textColor)
+                view.textSize = textSize.toFloat()
+                view.gravity = gravity
+                view.setTypeface(view.typeface, textStyle)
+                view.inputType = inputType
+                view.minLines = minLine
+                view.maxLines = maxLine
+                view.movementMethod = ScrollingMovementMethod.getInstance()
+
+                view.isEnabled = false
+                if (attach) {
+                    parent.addView(viewLayout)
+                }
+                return viewLayout
+            } else {
+                val view = LayoutInflater.from(context)
+                    .inflate(R.layout.view_text, parent, false) as TextView
+                view.text = text
+                view.setTextColor(textColor)
+                view.textSize = textSize.toFloat()
+                view.setBackgroundColor(bgColor)
+
+                view.setPadding(DensityUtil.dp2px(context, paddingLeft.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, paddingTop.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, paddingRight.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, paddingBottom.toFloat()).toInt())
+                val params = ViewGroup.MarginLayoutParams(view.layoutParams)
+                params.setMargins(DensityUtil.dp2px(context, marginLeft.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginTop.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
+                    DensityUtil.dp2px(context, marginBottom.toFloat()).toInt())
+                params.width = lengthToPx(context, width)
+                params.height = lengthToPx(context, height)
+                view.layoutParams = params
+                view.gravity = gravity
+                view.setTypeface(view.typeface, textStyle)
+                view.minLines = minLine
+                view.maxLines = maxLine
+                view.movementMethod = ScrollingMovementMethod.getInstance()
+
+                if (attach) {
+                    parent.addView(view)
+                }
+                return view
+            }
+        }
+    }
+
+    private fun generateShowImageView(context: Context, imageView: RecordImageView,
+                                      parent: ViewGroup, attach: Boolean): View {
+        with(imageView) {
+            val view = LayoutInflater.from(context)
+                .inflate(R.layout.view_img, parent, false) as ImageView
+            view.setPadding(DensityUtil.dp2px(context, paddingLeft.toFloat()).toInt(),
+                DensityUtil.dp2px(context, paddingTop.toFloat()).toInt(),
+                DensityUtil.dp2px(context, paddingRight.toFloat()).toInt(),
+                DensityUtil.dp2px(context, paddingBottom.toFloat()).toInt())
+
+            val lp = view.layoutParams as ViewGroup.MarginLayoutParams
+            lp.width = lengthToPx(context, width)
+            lp.height = lengthToPx(context, height)
+            lp.setMargins(DensityUtil.dp2px(context, marginLeft.toFloat()).toInt(),
+                DensityUtil.dp2px(context, marginTop.toFloat()).toInt(),
+                DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
+                DensityUtil.dp2px(context, marginBottom.toFloat()).toInt())
+            view.layoutParams = lp
+
+            if (attach) {
+                parent.addView(view)
+            }
+
+            Glide.with(context)
+                .load(R.drawable.ic_demo)
+                .apply(generateOption(imageView, view))
+                .into(view)
+            return view
+        }
+    }
+
+    private fun generateShowLayoutView(context: Context, layoutView: RealRecordLayoutView,
+                                       parent: ViewGroup, attach: Boolean): View {
+        with(layoutView) {
+            val view = LayoutInflater.from(context).inflate(R.layout.view_layout,
+                parent, false) as LinearLayout
+            view.orientation = orientation
+            view.gravity = gravity
+            view.setBackgroundColor(bgColor)
+            view.setPadding(DensityUtil.dp2px(context, paddingLeft.toFloat()).toInt(),
+                DensityUtil.dp2px(context, paddingTop.toFloat()).toInt(),
+                DensityUtil.dp2px(context, paddingRight.toFloat()).toInt(),
+                DensityUtil.dp2px(context, paddingBottom.toFloat()).toInt())
+            val lp = view.layoutParams as ViewGroup.MarginLayoutParams
+            lp.width = lengthToPx(context, width)
+            lp.height = lengthToPx(context, height)
+            lp.setMargins(DensityUtil.dp2px(context, marginLeft.toFloat()).toInt(),
+                DensityUtil.dp2px(context, marginTop.toFloat()).toInt(),
+                DensityUtil.dp2px(context, marginRight.toFloat()).toInt(),
+                DensityUtil.dp2px(context, marginBottom.toFloat()).toInt())
+            view.layoutParams = lp
+
+            for (v in items) {
+                generateShowView(context, v, view, true)
+            }
+
+            if (attach) {
+                parent.addView(view)
+            }
+            return view
+        }
+    }
+
+
     private fun lengthToPx(context: Context, length: Int): Int {
         return if (length < 0) length
                 else DensityUtil.dp2px(context, length.toFloat()).toInt()
@@ -283,5 +443,24 @@ object ViewFactory {
             is RecordTextView -> if (view.editable) "编辑框" else "标签"
             else -> "未知"
         }
+    }
+
+    fun generateOption(view: RecordImageView, iv: ImageView): BaseRequestOptions<*> {
+        val default = RoundedCornersTransformation(0, 0)
+        return RequestOptions.bitmapTransform(
+            MultiTransformation<Bitmap>(
+                if (view.blur) BlurTransformation(25) else default,
+                if (view.tint != 0) ColorFilterTransformation(view.tint) else default,
+                when (view.shape) {
+                    0 -> CenterCrop()
+                    1 -> MultiTransformation<Bitmap>(
+                        CenterCrop(),
+                        RoundedCornersTransformation(25, 0)
+                    )
+                    2 -> CircleCrop()
+                    else -> default
+                }
+            )
+        )
     }
 }
