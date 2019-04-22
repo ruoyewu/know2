@@ -184,7 +184,7 @@ class RecordTypeSetAdapter :
         }
 
         override fun areContentsTheSame(oldItem: RecordType, newItem: RecordType): Boolean {
-            return false
+            return oldItem == newItem
         }
     }
 

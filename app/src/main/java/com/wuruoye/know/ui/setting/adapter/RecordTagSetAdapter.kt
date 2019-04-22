@@ -184,7 +184,7 @@ class RecordTagSetAdapter :
         }
 
         override fun areContentsTheSame(oldItem: RecordTag, newItem: RecordTag): Boolean {
-            return false
+            return oldItem == newItem
         }
     }
 

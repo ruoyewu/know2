@@ -22,6 +22,7 @@ import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
+import com.wuruoye.know.util.toast
 
 /**
  * Created at 2019/4/9 21:11 by wuruoye
@@ -72,15 +73,15 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
     }
 
     override fun onClick(item: RecordListItem) {
-
+        context?.toast(item.title)
     }
 
     override fun onNotRemember(item: RecordListItem) {
-
+        vm.rememberRecord(item, false)
     }
 
     override fun onRemember(item: RecordListItem) {
-
+        vm.rememberRecord(item, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

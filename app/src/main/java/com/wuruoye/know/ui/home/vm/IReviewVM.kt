@@ -11,4 +11,5 @@ interface IReviewVM {
     val recordList: MutableLiveData<List<RecordListItem>>
 
     fun updateRecordList()
+    fun rememberRecord(recordListItem: RecordListItem, remember: Boolean)
 }

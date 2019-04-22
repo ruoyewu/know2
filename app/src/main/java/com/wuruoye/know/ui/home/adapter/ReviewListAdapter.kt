@@ -1,6 +1,5 @@
 package com.wuruoye.know.ui.home.adapter
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,21 +56,6 @@ class ReviewListAdapter : ListAdapter<RecordListItem, ReviewListAdapter.ViewHold
                 }
             })
         }
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            recyclerView.setOnScrollChangeListener { _, _, _, _, _ ->
-                mLastVH?.siv?.close()
-            }
-        } else {
-            recyclerView.setOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    mLastVH?.siv?.close()
-                }
-            })
-        }
-        super.onAttachedToRecyclerView(recyclerView)
     }
 
     fun setOnActionListener(listener: OnActionListener) {

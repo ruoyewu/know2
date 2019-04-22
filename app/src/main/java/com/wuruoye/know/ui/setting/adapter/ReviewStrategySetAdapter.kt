@@ -183,7 +183,7 @@ class ReviewStrategySetAdapter :
         }
 
         override fun areContentsTheSame(oldItem: ReviewStrategy, newItem: ReviewStrategy): Boolean {
-            return false
+            return oldItem == newItem
         }
     }
 

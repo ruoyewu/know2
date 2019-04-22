@@ -283,9 +283,11 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
 
         if (last <= mDeleteLength && cur == mDeleteLength) {
             mOnePass = false
+            postDelayed( { closeDirectly() }, 200)
             mScrollListener?.onLeft()
         } else if (last >= -mDeleteLength && cur == -mDeleteLength) {
             mOnePass = false
+            postDelayed( { closeDirectly() }, 200)
             mScrollListener?.onRight()
         }
     }
