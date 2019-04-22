@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.model.AppCache
+import com.wuruoye.know.util.model.beans.UserInfo
 import com.wuruoye.know.util.orm.dao.RecordDao
 import com.wuruoye.know.util.orm.dao.RecordTagDao
 import com.wuruoye.know.util.orm.dao.RecordTypeDao
@@ -20,25 +21,34 @@ class UserViewModel(
     private val recordTagDao: RecordTagDao,
     private val cache: AppCache
 ) : ViewModel(), IUserVM {
-    override var login: MutableLiveData<Boolean> =
-            MutableLiveData<Boolean>()
+    override val userInfo: MutableLiveData<UserInfo?> =
+        MutableLiveData()
+
+    override var login: Boolean
+        get() = cache.userLogin
+        set(value) { cache.userLogin = value }
 
     override var recordSize: MutableLiveData<Long> =
-            MutableLiveData<Long>()
+            MutableLiveData()
 
     override var recordTagSize: MutableLiveData<Long> =
-            MutableLiveData<Long>()
+            MutableLiveData()
 
     override var recordTypeSize: MutableLiveData<Long> =
-            MutableLiveData<Long>()
+            MutableLiveData()
 
     init {
         updateInfo()
+
+        if (login) {
+            val id = cache.userId
+            val pwd = cache.userPwd
+
+        }
     }
 
     override fun updateInfo() {
         GlobalScope.launch {
-            login.postValue(false)
             recordSize.postValue(recordDao.queryCount())
             recordTypeSize.postValue(recordTypeDao.queryCount())
             recordTagSize.postValue(recordTagDao.queryCount())

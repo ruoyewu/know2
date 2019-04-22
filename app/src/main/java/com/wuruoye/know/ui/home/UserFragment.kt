@@ -14,6 +14,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.home.vm.IUserVM
@@ -130,12 +131,38 @@ class UserFragment : Fragment(), View.OnClickListener {
         vm.recordTagSize.observe(this, Observer {
             tvRecordTagSize.text = it.toString()
         })
+
+        vm.userInfo.observe(this, Observer {
+            if (it != null) {
+                tvName.text = it.name
+                tvSign.text = it.sign
+                Glide.with(ivUser).load(it.avatar).into(ivUser)
+            } else {
+                tvName.text = "未登录"
+                tvSign.text = "用户签名"
+                ivUser.setImageResource(R.drawable.ic_avatar)
+            }
+        })
     }
 
     override fun onClick(v: View?) {
         when(v?.id) {
+            R.id.iv_bg_user -> {
+                if (vm.login) {
+
+                } else {
+
+                }
+            }
+            R.id.tv_user_user -> {
+                if (vm.login) {
+
+                } else {
+
+                }
+            }
             R.id.ll_user_info_user -> {
-                if (vm.login.value!!) {
+                if (vm.login) {
 
                 } else {
                     context?.toast("请先登录")
@@ -154,7 +181,11 @@ class UserFragment : Fragment(), View.OnClickListener {
                     USER_FOR_RECORD_TAG)
             }
             R.id.ll_backup_user -> {
+                if (vm.login) {
 
+                } else {
+
+                }
             }
         }
     }
