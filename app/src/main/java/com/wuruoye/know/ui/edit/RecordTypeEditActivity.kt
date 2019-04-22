@@ -2,39 +2,24 @@ package com.wuruoye.know.ui.edit
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
-import com.wuruoye.know.ui.edit.adapter.RecordTypeSelectAdapter
 import com.wuruoye.know.ui.edit.vm.IRecordTypeEditVM
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
+import com.wuruoye.know.ui.home.adapter.FragmentAdapter
 import com.wuruoye.know.util.InjectorUtil
-import com.wuruoye.know.util.ViewFactory
-import com.wuruoye.know.util.model.RequestCode.RECORD_TYPE_EDIT_FOR_ADD
-import com.wuruoye.know.util.model.RequestCode.RECORD_TYPE_EDIT_FOR_UPDATE
-import com.wuruoye.know.util.model.beans.RealRecordLayoutView
-import com.wuruoye.know.util.model.beans.RecordTypeSelect
-import com.wuruoye.know.util.orm.table.RecordImageView
-import com.wuruoye.know.util.orm.table.RecordLayoutView
-import com.wuruoye.know.util.orm.table.RecordTextView
-import com.wuruoye.know.util.orm.table.RecordView
 import com.wuruoye.know.widgets.BottomAlertDialog
 
 /**
@@ -43,26 +28,17 @@ import com.wuruoye.know.widgets.BottomAlertDialog
  */
 class RecordTypeEditActivity :
     AppCompatActivity(),
-    View.OnClickListener,
-    ViewFactory.OnLongClickListener,
-    RecordTypeSelectAdapter.OnClickListener {
+    View.OnClickListener {
 
     private lateinit var dlgTitle: BottomAlertDialog
     private lateinit var tilTitle: TextInputLayout
     private lateinit var etTitle: EditText
 
-    private lateinit var dlgSelectItem: BottomSheetDialog
-    private lateinit var rvSelectItem: RecyclerView
-
-    private lateinit var mParent: ViewGroup
-    private lateinit var mParentViews: ArrayList<RecordView>
-    private lateinit var mUpdateView: RecordView
-
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var ivMore: ImageView
-    private lateinit var llContent: LinearLayout
-    private lateinit var fabAdd: FloatingActionButton
+    private lateinit var tl: TabLayout
+    private lateinit var vp: ViewPager
     private lateinit var vm: IRecordTypeEditVM
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,14 +66,13 @@ class RecordTypeEditActivity :
         tvTitle = findViewById(R.id.tv_title_toolbar)
         ivBack = findViewById(R.id.iv_back_toolbar)
         ivMore = findViewById(R.id.iv_more_toolbar)
-        llContent = findViewById(R.id.ll_record_type_edit)
-        fabAdd = findViewById(R.id.fab_record_type_edit)
+        tl = findViewById(R.id.tl_toolbar)
+        vp = findViewById(R.id.vp_record_type_edit)
     }
 
     private fun bindListener() {
         ivBack.setOnClickListener(this)
         ivMore.setOnClickListener(this)
-        fabAdd.setOnClickListener(this)
         tvTitle.setOnClickListener(this)
     }
 
@@ -119,33 +94,23 @@ class RecordTypeEditActivity :
             .setCancelListener(this)
             .setCancelable(false)
             .build()
-
-        val selectAdapter = RecordTypeSelectAdapter()
-        selectAdapter.setOnClickListener(this)
-        rvSelectItem = LayoutInflater.from(this)
-            .inflate(R.layout.dlg_record_type, null) as RecyclerView
-        rvSelectItem.layoutManager = LinearLayoutManager(this)
-        rvSelectItem.adapter = selectAdapter
-        dlgSelectItem = BottomSheetDialog(this)
-        dlgSelectItem.setContentView(rvSelectItem)
     }
 
     private fun initView() {
         ivBack.setImageResource(R.drawable.ic_left)
         ivMore.setImageResource(R.drawable.ic_check)
+
+        val adapter = FragmentAdapter(supportFragmentManager,
+            arrayOf(RecordTypeEditFragment.newInstance,
+                RecordTypeEditShowFragment.newInstance),
+            arrayOf("编辑", "预览"))
+        vp.adapter = adapter
+        tl.visibility = View.VISIBLE
+        tl.setupWithViewPager(vp)
     }
 
     private fun subscribeUI() {
-        vm.selectItems.observe(this, Observer {
-            (rvSelectItem.adapter as RecordTypeSelectAdapter).submitList(it)
-        })
         vm.recordType.observe(this, Observer {
-            llContent.removeAllViews()
-            for (v in it.items) {
-                ViewFactory.generateEditView(applicationContext,
-                    v, llContent, it.items, true, this)
-            }
-
             tvTitle.text = it.title
             if (it.title.isEmpty()) {
                 dlgTitle.show()
@@ -161,49 +126,9 @@ class RecordTypeEditActivity :
         })
     }
 
-    override fun onLongClick(recordView: RecordView,
-                             view: View,
-                             parentView: ArrayList<RecordView>,
-                             parent: ViewGroup) {
-        AlertDialog.Builder(this)
-            .setItems(if (recordView is RealRecordLayoutView) ITEM_LAYOUT else ITEM_VIEW) {
-                _, which ->
-                        when (which) {
-                            0 -> {  // update
-                                mParent = parent
-                                mParentViews = parentView
-                                mUpdateView = recordView
-                                val intent = Intent(this, TypeItemEditActivity::class.java)
-                                intent.putExtra(TypeItemEditActivity.RECORD_VIEW,
-                                    if (recordView is RealRecordLayoutView) {
-                                        RecordLayoutView(recordView, "")
-                                    } else {
-                                        recordView
-                                    })
-                                startActivityForResult(intent, RECORD_TYPE_EDIT_FOR_UPDATE)
-                            }
-                            1 -> {  // remove
-                                parentView.remove(recordView)
-                                parent.removeView(view)
-                                vm.removeView(recordView)
-                            }
-                            2 -> {  // add
-                                mParent = view as ViewGroup
-                                mParentViews = (recordView as RealRecordLayoutView).items
-                                dlgSelectItem.show()
-                            }
-                        }
-            }
-            .show()
-    }
 
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.fab_record_type_edit -> {
-                mParentViews = vm.recordType.value!!.items
-                mParent = llContent
-                dlgSelectItem.show()
-            }
             R.id.tv_title_toolbar -> {
                 dlgTitle.show()
             }
@@ -219,41 +144,6 @@ class RecordTypeEditActivity :
             R.id.btn_cancel_dlg_bottom_alert -> {
                 finish()
             }
-        }
-    }
-
-    override fun onClick(item: RecordTypeSelect) {
-        dlgSelectItem.dismiss()
-        val intent = Intent(this, TypeItemEditActivity::class.java)
-        intent.putExtra(TypeItemEditActivity.RECORD_TYPE, item.id)
-        startActivityForResult(intent, RECORD_TYPE_EDIT_FOR_ADD)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val view = data!!.getParcelableExtra<RecordView>(TypeItemEditActivity.RECORD_VIEW)
-            when (requestCode) {
-                RECORD_TYPE_EDIT_FOR_ADD -> {
-                    mParentViews.add(if (view is RecordLayoutView) {
-                        RealRecordLayoutView(view, arrayListOf())
-                    } else view)
-                }
-                RECORD_TYPE_EDIT_FOR_UPDATE -> {
-                    when (view) {
-                        is RecordLayoutView -> {
-                            (mUpdateView as RealRecordLayoutView).setInfo(view)
-                        }
-                        is RecordTextView -> {
-                            (mUpdateView as RecordTextView).setInfo(view)
-                        }
-                        is RecordImageView -> {
-                            (mUpdateView as RecordImageView).setInfo(view)
-                        }
-                    }
-                }
-            }
-            vm.updateView()
         }
     }
 

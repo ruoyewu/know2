@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="@color/romance"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="?attr/actionBarSize">
+<com.google.android.material.appbar.AppBarLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@color/romance"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -62,4 +64,17 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_toolbar"
+            app:tabSelectedTextColor="@color/light_slate_gray"
+            app:tabTextColor="@color/monsoon"
+            app:tabIndicatorColor="@color/light_slate_gray"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="1.5dp"
+            app:tabIndicatorFullWidth="false"
+            app:tabMinWidth="100dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
 </com.google.android.material.appbar.AppBarLayout>

@@ -23,6 +23,7 @@
                 android:id="@+id/bnv_main"
                 app:itemIconTint="@color/light_slate_gray"
                 app:itemTextColor="@color/light_slate_gray"
+                app:labelVisibilityMode="selected"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
     </androidx.cardview.widget.CardView>

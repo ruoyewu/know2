@@ -1,4 +1,4 @@
-package com.wuruoye.know.ui.home.adapter
+package com.wuruoye.know .ui.home.adapter
 
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -11,7 +11,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter
  */
 class FragmentAdapter(
     private val fm: FragmentManager,
-    private val fragments: Array<Fragment>
+    private val fragments: Array<Fragment>,
+    private val titles: Array<String>? = null
 ) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return fragments[position]
@@ -19,6 +20,10 @@ class FragmentAdapter(
 
     override fun getCount(): Int {
         return fragments.size
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return titles?.get(position)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
