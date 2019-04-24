@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class WConfig {
+    public static long CONNECT_TIME_OUT = 20;
     private static Handler sMainHandler;
     private static Context sAppContext;
 

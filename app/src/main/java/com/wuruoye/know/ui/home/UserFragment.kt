@@ -22,9 +22,11 @@ import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.RecordTagSetActivity
 import com.wuruoye.know.ui.setting.RecordTypeSetActivity
 import com.wuruoye.know.ui.setting.ReviewStrategySetActivity
+import com.wuruoye.know.ui.setting.UserLoginActivity
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_LOGIN
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_REVIEW_STRATEGY
@@ -147,11 +149,12 @@ class UserFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.iv_bg_user -> {
+            R.id.civ_user -> {
                 if (vm.login) {
 
                 } else {
-
+                    startActivityForResult(Intent(context, UserLoginActivity::class.java),
+                        USER_FOR_LOGIN)
                 }
             }
             R.id.tv_user_user -> {

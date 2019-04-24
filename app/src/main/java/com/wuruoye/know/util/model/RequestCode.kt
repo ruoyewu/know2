@@ -19,4 +19,5 @@ object RequestCode {
     const val RECORD_TAG_SET_FOR_UPDATE = 11
     val REVIEW_STRATEGY_SET_FOR_ADD = 13
     val REVIEW_STRATEGY_SET_FOR_UPDATE = 14
+    val USER_FOR_LOGIN = 15
 }

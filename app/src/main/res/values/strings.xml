@@ -75,5 +75,14 @@
     <string name="one_year">一年内</string>
     <string name="no_limit">不限</string>
 
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="user_id">用户账号</string>
+    <string name="user_pwd">用户密码</string>
+    <string name="user_name">用户名称</string>
+    <string name="user_phone">手机号</string>
+    <string name="verify_code">验证码</string>
+    <string name="send_verify_code">发送验证码</string>
+
     <string name="default_date">2019–04–01 19:00</string>
 </resources>
