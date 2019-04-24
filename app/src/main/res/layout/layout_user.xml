@@ -129,7 +129,7 @@
             android:layout_height="wrap_content">
 
         <TextView
-                android:text="@string/set_user_info"
+                android:text="@string/user_info"
                 android:textSize="15sp"
                 android:layout_width="0dp"
                 android:layout_weight="1"

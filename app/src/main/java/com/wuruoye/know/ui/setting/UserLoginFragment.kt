@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +31,8 @@ class UserLoginFragment : Fragment(), View.OnClickListener {
     private lateinit var etPwd: EditText
     private lateinit var btnLogin: Button
 
+    private lateinit var dlgLoading: AlertDialog
+
     private lateinit var vm: IUserLoginVM
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -46,6 +50,7 @@ class UserLoginFragment : Fragment(), View.OnClickListener {
 
         bindView(view)
         bindListener()
+        initDlg()
         subscribeUI()
     }
 
@@ -63,8 +68,20 @@ class UserLoginFragment : Fragment(), View.OnClickListener {
         btnLogin.setOnClickListener(this)
     }
 
+    @SuppressLint("InflateParams")
+    private fun initDlg() {
+        val loadingView = LayoutInflater.from(context)
+            .inflate(R.layout.dlg_loading, null)
+        val tv: TextView = loadingView.findViewById(R.id.tv_dlg_loading)
+        tv.text = "正在登录中"
+        dlgLoading = AlertDialog.Builder(context!!)
+            .setView(loadingView)
+            .create()
+    }
+
     private fun subscribeUI() {
         vm.loginResult.observe(this, Observer {
+            dlgLoading.dismiss()
             with(it) {
                 if (successful) {
                     val userInfo = GsonFactory.getInstance()
@@ -88,7 +105,10 @@ class UserLoginFragment : Fragment(), View.OnClickListener {
                 when {
                     id.isEmpty() -> tilId.error = "账号不能为空"
                     pwd.isEmpty() -> tilPwd.error = "密码不能为空"
-                    else -> vm.login(id, pwd)
+                    else -> {
+                        dlgLoading.show()
+                        vm.login(id, pwd)
+                    }
                 }
             }
         }

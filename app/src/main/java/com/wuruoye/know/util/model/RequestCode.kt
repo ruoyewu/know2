@@ -20,4 +20,5 @@ object RequestCode {
     val REVIEW_STRATEGY_SET_FOR_ADD = 13
     val REVIEW_STRATEGY_SET_FOR_UPDATE = 14
     val USER_FOR_LOGIN = 15
+    val USER_FOR_USER_INFO = 16
 }

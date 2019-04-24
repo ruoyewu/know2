@@ -9,10 +9,7 @@ import com.wuruoye.know.ui.edit.vm.ReviewStrategyEditViewModel
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.ui.home.vm.UserViewModel
-import com.wuruoye.know.ui.setting.vm.RecordTagSetViewModel
-import com.wuruoye.know.ui.setting.vm.RecordTypeSetViewModel
-import com.wuruoye.know.ui.setting.vm.ReviewStrategySetViewModel
-import com.wuruoye.know.ui.setting.vm.UserLoginViewModel
+import com.wuruoye.know.ui.setting.vm.*
 import com.wuruoye.know.util.model.AppCache
 import com.wuruoye.know.util.orm.Repository
 
@@ -98,5 +95,9 @@ object InjectorUtil {
     fun userLoginViewModelFactory(context: Context): ViewModelProvider.Factory {
         val cache = AppCache.getInstance(context)
         return UserLoginViewModel.Factory(cache)
+    }
+
+    fun userInfoViewModelFactory(context: Context): ViewModelProvider.Factory {
+        return UserInfoViewModel.Factory()
     }
 }

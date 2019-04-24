@@ -8,4 +8,12 @@
         <attr name="left_view" format="reference"/>
         <attr name="right_view" format="reference"/>
     </declare-styleable>
+
+
+    <declare-styleable name="HeartBeatView">
+        <attr name="heartColor" format="color"/>
+        <attr name="duration" format="integer"/>
+        <attr name="count" format="integer"/>
+        <attr name="press" format="float"/>
+    </declare-styleable>
 </resources>

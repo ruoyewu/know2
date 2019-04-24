@@ -55,6 +55,12 @@ class UserViewModel(
         }
     }
 
+    override fun logout() {
+        login = false
+        cache.userId = ""
+        cache.userPwd = ""
+    }
+
     private fun login() {
         GlobalScope.launch {
             val id = cache.userId
@@ -68,9 +74,7 @@ class UserViewModel(
                     .fromJson(result.data!!, UserInfo::class.java)
                 this@UserViewModel.userInfo.postValue(userInfo)
             } else {
-                login = false
-                cache.userId = ""
-                cache.userPwd = ""
+                logout()
             }
         }
     }

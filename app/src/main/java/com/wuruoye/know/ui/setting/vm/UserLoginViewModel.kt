@@ -68,7 +68,6 @@ class UserLoginViewModel(
                 val values = mapOf(Pair("phone", phone))
 
                 val result = NetUtil.get(NetUtil.VERIFY_CODE, values)
-//                val result = NetResult(200, "ok")
                 if (result.successful) {
                     leftSecond.postValue(60)
                     count()

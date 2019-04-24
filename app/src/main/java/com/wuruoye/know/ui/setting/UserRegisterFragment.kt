@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -37,6 +39,9 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
     private lateinit var btnVerifyCode: Button
     private lateinit var btnRegister: Button
 
+    private lateinit var dlgLoading: AlertDialog
+    private lateinit var tvLoading: TextView
+
     private lateinit var vm: IUserLoginVM
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -55,6 +60,7 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
 
         bindView(view)
         bindListener()
+        initDlg()
         subscribeUI()
     }
 
@@ -78,6 +84,16 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
     private fun bindListener() {
         btnVerifyCode.setOnClickListener(this)
         btnRegister.setOnClickListener(this)
+    }
+
+    @SuppressLint("InflateParams")
+    private fun initDlg() {
+        val loadingView = LayoutInflater.from(context)
+            .inflate(R.layout.dlg_loading, null)
+        tvLoading = loadingView.findViewById(R.id.tv_dlg_loading)
+        dlgLoading = AlertDialog.Builder(context!!)
+            .setView(loadingView)
+            .create()
     }
 
     @SuppressLint("SetTextI18n")
@@ -119,6 +135,7 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.btn_verify_code_user_register -> {
+                showLoading("正在发送验证码")
                 val phone = etPhone.text.toString()
                 vm.verifyCode(phone)
             }
@@ -142,12 +159,21 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
                     pwd.length < 6 -> tilPwd.error = "密码长度不能小于 6"
                     pwd.length > 32 -> tilPwd.error = "密码长度不能大于 32"
                     name.isEmpty() -> tilName.error = "名称不能为空"
+                    name.length > 8 -> tilName.error = "名称长度不能大于 8"
                     phone.isEmpty() -> tilPhone.error = "手机号不能为空"
                     code.isEmpty() -> tilVerifyCode.error = "验证码不能为空"
-                    else -> vm.register(id, name, pwd, phone, code)
+                    else -> {
+                        showLoading("正在注册中")
+                        vm.register(id, name, pwd, phone, code)
+                    }
                 }
             }
         }
+    }
+
+    private fun showLoading(text: String) {
+        tvLoading.text = text
+        dlgLoading.show()
     }
 
     companion object {

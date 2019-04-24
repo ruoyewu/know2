@@ -1,9 +1,8 @@
 package com.wuruoye.know.util
 
+import android.util.ArrayMap
 import com.wuruoye.know.util.model.beans.NetResult
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import org.json.JSONObject
 
 /**
@@ -13,10 +12,24 @@ import org.json.JSONObject
 object NetUtil {
     private val HOST = "http://know.wuruoye.com/"
     val LOGIN = HOST + "user/login"
+    val LOGOUT = HOST + "/user/logout"
     val VERIFY_CODE = HOST + "user/verify_code"
     val USER = HOST + "user/user"
+    val UPLOAD_TOKEN = HOST + "user/token"
 
-    private val mClient = OkHttpClient.Builder().build()
+    private val cookieMap = ArrayMap<String, MutableList<Cookie>>()
+    private val mClient = OkHttpClient.Builder()
+        .cookieJar(object : CookieJar {
+            override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
+                cookieMap[url.host()] = cookies
+            }
+
+            override fun loadForRequest(url: HttpUrl): MutableList<Cookie> {
+                return cookieMap[url.host()] ?: mutableListOf()
+            }
+
+        })
+        .build()
 
     fun get(url: String, values: Map<String, String>): NetResult {
         val builder = StringBuilder(url)
@@ -47,16 +60,30 @@ object NetUtil {
         return request(request)
     }
 
+    fun put(url: String, values: Map<String, String>): NetResult {
+        val builder = FormBody.Builder()
+        for (entry in values.entries) {
+            builder.add(entry.key, entry.value)
+        }
+
+        val request = Request.Builder()
+            .url(url)
+            .put(builder.build())
+            .build()
+
+        return request(request)
+    }
+
     private fun request(request: Request): NetResult {
         val response = mClient.newCall(request).execute()
-        return if (response.isSuccessful) {
+        if (response.isSuccessful) {
             val obj = JSONObject(response.body()!!.string())
             val res = obj.getInt("res")
             val msg = if (obj.has("msg")) obj.getString("msg") else null
             val data = if (obj.has("data")) obj.getString("data") else null
-            NetResult(res, msg, data)
+            return NetResult(res, msg, data)
         } else {
-            NetResult(400, "error in okhttp")
+            return NetResult(400, response.message())
         }
     }
 }

@@ -19,10 +19,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.home.vm.IUserVM
 import com.wuruoye.know.ui.home.vm.UserViewModel
-import com.wuruoye.know.ui.setting.RecordTagSetActivity
-import com.wuruoye.know.ui.setting.RecordTypeSetActivity
-import com.wuruoye.know.ui.setting.ReviewStrategySetActivity
-import com.wuruoye.know.ui.setting.UserLoginActivity
+import com.wuruoye.know.ui.setting.*
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
@@ -30,6 +27,7 @@ import com.wuruoye.know.util.model.RequestCode.USER_FOR_LOGIN
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_REVIEW_STRATEGY
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_USER_INFO
 import com.wuruoye.know.util.model.beans.UserInfo
 import com.wuruoye.know.util.toast
 import de.hdodenhof.circleimageview.CircleImageView
@@ -167,7 +165,9 @@ class UserFragment : Fragment(), View.OnClickListener {
             }
             R.id.ll_user_info_user -> {
                 if (vm.login) {
-
+                    val intent = Intent(context, UserInfoActivity::class.java)
+                    intent.putExtra(UserInfoActivity.USER_INFO, vm.userInfo.value!!)
+                    startActivityForResult(intent, USER_FOR_USER_INFO)
                 } else {
                     context?.toast("请先登录")
                 }
@@ -214,6 +214,14 @@ class UserFragment : Fragment(), View.OnClickListener {
                     val userInfo = data!!
                         .getParcelableExtra<UserInfo>(UserLoginActivity.USER_INFO)
                     vm.userInfo.value = userInfo
+                }
+                USER_FOR_USER_INFO -> {
+                    val userInfo = data
+                        ?.getParcelableExtra<UserInfo>(UserInfoActivity.USER_INFO)
+                    vm.userInfo.value = userInfo
+                    if (userInfo == null) {
+                        vm.logout()
+                    }
                 }
             }
         }

@@ -16,4 +16,5 @@ interface IUserVM {
     var login: Boolean
 
     fun updateInfo()
+    fun logout()
 }
