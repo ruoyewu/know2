@@ -13,7 +13,7 @@ interface IUserVM {
     val recordTypeSize: MutableLiveData<Long>
 
     val userInfo: MutableLiveData<UserInfo?>
-    val login: Boolean
+    var login: Boolean
 
     fun updateInfo()
 }

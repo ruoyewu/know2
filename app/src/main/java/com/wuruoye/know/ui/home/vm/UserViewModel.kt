@@ -3,6 +3,8 @@ package com.wuruoye.know.ui.home.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.wuruoye.know.util.GsonFactory
+import com.wuruoye.know.util.NetUtil
 import com.wuruoye.know.util.model.AppCache
 import com.wuruoye.know.util.model.beans.UserInfo
 import com.wuruoye.know.util.orm.dao.RecordDao
@@ -41,9 +43,7 @@ class UserViewModel(
         updateInfo()
 
         if (login) {
-            val id = cache.userId
-            val pwd = cache.userPwd
-
+            login()
         }
     }
 
@@ -52,6 +52,26 @@ class UserViewModel(
             recordSize.postValue(recordDao.queryCount())
             recordTypeSize.postValue(recordTypeDao.queryCount())
             recordTagSize.postValue(recordTagDao.queryCount())
+        }
+    }
+
+    private fun login() {
+        GlobalScope.launch {
+            val id = cache.userId
+            val pwd = cache.userPwd
+
+            val values = mapOf(Pair("id", id),
+                Pair("pwd", pwd))
+            val result = NetUtil.get(NetUtil.LOGIN, values)
+            if (result.successful) {
+                val userInfo = GsonFactory.getInstance()
+                    .fromJson(result.data!!, UserInfo::class.java)
+                this@UserViewModel.userInfo.postValue(userInfo)
+            } else {
+                login = false
+                cache.userId = ""
+                cache.userPwd = ""
+            }
         }
     }
 

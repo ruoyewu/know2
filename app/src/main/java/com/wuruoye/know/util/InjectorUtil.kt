@@ -96,6 +96,7 @@ object InjectorUtil {
     }
 
     fun userLoginViewModelFactory(context: Context): ViewModelProvider.Factory {
-        return UserLoginViewModel.Factory()
+        val cache = AppCache.getInstance(context)
+        return UserLoginViewModel.Factory(cache)
     }
 }

@@ -30,6 +30,7 @@ import com.wuruoye.know.util.model.RequestCode.USER_FOR_LOGIN
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_REVIEW_STRATEGY
+import com.wuruoye.know.util.model.beans.UserInfo
 import com.wuruoye.know.util.toast
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -208,6 +209,11 @@ class UserFragment : Fragment(), View.OnClickListener {
                 }
                 RECORD_FOR_TYPE -> {
                     vm.updateInfo()
+                }
+                USER_FOR_LOGIN -> {
+                    val userInfo = data!!
+                        .getParcelableExtra<UserInfo>(UserLoginActivity.USER_INFO)
+                    vm.userInfo.value = userInfo
                 }
             }
         }
