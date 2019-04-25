@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.GsonFactory
-import com.wuruoye.know.util.log
 import com.wuruoye.know.util.model.beans.*
 import com.wuruoye.know.util.orm.dao.RecordDao
 import com.wuruoye.know.util.orm.dao.RecordItemDao
@@ -90,7 +89,6 @@ class RecordShowViewModel(
                 record.lastFailReview = System.currentTimeMillis()
             }
 
-            log("record : remNum ${record.remNum}, failNum ${record.failNum}")
             recordDao.insert(record)
         }
     }

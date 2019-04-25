@@ -22,7 +22,6 @@ import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.orm.table.Record
-import com.wuruoye.know.util.toast
 
 /**
  * Created at 2019-04-24 18:26 by wuruoye
@@ -107,23 +106,15 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
         when(v?.id) {
             R.id.iv_back_toolbar -> onBackPressed()
             R.id.fab_ok_record_show -> {
-                if (!isRunning) {
-                    if (hasContent()) {
-                        startAnimation(fabOk)
-                        vm.rememberRecord(llCur.tag as Record, true)
-                    } else {
-                        toast("no content")
-                    }
+                if (!isRunning && hasContent()) {
+                    startAnimation(fabOk)
+                    vm.rememberRecord(llCur.tag as Record, true)
                 }
             }
             R.id.fab_error_record_show -> {
-                if (!isRunning) {
-                    if (hasContent()) {
-                        startAnimation(fabError)
-                        vm.rememberRecord(llCur.tag as Record, false)
-                    } else {
-                        toast("no content")
-                    }
+                if (!isRunning && hasContent()) {
+                    startAnimation(fabError)
+                    vm.rememberRecord(llCur.tag as Record, false)
                 }
             }
         }
@@ -173,6 +164,6 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         val RECORD_POSITION = "record_position"
         val RECORD_LIST = "record_list"
-        val DURATION = 800L
+        val DURATION = 1000L
     }
 }
