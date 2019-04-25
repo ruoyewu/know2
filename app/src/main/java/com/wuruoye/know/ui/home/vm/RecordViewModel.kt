@@ -106,6 +106,14 @@ class RecordViewModel(
         cache.typeTagLimit = limit
     }
 
+    override fun updateRecordTag() {
+        GlobalScope.launch {
+            recordTagList.postValue(
+                recordTagDao.queryAll()
+            )
+        }
+    }
+
     override fun updateRecord() {
         GlobalScope.launch {
             val timeLimit = getTimeLimit(typeTimeLimit.value!!)

@@ -130,6 +130,7 @@ class RecordTypeEditActivity :
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.tv_title_toolbar -> {
+                etTitle.setText(vm.recordType.value?.title)
                 dlgTitle.show()
             }
             R.id.iv_back_toolbar -> {

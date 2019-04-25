@@ -26,6 +26,7 @@ interface IRecordVM {
     var typeTypeLimit: MutableLiveData<Long>
     var typeTagLimit: MutableLiveData<Long>
 
+    fun updateRecordTag()
     fun updateRecordType()
     fun updateRecord()
     fun removeRecord(id: Long)

@@ -121,20 +121,9 @@ class RecordEditActivity :
     }
 
     private fun subscribeUI() {
-//        vm.recordType.observe(this, Observer {
-//            tvTitle.text = it.title
-//
-//            for (v in it.items) {
-////                ViewFactory.generateView(this, v, llContent, true, this)
-//                ViewFactory.generateView(this, v, llContent, listener = this)
-//            }
-//
-//            val recordId = intent!!.getLongExtra(RECORD, -1)
-//            if (recordId >= 0) {
-//                vm.setRecordId(recordId)
-//            }
-//        })
         vm.recordShow.observe(this, Observer {
+            tvTitle.text = it.recordType.title
+
             ViewFactory.generateView(this, it, llContent, listener = this)
         })
         vm.recordTagList.observe(this, Observer {
@@ -143,9 +132,6 @@ class RecordEditActivity :
         vm.recordTagTitle.observe(this, Observer {
             tvTag.text = it
         })
-//        vm.recordData.observe(this, Observer {
-//            loadRecord(it)
-//        })
         vm.submitResult.observe(this, Observer {
             if (it) {
                 setResult(Activity.RESULT_OK)
