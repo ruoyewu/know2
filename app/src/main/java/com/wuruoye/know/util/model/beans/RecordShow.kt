@@ -1,6 +1,7 @@
 package com.wuruoye.know.util.model.beans
 
 import android.util.ArrayMap
+import com.wuruoye.know.util.orm.table.Record
 import com.wuruoye.know.util.orm.table.RecordItem
 
 /**
@@ -9,5 +10,6 @@ import com.wuruoye.know.util.orm.table.RecordItem
  */
 class RecordShow(
     var recordType: RealRecordType,
-    var recordData: ArrayMap<String, RecordItem>? = null
+    var recordData: ArrayMap<String, RecordItem>? = null,
+    var record: Record? = null
 )

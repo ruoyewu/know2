@@ -78,7 +78,7 @@ object ViewFactory {
             is RecordImageView ->
                 generateImageView(context, recordView, parent, attach, listener, map, isShow)
             is RealRecordLayoutView ->
-                generateLayoutView(context, recordView, parent, attach, listener, map)
+                generateLayoutView(context, recordView, parent, attach, listener, map, isShow)
             else -> null
         }
     }
@@ -239,7 +239,8 @@ object ViewFactory {
         parent: ViewGroup,
         attach: Boolean,
         listener: OnClickListener? = null,
-        map: ArrayMap<String, RecordItem>? = null
+        map: ArrayMap<String, RecordItem>? = null,
+        isShow: Boolean = false
     ): View {
         with(layoutView) {
             val view = LayoutInflater.from(context).inflate(R.layout.view_layout,
@@ -261,7 +262,7 @@ object ViewFactory {
             view.layoutParams = lp
 
             for (v in items) {
-                generateView(context, v, view, true, listener, map)
+                generateView(context, v, view, true, listener, map, isShow)
             }
 
             if (attach) {

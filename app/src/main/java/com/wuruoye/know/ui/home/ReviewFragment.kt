@@ -24,6 +24,7 @@ import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
 import com.wuruoye.know.util.model.RequestCode.REVIEW_FOR_SHOW
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
+import java.util.*
 
 /**
  * Created at 2019/4/9 21:11 by wuruoye
@@ -74,7 +75,12 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
     }
 
     override fun onClick(item: RecordListItem) {
+        val list = (rv.adapter as ReviewListAdapter).currentList
+        val position = list.indexOf(item)
         val intent = Intent(context, RecordShowActivity::class.java)
+        intent.putParcelableArrayListExtra(RecordShowActivity.RECORD_LIST,
+            ArrayList(list))
+        intent.putExtra(RecordShowActivity.RECORD_POSITION, position)
         startActivityForResult(intent, REVIEW_FOR_SHOW)
     }
 
@@ -92,7 +98,8 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
             when(requestCode) {
                 RECORD_FOR_TYPE,
                 RECORD_FOR_RECORD,
-                USER_FOR_RECORD_TYPE -> vm.updateRecordList()
+                USER_FOR_RECORD_TYPE,
+                REVIEW_FOR_SHOW-> vm.updateRecordList()
             }
         }
     }

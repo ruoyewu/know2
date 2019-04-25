@@ -87,7 +87,7 @@ class RecordEditViewModel(
                 map["${item.type}_${item.typeId}"] = item
             }
 
-            recordShow.postValue(RecordShow(realRecordType, map))
+            recordShow.postValue(RecordShow(realRecordType, map, record))
 
             setRecordTag(record.tag)
             recordId = id

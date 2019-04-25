@@ -2,10 +2,7 @@ package com.wuruoye.know.util
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
-import com.wuruoye.know.ui.edit.vm.RecordTagEditViewModel
-import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
-import com.wuruoye.know.ui.edit.vm.ReviewStrategyEditViewModel
+import com.wuruoye.know.ui.edit.vm.*
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.ui.home.vm.UserViewModel
@@ -99,5 +96,13 @@ object InjectorUtil {
 
     fun userInfoViewModelFactory(context: Context): ViewModelProvider.Factory {
         return UserInfoViewModel.Factory()
+    }
+
+    fun recordShowViewModelFactory(context: Context): ViewModelProvider.Factory {
+        val recordDao = Repository.getRecord(context)
+        val recordTypeDao = Repository.getRecordType(context)
+        val recordViewDao = Repository.getRecordView(context)
+        val recordItemDao = Repository.getRecordItem(context)
+        return RecordShowViewModel.Factory(recordDao, recordTypeDao, recordItemDao, recordViewDao)
     }
 }

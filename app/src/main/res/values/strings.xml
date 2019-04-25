@@ -87,5 +87,7 @@
     <string name="user_avatar">用户头像</string>
     <string name="user_sign">用户签名</string>
 
+    <string name="no_more">没有更多内容了呢</string>
+
     <string name="default_date">2019–04–01 19:00</string>
 </resources>
