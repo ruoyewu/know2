@@ -34,6 +34,7 @@
         <activity android:name=".ui.setting.UserLoginActivity"/>
         <activity android:name=".ui.setting.UserInfoActivity"/>
         <activity android:name=".ui.edit.RecordShowActivity"/>
+        <activity android:name=".ui.setting.BackupActivity"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"

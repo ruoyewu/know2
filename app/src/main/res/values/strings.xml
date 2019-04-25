@@ -88,6 +88,10 @@
     <string name="user_avatar">用户头像</string>
     <string name="user_sign">用户签名</string>
 
+    <string name="backup_info">备份信息</string>
+    <string name="upload_backup">上传备份</string>
+    <string name="download_backup">下载备份</string>
+
     <string name="no_more">没有更多内容了呢</string>
 
     <string name="default_date">2019–04–01 19:00</string>

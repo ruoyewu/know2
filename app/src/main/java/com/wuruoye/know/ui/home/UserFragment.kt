@@ -23,6 +23,7 @@ import com.wuruoye.know.ui.setting.*
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_BACKUP
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_LOGIN
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
@@ -186,9 +187,10 @@ class UserFragment : Fragment(), View.OnClickListener {
             }
             R.id.ll_backup_user -> {
                 if (vm.login) {
-
+                    startActivityForResult(Intent(context, BackupActivity::class.java),
+                        USER_FOR_BACKUP)
                 } else {
-
+                    context?.toast("请先登录")
                 }
             }
         }
@@ -222,6 +224,9 @@ class UserFragment : Fragment(), View.OnClickListener {
                     if (userInfo == null) {
                         vm.logout()
                     }
+                }
+                USER_FOR_BACKUP -> {
+                    vm.updateInfo()
                 }
             }
         }

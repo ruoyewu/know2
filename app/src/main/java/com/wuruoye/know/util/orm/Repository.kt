@@ -17,6 +17,7 @@ object Repository {
     @Volatile private var recordViewDao: RecordViewDao? = null
     @Volatile private var recordTagDao: RecordTagDao? = null
     @Volatile private var reviewStrategyDao: ReviewStrategyDao? = null
+    @Volatile private var insertDao: InsertDao ? = null
 
     private fun getImageView(context: Context): ImageViewDao {
         if (imageViewDao == null) {
@@ -118,5 +119,16 @@ object Repository {
             }
         }
         return reviewStrategyDao!!
+    }
+
+    fun getInsertDao(context: Context): InsertDao {
+        if (insertDao == null) {
+            synchronized(this) {
+                if (insertDao == null) {
+                    insertDao = InsertDao.getInstance(context)
+                }
+            }
+        }
+        return insertDao!!
     }
 }

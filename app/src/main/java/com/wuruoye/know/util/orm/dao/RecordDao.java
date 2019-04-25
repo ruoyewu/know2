@@ -46,4 +46,8 @@ public interface RecordDao {
 
     @Query("DELETE FROM record WHERE id = :id")
     int delete(long id);
+
+    @Query("INSERT INTO record VALUES (:id, :type, :remNum, :failNum, :lastReview, :lastFailReview, :tag, :createTime, :updateTime)")
+    void insertNotInTransaction(long id, long type, int remNum, int failNum, long lastReview,
+                                long lastFailReview, long tag, long createTime, long updateTime);
 }

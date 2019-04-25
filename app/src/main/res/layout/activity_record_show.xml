@@ -45,6 +45,7 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_error_record_show"
                 android:src="@drawable/ic_error"
+                android:backgroundTint="@color/monsoon"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="16dp"
                 android:layout_width="wrap_content"

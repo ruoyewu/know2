@@ -16,13 +16,13 @@
 
     <androidx.cardview.widget.CardView
             app:cardElevation="10dp"
-            app:cardBackgroundColor="@color/romance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bnv_main"
                 app:itemIconTint="@color/light_slate_gray"
                 app:itemTextColor="@color/light_slate_gray"
+                app:backgroundTint="@color/romance"
                 app:labelVisibilityMode="selected"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
