@@ -92,12 +92,10 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     }
 
     fun close() {
-        log("close")
         mVmMain.moveTo(0F)
     }
 
     fun closeDirectly() {
-        log("close directly")
         mMainView?.x = 0F
         mLeftView?.x = -mMoveLeft
         mRightView?.x = mDeleteLength

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RealRecordType
+import com.wuruoye.know.util.model.beans.RecordShow
 import com.wuruoye.know.util.model.beans.RecordTypeItem
 import com.wuruoye.know.util.orm.dao.*
 import com.wuruoye.know.util.orm.table.*
@@ -27,17 +28,20 @@ class RecordEditViewModel(
     private val recordTagDao: RecordTagDao
 ) : ViewModel(), IRecordEditVM {
 
-    override var recordTagList: MutableLiveData<List<RecordTag>> =
+    override val recordTagList: MutableLiveData<List<RecordTag>> =
         MediatorLiveData<List<RecordTag>>()
 
-    override var recordData: MutableLiveData<ArrayMap<String, RecordItem>> =
-            MutableLiveData()
+    override val recordShow: MutableLiveData<RecordShow> =
+        MutableLiveData()
 
-    override var recordType: MutableLiveData<RealRecordType> = MutableLiveData()
+    override val recordType: RealRecordType
+        get() = recordShow.value!!.recordType
 
-    override var submitResult: MutableLiveData<Boolean> = MutableLiveData()
+    override val submitResult: MutableLiveData<Boolean> =
+        MutableLiveData()
 
-    override var recordTagTitle: MutableLiveData<String> = MutableLiveData()
+    override val recordTagTitle: MutableLiveData<String> =
+        MutableLiveData()
 
     private var recordId: Long? = null
 
@@ -49,7 +53,7 @@ class RecordEditViewModel(
             val id = recordId
             val record =
                 if (id == null) {
-                    Record(recordType.value!!.id!!)
+                    Record(recordType.id!!)
                 } else {
                     recordDao.query(id)!!
                 }
@@ -75,23 +79,25 @@ class RecordEditViewModel(
 
     override fun setRecordId(id: Long) {
         GlobalScope.launch {
-            val list = recordItemDao.queryByRecord(id)
+            val record = recordDao.query(id)
+            val realRecordType = queryRealRecordType(record.type)
             val map = ArrayMap<String, RecordItem>()
+            val list = recordItemDao.queryByRecord(id)
             for (item in list) {
                 map["${item.type}_${item.typeId}"] = item
             }
 
-            recordData.postValue(map)
-            setRecordTag(recordDao.query(id).tag)
+            recordShow.postValue(RecordShow(realRecordType, map))
+
+            setRecordTag(record.tag)
             recordId = id
         }
     }
 
     override fun setRecordTypeId(id: Long) {
         GlobalScope.launch {
-            recordType.postValue(
-                queryRealRecordType(id)
-            )
+            val realRecordType = queryRealRecordType(id)
+            recordShow.postValue(RecordShow(realRecordType))
         }
     }
 

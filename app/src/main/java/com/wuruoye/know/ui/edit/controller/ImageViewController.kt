@@ -36,6 +36,7 @@ class ImageViewController (private val mView: RecordImageView)
     }
 
     private fun initView() {
+//        mShowView = ViewFactory.generateView(mContext, mView, flContent) as ImageView
         mShowView = ViewFactory.generateView(mContext, mView, flContent) as ImageView
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_image_view, svOptions, true)

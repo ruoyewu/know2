@@ -1,8 +1,8 @@
 package com.wuruoye.know.ui.edit.vm
 
-import android.util.ArrayMap
 import androidx.lifecycle.MutableLiveData
 import com.wuruoye.know.util.model.beans.RealRecordType
+import com.wuruoye.know.util.model.beans.RecordShow
 import com.wuruoye.know.util.orm.table.RecordItem
 import com.wuruoye.know.util.orm.table.RecordTag
 
@@ -11,12 +11,12 @@ import com.wuruoye.know.util.orm.table.RecordTag
  * Description:
  */
 interface IRecordEditVM {
-    var recordTagList: MutableLiveData<List<RecordTag>>
+    val recordTagList: MutableLiveData<List<RecordTag>>
 
-    var recordType: MutableLiveData<RealRecordType>
-    var recordData: MutableLiveData<ArrayMap<String, RecordItem>>
-    var recordTagTitle: MutableLiveData<String>
-    var submitResult: MutableLiveData<Boolean>
+    val recordShow: MutableLiveData<RecordShow>
+    val recordType: RealRecordType
+    val recordTagTitle: MutableLiveData<String>
+    val submitResult: MutableLiveData<Boolean>
 
     fun setRecordTypeId(id: Long)
     fun setRecordId(id: Long)

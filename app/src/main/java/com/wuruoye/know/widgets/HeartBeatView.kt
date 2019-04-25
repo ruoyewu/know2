@@ -8,7 +8,6 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import com.wuruoye.know.R
-import com.wuruoye.know.util.log
 
 /**
  * Created by wuruoye on 2018/3/21.
@@ -144,7 +143,6 @@ class HeartBeatView : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        log("heart beat")
         super.onDraw(canvas)
         canvas.translate(mCenterY.toFloat(), mCenterX.toFloat())
         canvas.scale(1f, -1f)

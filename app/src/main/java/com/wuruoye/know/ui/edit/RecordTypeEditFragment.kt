@@ -106,7 +106,7 @@ class RecordTypeEditFragment :
         })
     }
 
-    override fun onLongClick(recordView: RecordView, view: View,
+    override fun onClick(recordView: RecordView, view: View,
                              parentView: ArrayList<RecordView>, parent: ViewGroup) {
         AlertDialog.Builder(context!!)
             .setItems(if (recordView is RealRecordLayoutView) RecordTypeEditActivity.ITEM_LAYOUT else RecordTypeEditActivity.ITEM_VIEW) {

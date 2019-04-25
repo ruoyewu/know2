@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -53,7 +52,8 @@ class TextViewController(private val mView: RecordTextView) :
 
     @SuppressLint("SetTextI18n")
     private fun initView() {
-        mShowView = ViewFactory.generateView(mContext, mView, flContent as ViewGroup) as TextView
+//        mShowView = ViewFactory.generateView(mContext, mView, flContent as ViewGroup) as TextView
+        mShowView = ViewFactory.generateView(mContext, mView, flContent) as TextView
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_text_view, svOptions)
 

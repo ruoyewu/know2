@@ -3,12 +3,9 @@ package com.wuruoye.know.ui.edit
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,14 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.BaseRequestOptions
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.vm.IRecordEditVM
 import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
@@ -39,12 +29,11 @@ import com.wuruoye.know.util.base.media.WPhoto
 import com.wuruoye.know.util.base.permission.WPermission
 import com.wuruoye.know.util.model.RequestCode.RECORD_EDIT_FOR_TAG
 import com.wuruoye.know.util.model.beans.ImagePath
-import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
-import com.wuruoye.know.util.orm.table.*
-import jp.wasabeef.glide.transformations.BlurTransformation
-import jp.wasabeef.glide.transformations.ColorFilterTransformation
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import com.wuruoye.know.util.orm.table.RecordImageView
+import com.wuruoye.know.util.orm.table.RecordItem
+import com.wuruoye.know.util.orm.table.RecordTag
+import com.wuruoye.know.util.orm.table.RecordView
 
 /**
  * Created at 2019/4/11 18:40 by wuruoye
@@ -86,7 +75,13 @@ class RecordEditActivity :
         initView()
         subscribeUI()
 
-        vm.setRecordTypeId(intent!!.getLongExtra(RECORD_TYPE, -1))
+        val recordId = intent.getLongExtra(RECORD, -1)
+        if (recordId < 0) {
+            vm.setRecordTypeId(intent.getLongExtra(RECORD_TYPE, -1))
+        } else {
+            vm.setRecordId(recordId)
+        }
+
         val tag = intent.getLongExtra(RECORD_TAG, -1)
         if (tag >= 0) vm.setRecordTag(tag)
 
@@ -126,17 +121,21 @@ class RecordEditActivity :
     }
 
     private fun subscribeUI() {
-        vm.recordType.observe(this, Observer {
-            tvTitle.text = it.title
-
-            for (v in it.items) {
-                ViewFactory.generateView(this, v, llContent, true, this)
-            }
-
-            val recordId = intent!!.getLongExtra(RECORD, -1)
-            if (recordId >= 0) {
-                vm.setRecordId(recordId)
-            }
+//        vm.recordType.observe(this, Observer {
+//            tvTitle.text = it.title
+//
+//            for (v in it.items) {
+////                ViewFactory.generateView(this, v, llContent, true, this)
+//                ViewFactory.generateView(this, v, llContent, listener = this)
+//            }
+//
+//            val recordId = intent!!.getLongExtra(RECORD, -1)
+//            if (recordId >= 0) {
+//                vm.setRecordId(recordId)
+//            }
+//        })
+        vm.recordShow.observe(this, Observer {
+            ViewFactory.generateView(this, it, llContent, listener = this)
         })
         vm.recordTagList.observe(this, Observer {
             (rvRecordTag.adapter as RecordTagAdapter).submitList(it)
@@ -144,9 +143,9 @@ class RecordEditActivity :
         vm.recordTagTitle.observe(this, Observer {
             tvTag.text = it
         })
-        vm.recordData.observe(this, Observer {
-            loadRecord(it)
-        })
+//        vm.recordData.observe(this, Observer {
+//            loadRecord(it)
+//        })
         vm.submitResult.observe(this, Observer {
             if (it) {
                 setResult(Activity.RESULT_OK)
@@ -180,7 +179,9 @@ class RecordEditActivity :
                 onBackPressed()
             }
             R.id.iv_more_toolbar -> {
-                saveRecord()
+                val result =
+                    ViewFactory.loadRecordView(vm.recordType.items, llContent)
+                vm.saveRecordItems(result)
             }
             R.id.tv_tag_record_edit -> {
                 dlgRecordTag.show()
@@ -200,7 +201,7 @@ class RecordEditActivity :
         path.remotePath = ""
         item.content = GsonFactory.getInstance().toJson(path)
         mView.setTag(R.id.tag_image, item)
-        loadImage(path, mView, generateOption(mRecordView as RecordImageView, mView))
+        ViewFactory.loadImg(path, mView, ViewFactory.generateOption(mRecordView as RecordImageView, mView))
     }
 
     override fun onPhotoError(error: String?) {
@@ -236,111 +237,6 @@ class RecordEditActivity :
                                             grantResults: IntArray) {
         WPermission.onPermissionResult(requestCode, permissions, grantResults)
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    private fun loadRecord(map: ArrayMap<String, RecordItem>) {
-        val views = vm.recordType.value!!.items
-        val parent = llContent
-
-        loadRecordRecursive(map, views, parent)
-    }
-
-    private fun loadRecordRecursive(map: ArrayMap<String, RecordItem>,
-                                    views: ArrayList<RecordView>,
-                                    parent: ViewGroup) {
-        for (i in 0 until views.size) {
-            val v = views[i]
-            val child = parent.getChildAt(i)
-
-            if (v is RealRecordLayoutView) {
-                loadRecordRecursive(map, v.items, child as ViewGroup)
-            } else if (v is RecordTextView && v.editable) {
-                val item = map[generateKey(v)]
-                if (item != null) {
-                    (child as TextInputLayout).editText!!.setText(item.content)
-                    child.setTag(R.id.tag_text, item)
-                }
-            } else if (v is RecordImageView) {
-                val item = map[generateKey(v)]
-                if (item != null) {
-                    val path = GsonFactory.getInstance()
-                        .fromJson(item.content, ImagePath::class.java)
-                    loadImage(path, child as ImageView, generateOption(v, child))
-                    child.setTag(R.id.tag_image, item)
-                }
-            }
-        }
-    }
-
-    private fun saveRecord() {
-        val itemList = ArrayList<RecordItem>()
-        val views = vm.recordType.value!!.items
-        val parent = llContent
-
-        saveRecordRecursive(itemList, views, parent)
-
-        vm.saveRecordItems(itemList)
-    }
-
-    private fun saveRecordRecursive(itemList: ArrayList<RecordItem>,
-                                    views: ArrayList<RecordView>,
-                                    parent: ViewGroup) {
-        for (i in 0 until views.size) {
-            val v = views[i]
-            val child = parent.getChildAt(i)
-
-            if (v is RealRecordLayoutView) {
-                saveRecordRecursive(itemList, v.items, child as ViewGroup)
-            } else if (v is RecordTextView && v.editable) {
-                var item = child.getTag(R.id.tag_text)
-                if (item == null) {
-                    item = RecordItem(-1, v.id!!, RecordTypeSelect.TYPE_TEXT)
-                }
-                item = item as RecordItem
-                item.content = (child as TextInputLayout).editText!!.text.toString()
-                itemList.add(item)
-            } else if (v is RecordImageView) {
-                val item = child.getTag(R.id.tag_image)
-                if (item != null) {
-                    itemList.add(item as RecordItem)
-                }
-            }
-        }
-    }
-
-    private fun generateKey(view: RecordView): String {
-        val type = RecordTypeSelect.getType(view)
-        return "${type}_${view.id}"
-    }
-
-    private fun loadImage(imagePath: ImagePath, iv: ImageView, options: BaseRequestOptions<*>) {
-        Glide.with(iv)
-            .load(imagePath.localPath)
-            .apply(options)
-            .error(
-                Glide.with(iv)
-                    .load(imagePath.remotePath)
-            )
-            .into(iv)
-    }
-
-    private fun generateOption(view: RecordImageView, iv: ImageView): BaseRequestOptions<*> {
-        val default = RoundedCornersTransformation(0, 0)
-        return RequestOptions.bitmapTransform(
-            MultiTransformation<Bitmap>(
-                if (view.blur) BlurTransformation(25) else default,
-                if (view.tint != 0) ColorFilterTransformation(view.tint) else default,
-                when (view.shape) {
-                    0 -> CenterCrop()
-                    1 -> MultiTransformation<Bitmap>(
-                        CenterCrop(),
-                        RoundedCornersTransformation(25, 0)
-                    )
-                    2 -> CircleCrop()
-                    else -> default
-                }
-            )
-        )
     }
 
     private fun generateImgPath(): String {

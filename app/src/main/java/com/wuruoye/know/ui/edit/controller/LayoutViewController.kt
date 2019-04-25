@@ -39,6 +39,7 @@ class LayoutViewController(private val mView: RealRecordLayoutView) :
     }
 
     private fun initView() {
+//        mShowView = ViewFactory.generateView(mContext, mView, flContent) as LinearLayout
         mShowView = ViewFactory.generateView(mContext, mView, flContent) as LinearLayout
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_layout_view, svOptions)

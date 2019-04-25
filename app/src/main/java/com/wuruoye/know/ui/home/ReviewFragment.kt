@@ -14,15 +14,16 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.edit.RecordShowActivity
 import com.wuruoye.know.ui.home.adapter.ReviewListAdapter
 import com.wuruoye.know.ui.home.vm.IReviewVM
 import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.REVIEW_FOR_SHOW
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
-import com.wuruoye.know.util.toast
 
 /**
  * Created at 2019/4/9 21:11 by wuruoye
@@ -73,7 +74,8 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
     }
 
     override fun onClick(item: RecordListItem) {
-        context?.toast(item.title)
+        val intent = Intent(context, RecordShowActivity::class.java)
+        startActivityForResult(intent, REVIEW_FOR_SHOW)
     }
 
     override fun onNotRemember(item: RecordListItem) {

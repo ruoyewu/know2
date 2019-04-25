@@ -49,7 +49,7 @@ class RecordTypeEditShowFragment : Fragment() {
         vm.recordType.observe(this, Observer {
             llShow.removeAllViews()
             for (view in it.items) {
-                ViewFactory.generateShowView(context!!, view, llShow, true)
+                ViewFactory.generateView(context!!, view, llShow, isShow = true)
             }
         })
     }

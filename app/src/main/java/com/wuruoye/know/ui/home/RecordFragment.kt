@@ -227,7 +227,6 @@ class RecordFragment : Fragment(),
 
     override fun onClick(item: RecordListItem) {
         val intent = Intent(context, RecordEditActivity::class.java)
-        intent.putExtra(RecordEditActivity.RECORD_TYPE, item.record.type)
         intent.putExtra(RecordEditActivity.RECORD, item.record.id)
         startActivityForResult(intent, RECORD_FOR_RECORD)
     }

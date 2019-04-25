@@ -33,6 +33,7 @@
         <activity android:name=".ui.setting.ReviewStrategySetActivity"/>
         <activity android:name=".ui.setting.UserLoginActivity"/>
         <activity android:name=".ui.setting.UserInfoActivity"/>
+        <activity android:name=".ui.edit.RecordShowActivity"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"
