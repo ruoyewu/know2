@@ -85,7 +85,7 @@ class ReviewStrategySetActivity :
     }
 
     private fun initView() {
-        tvTitle.text = "复习策略"
+        tvTitle.text = getString(R.string.review_strategy)
         ivBack.setImageResource(R.drawable.ic_left)
         ivMore.setImageResource(R.drawable.ic_menu)
 

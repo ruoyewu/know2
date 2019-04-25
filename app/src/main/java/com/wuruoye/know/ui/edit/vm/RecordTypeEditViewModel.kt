@@ -11,7 +11,9 @@ import com.wuruoye.know.util.model.beans.RecordTypeItem
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
 import com.wuruoye.know.util.orm.dao.RecordTypeDao
 import com.wuruoye.know.util.orm.dao.RecordViewDao
+import com.wuruoye.know.util.orm.dao.ReviewStrategyDao
 import com.wuruoye.know.util.orm.table.*
+import com.wuruoye.know.util.update
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -22,7 +24,8 @@ import org.json.JSONArray
  */
 class RecordTypeEditViewModel(
     private val recordTypeDao: RecordTypeDao,
-    private val recordViewDao: RecordViewDao
+    private val recordViewDao: RecordViewDao,
+    private val reviewStrategyDao: ReviewStrategyDao
 ) : ViewModel(), IRecordTypeEditVM {
     override var selectItems
             = MutableLiveData<List<RecordTypeSelect>>()
@@ -34,6 +37,9 @@ class RecordTypeEditViewModel(
                 RecordTypeSelect(RecordTypeSelect.TYPE_LAYOUT, "容器")
             )
         }
+
+    override val reviewStrategyList: MutableLiveData<List<ReviewStrategy>> =
+            MutableLiveData()
 
     var recordTypeId = MutableLiveData<Long?>().apply { value = null }
 
@@ -52,7 +58,21 @@ class RecordTypeEditViewModel(
         }
     }
 
+    override val reviewStrategyTitle: MutableLiveData<String> =
+        MediatorLiveData<String>().apply {
+            addSource(recordType) {
+                GlobalScope.launch {
+                    postValue(reviewStrategyDao.query(it.strategy).title)
+                }
+            }
+        }
+
     override var submitResult: MutableLiveData<Boolean> = MutableLiveData()
+
+
+    init {
+        updateReviewStrategy()
+    }
 
     override fun setRecordTypeId(id: Long?) {
         recordTypeId.value = id
@@ -68,8 +88,7 @@ class RecordTypeEditViewModel(
                     itemList.add(saveRecordView(item))
                 }
                 val recordType = RecordType(type, GsonFactory.getInstance().toJson(itemList))
-                if (recordType.createTime < 0) recordType.createTime = System.currentTimeMillis()
-                else recordType.updateTime = System.currentTimeMillis()
+                recordType.update()
                 val id = recordTypeDao.insert(recordType)
                 submitResult.postValue(id >= 0)
             }
@@ -84,8 +103,24 @@ class RecordTypeEditViewModel(
         recordType.value = type
     }
 
+    override fun setReviewStrategy(id: Long) {
+        val type = recordType.value
+        if (type != null) {
+            type.strategy = id
+        }
+        recordType.value = type
+    }
+
     override fun updateView() {
         recordType.value = recordType.value
+    }
+
+    override fun updateReviewStrategy() {
+        GlobalScope.launch {
+            reviewStrategyList.postValue(
+                reviewStrategyDao.queryAll()
+            )
+        }
     }
 
     override fun removeView(view: RecordView) {
@@ -174,10 +209,11 @@ class RecordTypeEditViewModel(
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val recordTypeDao: RecordTypeDao,
-        private val recordViewDao: RecordViewDao
+        private val recordViewDao: RecordViewDao,
+        private val reviewStrategyDao: ReviewStrategyDao
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return RecordTypeEditViewModel(recordTypeDao, recordViewDao) as T
+            return RecordTypeEditViewModel(recordTypeDao, recordViewDao, reviewStrategyDao) as T
         }
     }
 }

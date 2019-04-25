@@ -22,6 +22,9 @@ class ReviewStrategy(
     constructor() :
             this(null, "", 3, 86400000, -1, -1)
 
+    constructor(title: String):
+            this(null, title, 0, 0, -1, -1)
+
     constructor(source: Parcel) : this(
         source.readValue(Long::class.java.classLoader) as Long?,
         source.readString(),
@@ -40,6 +43,32 @@ class ReviewStrategy(
         writeLong(gapTime)
         writeLong(createTime)
         writeLong(updateTime)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ReviewStrategy
+
+        if (id != other.id) return false
+        if (title != other.title) return false
+        if (rememberTime != other.rememberTime) return false
+        if (gapTime != other.gapTime) return false
+        if (createTime != other.createTime) return false
+        if (updateTime != other.updateTime) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + title.hashCode()
+        result = 31 * result + rememberTime
+        result = 31 * result + gapTime.hashCode()
+        result = 31 * result + createTime.hashCode()
+        result = 31 * result + updateTime.hashCode()
+        return result
     }
 
     companion object {

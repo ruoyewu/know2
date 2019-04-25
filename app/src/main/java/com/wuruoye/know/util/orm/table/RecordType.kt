@@ -16,7 +16,7 @@ class RecordType(
         override var id: Long?,
         var title: String,
         var items: String,
-        var stratety: Long,
+        var strategy: Long,
         override var createTime: Long,
         override var updateTime: Long
 ) : BaseTable {
@@ -26,5 +26,5 @@ class RecordType(
     constructor(title: String): this(null, title, "[]", 0, -1, -1)
 
     constructor(type: RealRecordType, items: String):
-            this(type.id, type.title, items, 0, type.createTime, type.updateTime)
+            this(type.id, type.title, items, type.strategy, type.createTime, type.updateTime)
 }

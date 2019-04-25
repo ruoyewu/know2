@@ -22,4 +22,5 @@ object RequestCode {
     val USER_FOR_LOGIN = 15
     val USER_FOR_USER_INFO = 16
     val REVIEW_FOR_SHOW = 17
+    val RECORD_TYPE_EDIT_FOR_STRATEGY = 18
 }

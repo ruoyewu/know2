@@ -19,5 +19,5 @@ class RealRecordType(
     constructor(title: String): this(null, title, arrayListOf(), 0, -1, -1)
 
     constructor(type: RecordType, views: ArrayList<RecordView>):
-            this(type.id, type.title, views, 0, type.createTime, type.updateTime)
+            this(type.id, type.title, views, type.strategy, type.createTime, type.updateTime)
 }

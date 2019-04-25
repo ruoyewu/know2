@@ -84,12 +84,12 @@ class ReviewViewModel(
                         recordTypeMap[record.type]!!
                     }
             val strategy =
-                if (reviewStrategyMap[type.stratety] == null) {
-                    val s = reviewStrategyDao.query(type.stratety)
-                    reviewStrategyMap.put(type.stratety, s)
+                if (reviewStrategyMap[type.strategy] == null) {
+                    val s = reviewStrategyDao.query(type.strategy)
+                    reviewStrategyMap.put(type.strategy, s)
                     s
                 } else {
-                    reviewStrategyMap[type.stratety]!!
+                    reviewStrategyMap[type.strategy]!!
                 }
 
             if (record.remNum < strategy.rememberTime) {

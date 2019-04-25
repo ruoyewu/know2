@@ -57,7 +57,7 @@ class ReviewStrategySetViewModel(
 
         val recordTypeList = recordTypeDao.queryByStrategy(strategy.id!!)
         for (recordType in recordTypeList) {
-            recordType.stratety = 0
+            recordType.strategy = 0
             recordTypeDao.insert(recordType)
         }
 

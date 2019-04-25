@@ -53,6 +53,7 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review_strategy_edit)
+
         vm = ViewModelProviders.of(this,
             InjectorUtil.reviewStrategyEditViewModel(this))
             .get(ReviewStrategyEditViewModel::class.java)

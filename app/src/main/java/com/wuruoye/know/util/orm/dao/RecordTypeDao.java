@@ -26,7 +26,7 @@ public interface RecordTypeDao {
     @Query("SELECT COUNT(*) FROM record_type")
     long queryCount();
 
-    @Query("SELECT * FROM record_type WHERE stratety = :strategy")
+    @Query("SELECT * FROM record_type WHERE strategy = :strategy")
     List<RecordType> queryByStrategy(long strategy);
 
     @Query("DELETE FROM record_type WHERE id = :id")
