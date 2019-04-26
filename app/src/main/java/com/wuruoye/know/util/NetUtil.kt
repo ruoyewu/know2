@@ -17,6 +17,7 @@ object NetUtil {
     val USER = HOST + "user/user"
     val UPLOAD_TOKEN = HOST + "user/token"
     val BACKUP = HOST + "backup/backup"
+    val BACKUP_INFO = HOST + "backup/info"
 
     private val cookieMap = ArrayMap<String, MutableList<Cookie>>()
     private val mClient = OkHttpClient.Builder()

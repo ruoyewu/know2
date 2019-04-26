@@ -281,11 +281,11 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
 
         if (last <= mDeleteLength && cur == mDeleteLength) {
             mOnePass = false
-            postDelayed( { closeDirectly() }, 200)
+            postDelayed( { closeDirectly() }, DELAY)
             mScrollListener?.onLeft()
         } else if (last >= -mDeleteLength && cur == -mDeleteLength) {
             mOnePass = false
-            postDelayed( { closeDirectly() }, 200)
+            postDelayed( { closeDirectly() }, DELAY)
             mScrollListener?.onRight()
         }
     }
@@ -312,6 +312,7 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     }
 
     companion object {
-        const val RESISTANCE = 0.3F
+        private const val RESISTANCE = 0.3F
+        private const val DELAY = 500L
     }
 }

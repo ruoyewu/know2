@@ -22,6 +22,7 @@ import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
 import com.wuruoye.know.util.model.RequestCode.REVIEW_FOR_SHOW
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_BACKUP
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
 import java.util.*
@@ -66,6 +67,7 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
         adapter.setOnActionListener(this)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(context)
+        rv.post { rv.scrollToPosition(0) }
     }
 
     private fun subscribeUI() {
@@ -99,7 +101,8 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
                 RECORD_FOR_TYPE,
                 RECORD_FOR_RECORD,
                 USER_FOR_RECORD_TYPE,
-                REVIEW_FOR_SHOW-> vm.updateRecordList()
+                REVIEW_FOR_SHOW,
+                USER_FOR_BACKUP -> vm.updateRecordList()
             }
         }
     }

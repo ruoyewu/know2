@@ -2,6 +2,8 @@ package com.wuruoye.know.ui.edit
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,6 +42,11 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var vm: IRecordShowVM
     private var isRunning: Boolean = false
 
+    private var mStartColor: Int = 0
+    private var mEndColor: Int = 0
+    private lateinit var mArgbEvaluator: ArgbEvaluator
+    private lateinit var mValueAnimator: ValueAnimator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_show)
@@ -58,6 +66,7 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
         initView()
         subscribeUI()
 
+        flContent.post { initAnimator() }
     }
 
     private fun bindView() {
@@ -76,8 +85,25 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
         fabError.setOnClickListener(this)
     }
 
+    private fun initAnimator() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mStartColor = ActivityCompat.getColor(this, R.color.romance)
+            mArgbEvaluator = ArgbEvaluator()
+            mValueAnimator = ValueAnimator().apply {
+                duration = DURATION
+                setFloatValues(0F, 1F)
+                addUpdateListener {
+                    val value = it.animatedValue as Float
+                    llCur.setBackgroundColor(mArgbEvaluator
+                        .evaluate(value, mStartColor, mEndColor) as Int)
+                }
+            }
+        }
+    }
+
     private fun initView() {
         tvTitle.text = getString(R.string.record)
+
     }
 
     private fun subscribeUI() {
@@ -127,25 +153,28 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun startAnimation(view: View) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val x = view.x + view.width / 2
-            val y = view.y + view.width / 2
-            val animator = ViewAnimationUtils.createCircularReveal(llCur,
-                x.toInt(), y.toInt(),
-                llCur.height.toFloat(), 0F)
-            animator.duration = DURATION
-            animator.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
-                    isRunning = true
-                }
-                override fun onAnimationEnd(animation: Animator?) {
-                    removeCur()
-                }
+            mEndColor =
+                if (view == fabOk) ActivityCompat.getColor(this, R.color.light_slate_gray)
+                else ActivityCompat.getColor(this, R.color.monsoon)
+            ViewAnimationUtils.createCircularReveal(llCur,
+                (view.x + view.width/2).toInt(), (view.y + view.width/2).toInt(),
+                llCur.height.toFloat(), 0F).apply {
+                duration = DURATION
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator?) {
+                        this@RecordShowActivity.isRunning = true
+                    }
+                    override fun onAnimationEnd(animation: Animator?) {
+                        removeCur()
+                    }
 
-                override fun onAnimationCancel(animation: Animator?) {
-                    removeCur()
-                }
-            })
-            animator.start()
+                    override fun onAnimationCancel(animation: Animator?) {
+                        removeCur()
+                    }
+                })
+                start()
+                mValueAnimator.start()
+            }
         } else {
             removeCur()
         }
@@ -154,6 +183,7 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
     private fun removeCur() {
         isRunning = false
         llCur.removeAllViews()
+        llCur.setBackgroundColor(mStartColor)
         flContent.removeView(llCur)
         vm.showInViewGroup(llCur)
         llCur = llNext

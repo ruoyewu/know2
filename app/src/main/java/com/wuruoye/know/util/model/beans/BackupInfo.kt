@@ -5,7 +5,9 @@ package com.wuruoye.know.util.model.beans
  * Description:
  */
 class BackupInfo(
-    var recordNum: Long,
-    var recordTypeNum: Long,
-    var tagNum: Long
+    var record: Long,
+    var record_type: Long,
+    var review_strategy: Long,
+    var record_tag: Long,
+    var last_backup: Long
 )

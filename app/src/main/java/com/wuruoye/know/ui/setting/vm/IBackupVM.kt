@@ -1,6 +1,7 @@
 package com.wuruoye.know.ui.setting.vm
 
 import androidx.lifecycle.MutableLiveData
+import com.wuruoye.know.util.model.beans.BackupInfo
 import com.wuruoye.know.util.model.beans.NetResult
 
 /**
@@ -8,9 +9,11 @@ import com.wuruoye.know.util.model.beans.NetResult
  * Description:
  */
 interface IBackupVM {
+    val backupInfo: MutableLiveData<BackupInfo>
     val loadingTitle: MutableLiveData<String>
     val result: MutableLiveData<NetResult>
 
+    fun updateInfo()
     fun backup()
     fun download()
 }

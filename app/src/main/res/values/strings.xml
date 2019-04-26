@@ -59,6 +59,8 @@
     <string name="record_size">记录数量</string>
     <string name="record_type_size">记录类型数量</string>
     <string name="record_tag_size">标签数量</string>
+    <string name="review_strategy_size">复习策略数量</string>
+    <string name="last_backup">上次备份时间</string>
     <string name="record_num">20</string>
     <string name="set_record_type">编辑记录类型</string>
     <string name="set_record_tag">编辑标签</string>

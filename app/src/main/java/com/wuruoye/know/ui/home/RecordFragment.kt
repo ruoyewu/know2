@@ -27,6 +27,7 @@ import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_BACKUP
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.beans.RecordListItem
@@ -269,6 +270,11 @@ class RecordFragment : Fragment(),
                 USER_FOR_RECORD_TAG -> {
                     vm.updateRecordTag()
                     vm.updateRecord()
+                }
+                USER_FOR_BACKUP -> {
+                    vm.updateRecord()
+                    vm.updateRecordTag()
+                    vm.updateRecordType()
                 }
             }
         }

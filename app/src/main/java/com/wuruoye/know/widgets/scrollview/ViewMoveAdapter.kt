@@ -80,6 +80,6 @@ class ViewMoveAdapter(private val view: View) {
 
     companion object {
         const val MIN_VELOCITY = 20F
-        const val MAX_TIME = 8F
+        const val MAX_TIME = 6F
     }
 }
