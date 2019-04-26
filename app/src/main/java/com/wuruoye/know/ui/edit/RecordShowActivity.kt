@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,6 +47,8 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
     private var mEndColor: Int = 0
     private lateinit var mArgbEvaluator: ArgbEvaluator
     private lateinit var mValueAnimator: ValueAnimator
+    private lateinit var mOkSpring: SpringAnimation
+    private lateinit var mErrorSpring: SpringAnimation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +100,42 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
                     llCur.setBackgroundColor(mArgbEvaluator
                         .evaluate(value, mStartColor, mEndColor) as Int)
                 }
+                addListener(object: AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        llCur.setBackgroundColor(mStartColor)
+                    }
+                })
+            }
+
+            mOkSpring = SpringAnimation(fabOk,
+                SpringAnimation.SCALE_X, 1F).apply {
+                addUpdateListener { _, value, _ ->
+                    fabOk.scaleX = value
+                    fabOk.scaleY = value
+                }
+                spring.apply {
+                    stiffness = 50F
+                    dampingRatio = 0.3F
+                }
+                addEndListener { _,
+                                 _, _, _ ->
+                    removeCur()
+                }
+            }
+            mErrorSpring = SpringAnimation(fabError,
+                SpringAnimation.SCALE_X, 1F).apply {
+                addUpdateListener { _, value, _ ->
+                    fabError.scaleX = value
+                    fabError.scaleY = value
+                }
+                spring.apply {
+                    stiffness = 50F
+                    dampingRatio = 0.3F
+                }
+                addEndListener { _,
+                                 _, _, _ ->
+                    removeCur()
+                }
             }
         }
     }
@@ -122,6 +161,7 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
         })
         vm.recordShow.observe(this, Observer {
             llNext = it.viewGroup as LinearLayout
+            llNext.visibility = View.VISIBLE
             flContent.addView(llNext, 0)
             llNext.tag = it.recordShow.record
             ViewFactory.generateView(this, it.recordShow, llNext, isShow = true)
@@ -158,18 +198,17 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
                 else ActivityCompat.getColor(this, R.color.monsoon)
             ViewAnimationUtils.createCircularReveal(llCur,
                 (view.x + view.width/2).toInt(), (view.y + view.width/2).toInt(),
-                llCur.height.toFloat(), 0F).apply {
+                llCur.height.toFloat(), (view.width/2).toFloat()
+            ).apply {
                 duration = DURATION
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationStart(animation: Animator?) {
                         this@RecordShowActivity.isRunning = true
                     }
                     override fun onAnimationEnd(animation: Animator?) {
-                        removeCur()
-                    }
-
-                    override fun onAnimationCancel(animation: Animator?) {
-                        removeCur()
+                        llCur.visibility = View.GONE
+                        (if (view == fabOk) mOkSpring else mErrorSpring)
+                            .setStartVelocity(3F).start()
                     }
                 })
                 start()
@@ -183,7 +222,6 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
     private fun removeCur() {
         isRunning = false
         llCur.removeAllViews()
-        llCur.setBackgroundColor(mStartColor)
         flContent.removeView(llCur)
         vm.showInViewGroup(llCur)
         llCur = llNext
