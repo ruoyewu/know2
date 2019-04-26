@@ -289,6 +289,18 @@ public class InsertDao {
         db.runInTransaction(runnable);
     }
 
+    public void beginTransaction() {
+        db.beginTransaction();
+    }
+
+    public void endTransaction() {
+        db.endTransaction();
+    }
+
+    public void setTransactionSuccessful() {
+        db.setTransactionSuccessful();
+    }
+
     public long insertRecord(Record record) {
         return recordInsert.insertAndReturnId(record);
     }

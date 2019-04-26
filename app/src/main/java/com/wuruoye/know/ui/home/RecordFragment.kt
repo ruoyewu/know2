@@ -256,6 +256,7 @@ class RecordFragment : Fragment(),
         if (resultCode == RESULT_OK) {
             when(requestCode) {
                 RECORD_FOR_TYPE -> {
+                    vm.updateRecord()
                     vm.updateRecordType()
                 }
                 RECORD_FOR_RECORD -> {

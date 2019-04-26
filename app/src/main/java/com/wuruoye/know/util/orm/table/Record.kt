@@ -33,18 +33,6 @@ class Record(
             )
 
 
-    override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
-        result = 31 * result + type.hashCode()
-        result = 31 * result + remNum
-        result = 31 * result + failNum
-        result = 31 * result + lastReview.hashCode()
-        result = 31 * result + tag.hashCode()
-        result = 31 * result + createTime.hashCode()
-        result = 31 * result + updateTime.hashCode()
-        return result
-    }
-
     constructor(source: Parcel) : this(
         source.readValue(Long::class.java.classLoader) as Long?,
         source.readLong(),
@@ -88,6 +76,19 @@ class Record(
         if (updateTime != other.updateTime) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + type.hashCode()
+        result = 31 * result + remNum
+        result = 31 * result + failNum
+        result = 31 * result + lastReview.hashCode()
+        result = 31 * result + lastFailReview.hashCode()
+        result = 31 * result + tag.hashCode()
+        result = 31 * result + createTime.hashCode()
+        result = 31 * result + updateTime.hashCode()
+        return result
     }
 
     companion object {

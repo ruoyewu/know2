@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
         <LinearLayout
-                android:id="@+id/ll_record_size_todo"
+                android:id="@+id/ll_record_size_backup"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="10dp"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"/>
 
             <TextView
-                    android:id="@+id/tv_record_size_todo"
+                    android:id="@+id/tv_record_size_backup"
                     android:text="@string/record_num"
                     android:textSize="15sp"
                     android:textColor="@color/light_slate_gray"
@@ -55,7 +55,7 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/ll_record_type_size_todo"
+                android:id="@+id/ll_record_type_size_backup"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="10dp"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"/>
 
             <TextView
-                    android:id="@+id/tv_record_type_size_todo"
+                    android:id="@+id/tv_record_type_size_backup"
                     android:text="@string/record_num"
                     android:textSize="15sp"
                     android:textColor="@color/light_slate_gray"
@@ -84,7 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/ll_record_tag_size_todo"
+                android:id="@+id/ll_record_tag_size_backup"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="10dp"
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"/>
 
             <TextView
-                    android:id="@+id/tv_record_tag_size_todo"
+                    android:id="@+id/tv_record_tag_size_backup"
                     android:text="@string/record_num"
                     android:textSize="15sp"
                     android:textColor="@color/light_slate_gray"
@@ -113,7 +113,7 @@
         </LinearLayout>
 
         <Button
-                android:id="@+id/btn_upload_todo"
+                android:id="@+id/btn_upload_backup"
                 android:text="@string/upload_backup"
                 android:textColor="@color/romance"
                 android:textSize="18sp"
@@ -125,7 +125,7 @@
                 android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
         <Button
-                android:id="@+id/btn_download_todo"
+                android:id="@+id/btn_download_backup"
                 android:text="@string/download_backup"
                 android:textColor="@color/romance"
                 android:textSize="18sp"

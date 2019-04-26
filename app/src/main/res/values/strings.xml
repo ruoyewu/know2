@@ -62,7 +62,7 @@
     <string name="record_num">20</string>
     <string name="set_record_type">编辑记录类型</string>
     <string name="set_record_tag">编辑标签</string>
-    <string name="set_backup">备份</string>
+    <string name="backup">备份</string>
     <string name="set_review_strategy">编辑复习策略</string>
     <string name="delete_record_type">删除</string>
     <string name="remember">记住了</string>

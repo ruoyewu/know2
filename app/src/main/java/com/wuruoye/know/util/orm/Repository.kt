@@ -19,7 +19,7 @@ object Repository {
     @Volatile private var reviewStrategyDao: ReviewStrategyDao? = null
     @Volatile private var insertDao: InsertDao ? = null
 
-    private fun getImageView(context: Context): ImageViewDao {
+    fun getImageView(context: Context): ImageViewDao {
         if (imageViewDao == null) {
             synchronized(this) {
                 if (imageViewDao == null) {
@@ -30,7 +30,7 @@ object Repository {
         return imageViewDao!!
     }
 
-    private fun getLayoutView(context: Context): LayoutViewDao {
+    fun getLayoutView(context: Context): LayoutViewDao {
         if (layoutViewDao == null) {
             synchronized(this) {
                 if (layoutViewDao == null) {
@@ -74,7 +74,7 @@ object Repository {
         return recordTypeDao!!
     }
 
-    private fun getTextView(context: Context): TextViewDao {
+    fun getTextView(context: Context): TextViewDao {
         if (textViewDao == null) {
             synchronized(this) {
                 if (textViewDao == null) {

@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import com.wuruoye.know.util.orm.table.RecordTextView;
 
+import java.util.List;
+
 /**
  * Created at 2019/4/11 17:59 by wuruoye
  * Description:
@@ -14,6 +16,9 @@ import com.wuruoye.know.util.orm.table.RecordTextView;
 public interface TextViewDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(RecordTextView view);
+
+    @Query("SELECT * FROM text_view ORDER BY createTime DESC")
+    List<RecordTextView> queryAll();
 
     @Query("SELECT * FROM text_view WHERE id = :id")
     RecordTextView query(long id);

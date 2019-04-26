@@ -106,4 +106,18 @@ object InjectorUtil {
         val recordItemDao = Repository.getRecordItem(context)
         return RecordShowViewModel.Factory(recordDao, recordTypeDao, recordItemDao, recordViewDao)
     }
+
+    fun backupViewModelFactory(context: Context): ViewModelProvider.Factory {
+        val recordDao = Repository.getRecord(context)
+        val recordTypeDao = Repository.getRecordType(context)
+        val recordItemDao = Repository.getRecordItem(context)
+        val recordTagDao = Repository.getRecordTag(context)
+        val reviewStrategyDao = Repository.getReviewStrategy(context)
+        val textViewDao = Repository.getTextView(context)
+        val imageViewDao = Repository.getImageView(context)
+        val layoutViewDao = Repository.getLayoutView(context)
+        val insertDao = Repository.getInsertDao(context)
+        return BackupViewModel.Factory(recordDao, recordTypeDao, recordItemDao,
+            recordTagDao, reviewStrategyDao, textViewDao, imageViewDao, layoutViewDao, insertDao)
+    }
 }

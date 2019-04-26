@@ -238,7 +238,7 @@
             android:layout_height="45dp">
 
         <TextView
-                android:text="@string/set_backup"
+                android:text="@string/backup"
                 android:textSize="15sp"
                 android:layout_width="0dp"
                 android:layout_weight="1"

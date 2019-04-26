@@ -143,6 +143,72 @@ class RecordTextView(
         writeLong(updateTime)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RecordTextView
+
+        if (id != other.id) return false
+        if (text != other.text) return false
+        if (textSize != other.textSize) return false
+        if (textColor != other.textColor) return false
+        if (hint != other.hint) return false
+        if (hintSize != other.hintSize) return false
+        if (hintColor != other.hintColor) return false
+        if (bgColor != other.bgColor) return false
+        if (gravity != other.gravity) return false
+        if (textStyle != other.textStyle) return false
+        if (inputType != other.inputType) return false
+        if (minLine != other.minLine) return false
+        if (maxLine != other.maxLine) return false
+        if (editable != other.editable) return false
+        if (width != other.width) return false
+        if (height != other.height) return false
+        if (marginLeft != other.marginLeft) return false
+        if (marginRight != other.marginRight) return false
+        if (marginTop != other.marginTop) return false
+        if (marginBottom != other.marginBottom) return false
+        if (paddingLeft != other.paddingLeft) return false
+        if (paddingRight != other.paddingRight) return false
+        if (paddingTop != other.paddingTop) return false
+        if (paddingBottom != other.paddingBottom) return false
+        if (createTime != other.createTime) return false
+        if (updateTime != other.updateTime) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + text.hashCode()
+        result = 31 * result + textSize
+        result = 31 * result + textColor
+        result = 31 * result + hint.hashCode()
+        result = 31 * result + hintSize
+        result = 31 * result + hintColor
+        result = 31 * result + bgColor
+        result = 31 * result + gravity
+        result = 31 * result + textStyle
+        result = 31 * result + inputType
+        result = 31 * result + minLine
+        result = 31 * result + maxLine
+        result = 31 * result + editable.hashCode()
+        result = 31 * result + width
+        result = 31 * result + height
+        result = 31 * result + marginLeft
+        result = 31 * result + marginRight
+        result = 31 * result + marginTop
+        result = 31 * result + marginBottom
+        result = 31 * result + paddingLeft
+        result = 31 * result + paddingRight
+        result = 31 * result + paddingTop
+        result = 31 * result + paddingBottom
+        result = 31 * result + createTime.hashCode()
+        result = 31 * result + updateTime.hashCode()
+        return result
+    }
+
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<RecordTextView> = object : Parcelable.Creator<RecordTextView> {

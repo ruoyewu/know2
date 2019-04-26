@@ -16,6 +16,7 @@ object NetUtil {
     val VERIFY_CODE = HOST + "user/verify_code"
     val USER = HOST + "user/user"
     val UPLOAD_TOKEN = HOST + "user/token"
+    val BACKUP = HOST + "backup/backup"
 
     private val cookieMap = ArrayMap<String, MutableList<Cookie>>()
     private val mClient = OkHttpClient.Builder()
@@ -75,6 +76,10 @@ object NetUtil {
     }
 
     private fun request(request: Request): NetResult {
+        if (!NetworkUtil.isAvailable()) {
+            return NetResult(-1, "no network available")
+        }
+
         val response = mClient.newCall(request).execute()
         if (response.isSuccessful) {
             val obj = JSONObject(response.body()!!.string())
