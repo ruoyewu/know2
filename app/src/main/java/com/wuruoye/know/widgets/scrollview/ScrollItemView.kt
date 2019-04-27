@@ -182,7 +182,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
                 mTouchDownListener?.onActionDown()
             }
             MotionEvent.ACTION_MOVE -> {
-                log("action move in intercept")
                 val slotX = ev.x - mStartX
                 val slotY = ev.y - mStartY
                 mIsDragging = Math.abs(slotX) > Math.abs(slotY)
@@ -224,13 +223,20 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
                 val offsetX = mMainView!!.x
                 if (offsetX > 0) {
                     when {
-                        offsetX > mMaxLeft -> mVmMain.moveTo(mDeleteLength)
+                        offsetX > mMaxLeft -> {
+                            mVmMain.moveTo(mDeleteLength)
+                            mScrollListener?.onPreLeft()
+                        }
                         offsetX > mMoveLeft/2 -> mVmMain.moveTo(mMoveLeft)
                         else -> mVmMain.moveTo(0F)
                     }
                 } else {
                     when {
-                        offsetX < -mMaxRight -> mVmMain.moveTo(-mDeleteLength)
+                        offsetX < -mMaxRight -> {
+                            log("review do pre right")
+                            mVmMain.moveTo(-mDeleteLength)
+                            mScrollListener?.onPreRight()
+                        }
                         offsetX < -mMoveRight/2 -> mVmMain.moveTo(-mMoveRight)
                         else -> mVmMain.moveTo(0F)
                     }
@@ -241,7 +247,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     }
 
     override fun onChanged(last: Float, cur: Float) {
-        log("on changed $cur")
         if (!mOnePass) {
             if (last <= mMaxLeft && cur > mMaxLeft) {
                 performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
@@ -302,9 +307,11 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
         fun onClick(view: View)
     }
 
-    interface OnScrollListener {
-        fun onLeft()
-        fun onRight()
+    abstract class OnScrollListener {
+        open fun onPreLeft() {}
+        open fun onPreRight() {}
+        open fun onLeft() {}
+        open fun onRight() {}
     }
 
     interface OnTouchDownListener {
@@ -313,6 +320,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
 
     companion object {
         private const val RESISTANCE = 0.3F
-        private const val DELAY = 500L
+        private const val DELAY = 200L
     }
 }

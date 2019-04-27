@@ -36,6 +36,7 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
     private lateinit var rv: RecyclerView
 
     private lateinit var vm: IReviewVM
+    private var mFirstShow: Boolean = true
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -48,6 +49,7 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
             InjectorUtil.reviewViewModelFactory(context!!))
             .get(ReviewViewModel::class.java)
 
+        mFirstShow = true
         bindView(view)
         initView()
         subscribeUI()
@@ -67,12 +69,15 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
         adapter.setOnActionListener(this)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(context)
-        rv.post { rv.scrollToPosition(0) }
     }
 
     private fun subscribeUI() {
         vm.recordList.observe(this, Observer {
             (rv.adapter as ReviewListAdapter).submitList(it)
+            if (mFirstShow) {
+                mFirstShow = false
+                rv.post { rv.scrollToPosition(0) }
+            }
         })
     }
 

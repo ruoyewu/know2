@@ -48,19 +48,23 @@ class ReviewListAdapter : ListAdapter<RecordListItem, RecyclerView.ViewHolder>(C
                 siv.closeDirectly()
                 siv.setOnClickListener {
                     when(it.id) {
-                        R.id.ll_view_remember -> siv.deleteLeft()
-                        R.id.ll_view_not_remember -> siv.deleteRight()
+                        R.id.ll_view_remember -> {
+                            siv.deleteLeft()
+                            remember(item)
+                        }
+                        R.id.ll_view_not_remember -> {
+                            siv.deleteRight()
+                            notRemember(item)
+                        }
                         R.id.ll_review_list -> mListener?.onClick(item)
                     }
                 }
-                siv.setOnScrollListener(object : ScrollItemView.OnScrollListener {
-                    override fun onLeft() {
-                        mLastVH = null
-                        mListener?.onRemember(item)
+                siv.setOnScrollListener(object : ScrollItemView.OnScrollListener() {
+                    override fun onPreLeft() {
+                        remember(item)
                     }
-                    override fun onRight() {
-                        mLastVH = null
-                        mListener?.onNotRemember(item)
+                    override fun onPreRight() {
+                        notRemember(item)
                     }
                 })
             }
@@ -78,6 +82,16 @@ class ReviewListAdapter : ListAdapter<RecordListItem, RecyclerView.ViewHolder>(C
 
     fun setOnActionListener(listener: OnActionListener) {
         mListener = listener
+    }
+
+    private fun remember(item: RecordListItem) {
+        mLastVH = null
+        mListener?.onRemember(item)
+    }
+
+    private fun notRemember(item: RecordListItem) {
+        mLastVH = null
+        mListener?.onNotRemember(item)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

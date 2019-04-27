@@ -92,7 +92,7 @@ class ReviewViewModel(
                     reviewStrategyMap[type.strategy]!!
                 }
 
-            if (record.remNum < strategy.rememberTime) {
+            if (record.remNum < strategy.rememberTime && record.lastFailReview < System.currentTimeMillis() - 1000) {
                 result.add(record)
             }
         }

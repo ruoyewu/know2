@@ -93,12 +93,14 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
         tvLoading = loadingView.findViewById(R.id.tv_dlg_loading)
         dlgLoading = AlertDialog.Builder(context!!)
             .setView(loadingView)
+            .setCancelable(false)
             .create()
     }
 
     @SuppressLint("SetTextI18n")
     private fun subscribeUI() {
         vm.verifyCodeResult.observe(this, Observer {
+            dlgLoading.dismiss()
             with(it) {
                 if (successful) {
 
@@ -108,6 +110,7 @@ class UserRegisterFragment : Fragment(), View.OnClickListener {
             }
         })
         vm.registerResult.observe(this, Observer {
+            dlgLoading.dismiss()
             with(it) {
                 if (successful) {
                     val userInfo = GsonFactory.getInstance()

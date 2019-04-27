@@ -45,14 +45,17 @@ class ReviewStrategySetAdapter :
             siv.setOnClickListener {
                 when(it.id) {
                     R.id.tv_title_record_type_set -> onClickListener?.onClick(item)
-                    R.id.ll_view_del -> siv.deleteRight()
+                    R.id.ll_view_del -> {
+                        siv.deleteRight()
+                        if (mLastMoveVH == holder) {
+                            mLastMoveVH = null
+                        }
+                        onClickListener?.onDelClick(item)
+                    }
                 }
             }
-            siv.setOnScrollListener(object : ScrollItemView.OnScrollListener {
-                override fun onLeft() {
-
-                }
-                override fun onRight() {
+            siv.setOnScrollListener(object : ScrollItemView.OnScrollListener() {
+                override fun onPreRight() {
                     if (mLastMoveVH == holder) {
                         mLastMoveVH = null
                     }

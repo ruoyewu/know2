@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -114,8 +115,8 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
                     fabOk.scaleY = value
                 }
                 spring.apply {
-                    stiffness = 50F
-                    dampingRatio = 0.3F
+                    stiffness = SpringForce.STIFFNESS_LOW
+                    dampingRatio = SpringForce.DAMPING_RATIO_HIGH_BOUNCY * 1.5F
                 }
                 addEndListener { _,
                                  _, _, _ ->
@@ -129,8 +130,8 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
                     fabError.scaleY = value
                 }
                 spring.apply {
-                    stiffness = 50F
-                    dampingRatio = 0.3F
+                    stiffness = SpringForce.STIFFNESS_LOW
+                    dampingRatio = SpringForce.DAMPING_RATIO_HIGH_BOUNCY * 1.5F
                 }
                 addEndListener { _,
                                  _, _, _ ->
@@ -142,7 +143,7 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun initView() {
         tvTitle.text = getString(R.string.record)
-
+        ivBack.setImageResource(R.drawable.ic_left)
     }
 
     private fun subscribeUI() {
@@ -230,8 +231,8 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
     private fun hasContent(): Boolean = flContent.childCount > 0
 
     companion object {
-        val RECORD_POSITION = "record_position"
-        val RECORD_LIST = "record_list"
-        val DURATION = 1000L
+        const val RECORD_POSITION = "record_position"
+        const val RECORD_LIST = "record_list"
+        private const val DURATION = 1000L
     }
 }
