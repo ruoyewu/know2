@@ -33,7 +33,7 @@ class RecordImageView(
 ) : RecordView, Parcelable {
     constructor() :
             this(
-                null, 0, false, 0, -1, -2, 0, 0,
+                null, 0, false, 0, -1, 100, 0, 0,
                 0, 0, 0, 0,
                 0, 0, -1, -1
             )

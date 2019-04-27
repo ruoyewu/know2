@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.*
 import com.wuruoye.know.R
 import com.wuruoye.know.util.ColorUtil
-import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.orm.table.RecordImageView
 import com.wuruoye.know.util.orm.table.RecordView
 
@@ -20,7 +19,6 @@ class ImageViewController (private val mView: RecordImageView)
     private lateinit var flContent: FrameLayout
     private lateinit var svOptions: ScrollView
 
-    private lateinit var mShowView: ImageView
     private lateinit var llTint: LinearLayout
     private lateinit var tvTint: TextView
     private lateinit var llShape: LinearLayout
@@ -28,16 +26,15 @@ class ImageViewController (private val mView: RecordImageView)
     private lateinit var sthBlur: Switch
 
     override fun attach(context: Context, fl: FrameLayout, sv: ScrollView) {
-        super.attach(context)
+        super.attach(context, mView, fl)
         flContent = fl
         svOptions = sv
 
         initView()
     }
 
-    private fun initView() {
-//        mShowView = ViewFactory.generateView(mContext, mView, flContent) as ImageView
-        mShowView = ViewFactory.generateView(mContext, mView, flContent) as ImageView
+    override fun initView() {
+        updateView()
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_image_view, svOptions, true)
 
@@ -66,11 +63,10 @@ class ImageViewController (private val mView: RecordImageView)
             tvTint.text = ColorUtil.color2hex(mView.tint)
             tvTint.setTextColor(mView.tint)
             tvShape.text = SHAPE_NAME[shape]
-            // TODO set shape
             sthBlur.isChecked = mView.blur
         }
 
-        super.initView(mView, mShowView)
+        super.initView()
     }
 
     override fun onClick(v: View?) {
@@ -88,6 +84,8 @@ class ImageViewController (private val mView: RecordImageView)
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         mView.blur = isChecked
+
+        updateView()
     }
 
     override fun onItemSelect(value: Int) {
@@ -97,7 +95,7 @@ class ImageViewController (private val mView: RecordImageView)
                 mView.shape = value
                 tvShape.text = SHAPE_NAME[value]
 
-                // TODO 设置图片形状
+                updateView()
             }
         }
     }
@@ -107,9 +105,10 @@ class ImageViewController (private val mView: RecordImageView)
         when(mCurType) {
             TYPE_TINT -> {
                 mView.tint = color
-
                 tvTint.text = ColorUtil.color2hex(color)
                 tvTint.setTextColor(color)
+
+                updateView()
             }
         }
     }

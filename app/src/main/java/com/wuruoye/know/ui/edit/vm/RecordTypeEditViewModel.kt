@@ -131,7 +131,9 @@ class RecordTypeEditViewModel(
                 }
             }
 
-            recordViewDao.delete(RecordTypeSelect.getType(view), view.id!!)
+            if (view.id != null) {
+                recordViewDao.delete(RecordTypeSelect.getType(view), view.id!!)
+            }
         }
     }
 

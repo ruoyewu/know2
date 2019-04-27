@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
 import com.wuruoye.know.util.DensityUtil
+import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.orm.table.RecordView
 import com.wuruoye.know.widgets.BottomAlertDialog
 import com.wuruoye.know.widgets.ColorPickerView
@@ -46,7 +47,7 @@ abstract class AbstractEditorController : EditorController,
     private lateinit var cpvColor: ColorPickerView
 
     private lateinit var mView: RecordView
-    private lateinit var mShowView: View
+    private lateinit var mParent: ViewGroup
     protected lateinit var llWidth: LinearLayout
     protected lateinit var tvWidth: TextView
     protected lateinit var llHeight: LinearLayout
@@ -58,16 +59,15 @@ abstract class AbstractEditorController : EditorController,
 
     protected var mCurType = 0
 
-    internal fun attach(context: Context) {
+    internal fun attach(context: Context, view: RecordView, parent: ViewGroup) {
         mContext = context
+        mView = view
+        mParent = parent
 
         initDlg()
     }
 
-    internal fun initView(recordView: RecordView, view: View) {
-        mView = recordView
-        mShowView = view
-
+    internal open fun initView() {
         llWidth.setOnClickListener {
             mCurType = TYPE_WIDTH
             showLengthDlg(mView.width)
@@ -218,16 +218,16 @@ abstract class AbstractEditorController : EditorController,
         dlgColor.show()
     }
 
-    protected fun showLengthDlg(length: Int) {
+    private fun showLengthDlg(length: Int) {
         showSelectDlg(LENGTH_NAME, if (length < 0) LENGTH_VALUE.indexOf(length)
                                     else LENGTH_VALUE.size-1)
     }
 
-    protected fun toPx(dp: Int): Int {
+    private fun toPx(dp: Int): Int {
         return DensityUtil.dp2px(mContext, dp.toFloat()).toInt()
     }
 
-    protected fun lengthToPx(length: Int): Int {
+    private fun lengthToPx(length: Int): Int {
         return if (length < 0) length
                 else DensityUtil.dp2px(mContext, length.toFloat()).toInt()
     }
@@ -241,9 +241,7 @@ abstract class AbstractEditorController : EditorController,
                 mView.marginBottom = bottom
                 tvMargin.text = margin2String(left, top, right, bottom)
 
-                val lp = mShowView.layoutParams as ViewGroup.MarginLayoutParams
-                lp.setMargins(toPx(left), toPx(top), toPx(right), toPx(bottom))
-                mShowView.layoutParams = lp
+                updateView()
             }
             TYPE_PADDING -> {
                 mView.paddingLeft = left
@@ -252,7 +250,7 @@ abstract class AbstractEditorController : EditorController,
                 mView.paddingBottom = bottom
                 tvPadding.text = margin2String(left, top, right, bottom)
 
-                mShowView.setPadding(toPx(left), toPx(top), toPx(right), toPx(bottom))
+                updateView()
             }
         }
     }
@@ -279,6 +277,11 @@ abstract class AbstractEditorController : EditorController,
         }
     }
 
+    protected fun updateView() {
+        mParent.removeAllViews()
+        ViewFactory.generateView(mContext, mView, mParent, isShow = true)
+    }
+
     protected open fun onColorSubmit(color: Int) {
 
     }
@@ -289,22 +292,18 @@ abstract class AbstractEditorController : EditorController,
                 mView.width = length
                 tvWidth.text = length2String(length)
 
-                val lp = mShowView.layoutParams
-                lp.width = lengthToPx(length)
-                mShowView.layoutParams = lp
+                updateView()
             }
             TYPE_HEIGHT -> {
                 mView.height = length
                 tvHeight.text = length2String(length)
 
-                val lp = mShowView.layoutParams
-                lp.height = lengthToPx(length)
-                mShowView.layoutParams = lp
+                updateView()
             }
         }
     }
 
-    protected fun length2String(length: Int): String {
+    private fun length2String(length: Int): String {
         return if (length < 0) {
             LENGTH_NAME[LENGTH_VALUE.indexOf(length)]
         } else {
@@ -312,7 +311,7 @@ abstract class AbstractEditorController : EditorController,
         }
     }
 
-    protected fun margin2String(left: Int, top: Int, right: Int, bottom: Int): String {
+    private fun margin2String(left: Int, top: Int, right: Int, bottom: Int): String {
         return "$left | $top | $right | $bottom"
     }
 

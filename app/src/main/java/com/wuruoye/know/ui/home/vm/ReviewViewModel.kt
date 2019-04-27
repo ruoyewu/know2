@@ -92,11 +92,25 @@ class ReviewViewModel(
                     reviewStrategyMap[type.strategy]!!
                 }
 
-            if (record.remNum < strategy.rememberTime && record.lastFailReview < System.currentTimeMillis() - 1000) {
+            if (shouldShow(record, strategy, current)) {
                 result.add(record)
             }
         }
         return result
+    }
+
+    private fun shouldShow(record: Record, strategy: ReviewStrategy, current: Long): Boolean {
+        with(record) {
+            if (remNum < strategy.rememberTime) {
+                var n = failNum - remNum
+                if (n <= 0) n = 1
+                val gapTime = strategy.gapTime * n
+                if (current - lastReview > gapTime || current - lastFailReview > gapTime) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     @Suppress("UNCHECKED_CAST")

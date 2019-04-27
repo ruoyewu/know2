@@ -113,7 +113,6 @@ class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
         changePickerDivider(npHour)
         changePickerDivider(npMinute)
         dlgGap = BottomAlertDialog.Builder(this)
-            .setTitle("选择间隔时间")
             .setContentView(gapView)
             .setConfirmListener(this, Gravity.TOP)
             .build()

@@ -9,7 +9,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import com.wuruoye.know.R
 import com.wuruoye.know.util.ColorUtil
-import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.orm.table.RecordView
 
@@ -22,7 +21,6 @@ class LayoutViewController(private val mView: RealRecordLayoutView) :
     private lateinit var flContent: FrameLayout
     private lateinit var svOptions: ScrollView
 
-    private lateinit var mShowView: LinearLayout
     private lateinit var llOrientation: LinearLayout
     private lateinit var tvOrientation: TextView
     private lateinit var llBgColor: LinearLayout
@@ -31,16 +29,15 @@ class LayoutViewController(private val mView: RealRecordLayoutView) :
     private lateinit var tvGravity: TextView
 
     override fun attach(context: Context, fl: FrameLayout, sv: ScrollView) {
-        super.attach(context)
+        super.attach(context, mView, fl)
         flContent = fl
         svOptions = sv
 
         initView()
     }
 
-    private fun initView() {
-//        mShowView = ViewFactory.generateView(mContext, mView, flContent) as LinearLayout
-        mShowView = ViewFactory.generateView(mContext, mView, flContent) as LinearLayout
+    override fun initView() {
+        updateView()
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_layout_view, svOptions)
 
@@ -73,7 +70,7 @@ class LayoutViewController(private val mView: RealRecordLayoutView) :
                                             else GRAVITY_VALUE.indexOf(gravity)]
         }
 
-        super.initView(mView, mShowView)
+        super.initView()
     }
 
     override fun onClick(v: View?) {
@@ -100,13 +97,13 @@ class LayoutViewController(private val mView: RealRecordLayoutView) :
                 mView.orientation = ORIENTATION_VALUE[value]
                 tvOrientation.text = ORIENTATION_NAME[value]
 
-                mShowView.orientation = ORIENTATION_VALUE[value]
+                updateView()
             }
             TYPE_GRAVITY -> {
                 mView.gravity = GRAVITY_VALUE[value]
                 tvGravity.text = GRAVITY_NAME[value]
 
-                mShowView.gravity = GRAVITY_VALUE[value]
+                updateView()
             }
         }
     }
@@ -117,7 +114,7 @@ class LayoutViewController(private val mView: RealRecordLayoutView) :
                 mView.bgColor = color
                 tvBgColor.text = ColorUtil.color2hex(color)
 
-                mShowView.setBackgroundColor(color)
+                updateView()
             }
         }
     }

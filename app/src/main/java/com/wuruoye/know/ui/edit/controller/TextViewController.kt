@@ -2,7 +2,6 @@ package com.wuruoye.know.ui.edit.controller
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -11,7 +10,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import com.wuruoye.know.R
 import com.wuruoye.know.util.ColorUtil
-import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.orm.table.RecordTextView
 import com.wuruoye.know.util.orm.table.RecordView
 
@@ -24,7 +22,6 @@ class TextViewController(private val mView: RecordTextView) :
     private lateinit var flContent: FrameLayout
     private lateinit var svOptions: ScrollView
 
-    private lateinit var mShowView: TextView
     private lateinit var llText: LinearLayout
     private lateinit var tvText: TextView
     private lateinit var llTextSize: LinearLayout
@@ -43,7 +40,7 @@ class TextViewController(private val mView: RecordTextView) :
     private lateinit var tvMaxLine: TextView
 
     override fun attach(context: Context, fl: FrameLayout, sv: ScrollView) {
-        super.attach(context)
+        super.attach(context, mView, fl)
         flContent = fl
         svOptions = sv
 
@@ -51,9 +48,8 @@ class TextViewController(private val mView: RecordTextView) :
     }
 
     @SuppressLint("SetTextI18n")
-    private fun initView() {
-//        mShowView = ViewFactory.generateView(mContext, mView, flContent as ViewGroup) as TextView
-        mShowView = ViewFactory.generateView(mContext, mView, flContent) as TextView
+    override fun initView() {
+        updateView()
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_text_view, svOptions)
 
@@ -106,7 +102,7 @@ class TextViewController(private val mView: RecordTextView) :
             tvMaxLine.text = maxLine.toString()
         }
 
-        super.initView(mView, mShowView)
+        super.initView()
     }
 
     override val result: RecordView
@@ -117,8 +113,9 @@ class TextViewController(private val mView: RecordTextView) :
         when(mCurType) {
             TYPE_TEXT -> {
                 mView.text = text
-                mShowView.text = text
                 tvText.text = text
+
+                updateView()
             }
         }
     }
@@ -128,31 +125,33 @@ class TextViewController(private val mView: RecordTextView) :
         when(mCurType) {
             TYPE_TEXT_SIZE -> {
                 mView.textSize = value
-                mShowView.textSize = value.toFloat()
                 tvTextSize.text = value.toString()
+
+                updateView()
             }
             TYPE_TEXT_STYLE -> {
                 mView.textStyle = TEXT_STYLE_VALUE[value]
-                mShowView.setTypeface(mShowView.typeface, TEXT_STYLE_VALUE[value])
                 tvTextStyle.text = TEXT_STYLE_NAME[value]
-                if (value == 0) {
-                    mShowView.typeface = Typeface.DEFAULT
-                }
+
+                updateView()
             }
             TYPE_GRAVITY -> {
                 mView.gravity = GRAVITY_VALUE[value]
-                mShowView.gravity = GRAVITY_VALUE[value]
                 tvGravity.text = GRAVITY_NAME[value]
+
+                updateView()
             }
             TYPE_LINE_MIN -> {
                 mView.minLine = value
-                mShowView.minLines = value
                 tvMinLine.text = value.toString()
+
+                updateView()
             }
             TYPE_LINE_MAX -> {
                 mView.maxLine = value
-                mShowView.maxLines = value
                 tvMaxLine.text = value.toString()
+
+                updateView()
             }
         }
     }
@@ -161,15 +160,17 @@ class TextViewController(private val mView: RecordTextView) :
         when (mCurType) {
             TYPE_TEXT_COLOR -> {
                 mView.textColor = color
-                mShowView.setTextColor(color)
                 tvTextColor.setTextColor(color)
                 tvTextColor.text = ColorUtil.color2hex(color)
+
+                updateView()
             }
             TYPE_BG_COLOR -> {
                 mView.bgColor = color
-                mShowView.setBackgroundColor(color)
                 tvBgColor.setTextColor(color)
                 tvBgColor.text = ColorUtil.color2hex(color)
+
+                updateView()
             }
         }
     }

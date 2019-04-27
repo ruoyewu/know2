@@ -2,14 +2,14 @@ package com.wuruoye.know.ui.edit.controller
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
-import com.google.android.material.textfield.TextInputLayout
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
 import com.wuruoye.know.R
 import com.wuruoye.know.util.ColorUtil
-import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.orm.table.RecordTextView
 import com.wuruoye.know.util.orm.table.RecordView
 
@@ -22,8 +22,6 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
     private lateinit var svOptions: ScrollView
     private lateinit var flContent: FrameLayout
 
-    private lateinit var mShowLayout: TextInputLayout
-    private lateinit var mShowView: EditText
     private lateinit var llTextSize: LinearLayout
     private lateinit var tvTextSize: TextView
     private lateinit var llTextColor: LinearLayout
@@ -51,7 +49,7 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
         get() = mView
 
     override fun attach(context: Context, fl: FrameLayout, sv: ScrollView) {
-        super.attach(context)
+        super.attach(context, mView, fl)
         this.flContent = fl
         this.svOptions = sv
 
@@ -59,9 +57,8 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
     }
 
     @SuppressLint("SetTextI18n")
-    private fun initView() {
-        mShowLayout = ViewFactory.generateView(mContext, mView, flContent) as TextInputLayout
-        mShowView = mShowLayout.findViewById(R.id.et_view_edit)
+    override fun initView() {
+        updateView()
         LayoutInflater.from(mContext)
                 .inflate(R.layout.layout_edit_text, svOptions)
 
@@ -127,7 +124,7 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
             tvMaxLine.text = maxLine.toString()
         }
 
-        super.initView(mView, mShowView)
+        super.initView()
     }
 
     override fun onClick(v: View?) {
@@ -184,8 +181,9 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
         when (mCurType) {
             TYPE_HINT -> {
                 mView.hint = text
-                mShowLayout.hint = text
                 tvHint.text = text
+
+                updateView()
             }
         }
     }
@@ -195,8 +193,9 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
         when (mCurType) {
             TYPE_TEXT_SIZE -> {
                 mView.textSize = value
-                mShowView.textSize = value.toFloat()
                 tvTextSize.text = value.toString()
+
+                updateView()
             }
             TYPE_HINT_SIZE -> {
                 mView.hintSize = value
@@ -205,31 +204,33 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
             }
             TYPE_TEXT_STYLE -> {
                 mView.textStyle = TEXT_STYLE_VALUE[value]
-                mShowView.setTypeface(mShowView.typeface, TEXT_STYLE_VALUE[value])
                 tvTextStyle.text = TEXT_STYLE_NAME[value]
-                if (value == 0) {
-                    mShowView.typeface = Typeface.DEFAULT
-                }
+
+                updateView()
             }
             TYPE_GRAVITY -> {
                 mView.gravity = GRAVITY_VALUE[value]
-                mShowView.gravity = GRAVITY_VALUE[value]
                 tvGravity.text = GRAVITY_NAME[value]
+
+                updateView()
             }
             TYPE_LINE_MIN -> {
                 mView.minLine = value
-                mShowView.minLines = value
                 tvMinLine.text = value.toString()
+
+                updateView()
             }
             TYPE_INPUT_TYPE -> {
                 mView.inputType = INPUT_TYPE_VALUE[value]
-                mShowView.inputType = INPUT_TYPE_VALUE[value]
                 tvInputType.text = INPUT_TYPE_NAME[value]
+
+                updateView()
             }
             TYPE_LINE_MAX -> {
                 mView.maxLine = value
-                mShowView.maxLines = value
                 tvMaxLine.text = value.toString()
+
+                updateView()
             }
         }
     }
@@ -238,9 +239,10 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
         when (mCurType) {
             TYPE_TEXT_COLOR -> {
                 mView.textColor = color
-                mShowView.setTextColor(color)
                 tvTextColor.setTextColor(color)
                 tvTextColor.text = ColorUtil.color2hex(color)
+
+                updateView()
             }
             TYPE_HINT_COLOR -> {
                 mView.hintColor = color
@@ -250,9 +252,10 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
             }
             TYPE_BG_COLOR -> {
                 mView.bgColor = color
-                mShowLayout.setBackgroundColor(color)
                 tvBgColor.setTextColor(color)
                 tvBgColor.text = ColorUtil.color2hex(color)
+
+                updateView()
             }
         }
     }

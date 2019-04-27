@@ -28,7 +28,7 @@ class ReviewStrategyAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = if (position < itemCount-1) getItem(position)
-                            else ReviewStrategy("点击增加负责策略")
+                            else ReviewStrategy("点击增加复习策略")
         with(holder) {
             tv.text = item.title
 
