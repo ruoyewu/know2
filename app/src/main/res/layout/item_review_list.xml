@@ -3,7 +3,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/siv_review_list"
         app:left_color="@color/light_slate_gray"
         app:left_max="0.4"
         app:left_view="@layout/view_remember"

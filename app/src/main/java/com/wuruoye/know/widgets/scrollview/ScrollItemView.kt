@@ -63,14 +63,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
         mClickListener = listener
     }
 
-    fun setOnClickListener(action: (View) -> Unit) {
-        mClickListener = object : OnClickListener {
-            override fun onClick(view: View) {
-                action(view)
-            }
-        }
-    }
-
     fun setOnScrollListener(listener: OnScrollListener) {
         mScrollListener = listener
     }
@@ -144,7 +136,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
         val lp = mMainView!!.layoutParams
         lp.width = width
         mMainView!!.layoutParams = lp
-        mMainView!!.setOnClickListener { mClickListener?.onClick(mMainView!!)}
 
         val lv = mLeftView
         if (lv != null) {
@@ -152,7 +143,7 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
             lv.x = -mMoveLeft
             mMaxLeft = width * mLeftMax
             mVmLeft = ViewMoveAdapter(lv)
-            lv.setOnClickListener { mClickListener?.onClick(lv) }
+            lv.setOnClickListener { mClickListener?.onLeftClick() }
         }
 
         val rv = mRightView
@@ -161,7 +152,7 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
             rv.x = width.toFloat()
             mMaxRight = width * mRightMax
             mVmRight = ViewMoveAdapter(rv)
-            rv.setOnClickListener { mClickListener?.onClick(rv) }
+            rv.setOnClickListener { mClickListener?.onRightClick() }
         }
 
         mVmMain = ViewMoveAdapter(mMainView!!)
@@ -304,7 +295,8 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     }
 
     interface OnClickListener {
-        fun onClick(view: View)
+        fun onLeftClick()
+        fun onRightClick()
     }
 
     abstract class OnScrollListener {

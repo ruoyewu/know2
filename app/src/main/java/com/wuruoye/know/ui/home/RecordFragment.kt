@@ -22,6 +22,7 @@ import com.wuruoye.know.ui.home.adapter.RecordListAdapter
 import com.wuruoye.know.ui.home.adapter.RecordTagAdapter
 import com.wuruoye.know.ui.home.adapter.RecordTypeAdapter
 import com.wuruoye.know.ui.home.adapter.TimeLimitAdapter
+import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
 import com.wuruoye.know.ui.home.vm.IRecordVM
 import com.wuruoye.know.ui.home.vm.RecordViewModel
 import com.wuruoye.know.util.InjectorUtil
@@ -45,8 +46,7 @@ class RecordFragment : Fragment(),
     RecordTypeAdapter.OnLongClickListener,
     TimeLimitAdapter.OnClickListener,
     RecordListAdapter.OnClickListener,
-    RecordListAdapter.OnLongClickListener,
-    RecordTagAdapter.OnClickListener {
+    RecordTagAdapter.OnClickListener, BaseAdapter.OnActionListener<RecordListItem> {
 
     private lateinit var dlgSelectType: BottomSheetDialog
     private lateinit var rvSelect: RecyclerView
@@ -157,7 +157,7 @@ class RecordFragment : Fragment(),
 
         val adapter = RecordListAdapter()
         adapter.setOnClickListener(this)
-        adapter.setOnLongClickListener(this)
+        adapter.setOnActionListener(this)
         rvRecord.layoutManager = LinearLayoutManager(context)
         rvRecord.adapter = adapter
     }
@@ -214,6 +214,12 @@ class RecordFragment : Fragment(),
         }
     }
 
+    override fun onLeft(item: RecordListItem) {}
+
+    override fun onRight(item: RecordListItem) {
+        vm.removeRecord(item.record.id!!)
+    }
+
     override fun onLongClick(recordType: RecordType) {
         dlgSelectType.dismiss()
 
@@ -231,10 +237,6 @@ class RecordFragment : Fragment(),
         val intent = Intent(context, RecordEditActivity::class.java)
         intent.putExtra(RecordEditActivity.RECORD, item.record.id)
         startActivityForResult(intent, RECORD_FOR_RECORD)
-    }
-
-    override fun onLongClick(item: RecordListItem) {
-        vm.removeRecord(item.record.id!!)
     }
 
     override fun onClick(item: RecordTag) {

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.RecordTypeEditActivity
+import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
+import com.wuruoye.know.ui.setting.adapter.BaseSelectAdapter
 import com.wuruoye.know.ui.setting.adapter.RecordTypeSetAdapter
 import com.wuruoye.know.ui.setting.vm.IRecordTypeSetVM
 import com.wuruoye.know.ui.setting.vm.RecordTypeSetViewModel
@@ -33,7 +35,8 @@ import com.wuruoye.know.util.orm.table.RecordType
 class RecordTypeSetActivity :
     AppCompatActivity(),
     View.OnClickListener,
-    RecordTypeSetAdapter.OnClickListener, PopupMenu.OnMenuItemClickListener {
+    PopupMenu.OnMenuItemClickListener, BaseSelectAdapter.OnClickListener<RecordType>,
+    BaseAdapter.OnActionListener<RecordType> {
 
     private lateinit var popupMenu: PopupMenu
 
@@ -90,6 +93,7 @@ class RecordTypeSetActivity :
 
         val adapter = RecordTypeSetAdapter()
         adapter.setOnClickListener(this)
+        adapter.setOnActionListener(this)
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
     }
@@ -129,7 +133,9 @@ class RecordTypeSetActivity :
         startActivityForResult(intent, RECORD_TYPE_SET_FOR_UPDATE)
     }
 
-    override fun onDelClick(item: RecordType) {
+    override fun onLeft(item: RecordType) {}
+
+    override fun onRight(item: RecordType) {
         vm.deleteRecordType(item)
     }
 

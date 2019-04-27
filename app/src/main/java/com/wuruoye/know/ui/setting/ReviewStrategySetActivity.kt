@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.ReviewStrategyEditActivity
+import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
+import com.wuruoye.know.ui.setting.adapter.BaseSelectAdapter
 import com.wuruoye.know.ui.setting.adapter.ReviewStrategySetAdapter
 import com.wuruoye.know.ui.setting.vm.IReviewStrategySetVM
 import com.wuruoye.know.ui.setting.vm.ReviewStrategySetViewModel
@@ -34,8 +36,8 @@ import com.wuruoye.know.util.toast
 class ReviewStrategySetActivity :
     AppCompatActivity(),
     View.OnClickListener,
-    PopupMenu.OnMenuItemClickListener,
-    ReviewStrategySetAdapter.OnClickListener {
+    PopupMenu.OnMenuItemClickListener, BaseSelectAdapter.OnClickListener<ReviewStrategy>,
+    BaseAdapter.OnActionListener<ReviewStrategy> {
     private lateinit var popupMenu: PopupMenu
 
     private lateinit var toolbar: Toolbar
@@ -91,6 +93,7 @@ class ReviewStrategySetActivity :
 
         val adapter = ReviewStrategySetAdapter()
         adapter.setOnClickListener(this)
+        adapter.setOnActionListener(this)
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
     }
@@ -133,7 +136,9 @@ class ReviewStrategySetActivity :
         startActivityForResult(intent, REVIEW_STRATEGY_SET_FOR_UPDATE)
     }
 
-    override fun onDelClick(item: ReviewStrategy) {
+    override fun onLeft(item: ReviewStrategy) {}
+
+    override fun onRight(item: ReviewStrategy) {
         vm.deleteReviewStrategy(item)
     }
 

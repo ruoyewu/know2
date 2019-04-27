@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.RecordShowActivity
 import com.wuruoye.know.ui.home.adapter.ReviewListAdapter
+import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
 import com.wuruoye.know.ui.home.vm.IReviewVM
 import com.wuruoye.know.ui.home.vm.ReviewViewModel
 import com.wuruoye.know.util.InjectorUtil
@@ -31,7 +32,8 @@ import java.util.*
  * Created at 2019/4/9 21:11 by wuruoye
  * Description:
  */
-class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
+class ReviewFragment : Fragment(), BaseAdapter.OnActionListener<RecordListItem>,
+    ReviewListAdapter.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var rv: RecyclerView
 
@@ -67,6 +69,7 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
 
         val adapter = ReviewListAdapter()
         adapter.setOnActionListener(this)
+        adapter.setOnClickListener(this)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(context)
     }
@@ -91,11 +94,11 @@ class ReviewFragment : Fragment(), ReviewListAdapter.OnActionListener {
         startActivityForResult(intent, REVIEW_FOR_SHOW)
     }
 
-    override fun onNotRemember(item: RecordListItem) {
+    override fun onRight(item: RecordListItem) {
         vm.rememberRecord(item, false)
     }
 
-    override fun onRemember(item: RecordListItem) {
+    override fun onLeft(item: RecordListItem) {
         vm.rememberRecord(item, true)
     }
 

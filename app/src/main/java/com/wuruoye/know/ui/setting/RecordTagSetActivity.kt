@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.RecordTagEditActivity
+import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
+import com.wuruoye.know.ui.setting.adapter.BaseSelectAdapter
 import com.wuruoye.know.ui.setting.adapter.RecordTagSetAdapter
 import com.wuruoye.know.ui.setting.vm.IRecordTagSetVM
 import com.wuruoye.know.ui.setting.vm.RecordTagSetViewModel
@@ -34,8 +36,8 @@ import com.wuruoye.know.util.toast
 class RecordTagSetActivity :
     AppCompatActivity(),
     View.OnClickListener,
-    PopupMenu.OnMenuItemClickListener,
-    RecordTagSetAdapter.OnClickListener {
+    PopupMenu.OnMenuItemClickListener, BaseSelectAdapter.OnClickListener<RecordTag>,
+    BaseAdapter.OnActionListener<RecordTag> {
     private lateinit var popupMenu: PopupMenu
 
     private lateinit var toolbar: Toolbar
@@ -91,6 +93,7 @@ class RecordTagSetActivity :
 
         val adapter = RecordTagSetAdapter()
         adapter.setOnClickListener(this)
+        adapter.setOnActionListener(this)
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
     }
@@ -133,7 +136,9 @@ class RecordTagSetActivity :
         startActivityForResult(intent, RECORD_TAG_SET_FOR_UPDATE)
     }
 
-    override fun onDelClick(item: RecordTag) {
+    override fun onLeft(item: RecordTag) {}
+
+    override fun onRight(item: RecordTag) {
         vm.deleteRecordTag(item)
     }
 

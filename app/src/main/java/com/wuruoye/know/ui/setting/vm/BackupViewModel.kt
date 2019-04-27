@@ -99,43 +99,43 @@ class BackupViewModel(
                         }
                     }
                     table.recordType.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = recordTypeDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertRecordType(it)
                         }
                     }
                     table.recordItem.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = recordItemDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertRecordItem(it)
                         }
                     }
                     table.recordTag.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = recordTagDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertRecordTag(it)
                         }
                     }
                     table.reviewStrategy.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = reviewStrategyDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertReviewStrategy(it)
                         }
                     }
                     table.textView.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = textViewDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertTextView(it)
                         }
                     }
                     table.imageView.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = imageViewDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertImageView(it)
                         }
                     }
                     table.layoutView.forEach {
-                        val exit = recordDao.query(it.id!!)
+                        val exit = layoutViewDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
                             insertDao.insertLayoutView(it)
                         }

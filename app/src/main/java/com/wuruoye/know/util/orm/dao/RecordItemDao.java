@@ -20,6 +20,9 @@ public interface RecordItemDao {
     @Query("SELECT * FROM record_item ORDER BY createTime DESC")
     List<RecordItem> queryAll();
 
+    @Query("SELECT * FROM record_item WHERE id = :id")
+    RecordItem query(long id);
+
     @Query("SELECT * FROM record_item WHERE recordId = :recordId AND typeId = :typeId and type = :type")
     RecordItem query(long recordId, long typeId, int type);
 
