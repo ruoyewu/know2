@@ -36,7 +36,7 @@ class BackupViewModel(
     override val loadingTitle: MutableLiveData<String> =
         MutableLiveData()
 
-    override val result: MutableLiveData<NetResult> =
+    override val backupResult: MutableLiveData<NetResult> =
         MutableLiveData()
 
     private val gson = GsonFactory.getInstance()
@@ -53,7 +53,7 @@ class BackupViewModel(
                     .fromJson(result.data!!, BackupInfo::class.java)
                 backupInfo.postValue(info)
             } else {
-                this@BackupViewModel.result.postValue(result)
+                backupResult.postValue(result)
             }
         }
     }
@@ -100,7 +100,7 @@ class BackupViewModel(
             loadingTitle.postValue("正在上传数据中")
             delay(1000)
             val res = NetUtil.post(NetUtil.BACKUP, mapOf(Pair("data", result)))
-            this@BackupViewModel.result.postValue(res)
+            backupResult.postValue(res)
         }
     }
 
@@ -140,7 +140,7 @@ class BackupViewModel(
                                     if (downloadResult.successful) {
                                         path.localPath = filePath
                                     } else {
-                                        this@BackupViewModel.result.postValue(downloadResult)
+                                        backupResult.postValue(downloadResult)
                                         return@launch
                                     }
                                 }
@@ -182,15 +182,14 @@ class BackupViewModel(
                     }
 
                     insertDao.setTransactionSuccessful()
-                    this@BackupViewModel.result.postValue(NetResult(200, "ok"))
+                    backupResult.postValue(NetResult(200, "ok"))
                 } catch (e : Exception) {
-                    this@BackupViewModel.result.postValue(NetResult(400,
-                        "error in insertion"))
+                    backupResult.postValue(NetResult(400, "error in insertion"))
                 } finally {
                     insertDao.endTransaction()
                 }
             } else {
-                this@BackupViewModel.result.postValue(result)
+                backupResult.postValue(result)
             }
         }
     }

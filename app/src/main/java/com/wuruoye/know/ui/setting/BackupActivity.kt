@@ -107,7 +107,7 @@ class BackupActivity : AppCompatActivity(), View.OnClickListener {
                 dlgLoading.show()
             }
         })
-        vm.result.observe(this, Observer {
+        vm.backupResult.observe(this, Observer {
             dlgLoading.dismiss()
             if (it.successful) {
                 vm.updateInfo()

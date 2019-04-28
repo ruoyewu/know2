@@ -33,7 +33,7 @@ class RecordImageView(
 ) : RecordView, Parcelable {
     constructor() :
             this(
-                null, 0, false, 0, -1, 100, 0, 0,
+                null, SHAPE_RECTANGLE, false, 0, -1, 100, 0, 0,
                 0, 0, 0, 0,
                 0, 0, -1, -1
             )
@@ -144,6 +144,10 @@ class RecordImageView(
     }
 
     companion object {
+        const val SHAPE_RECTANGLE = 0
+        const val SHAPE_ROUND = 1
+        const val SHAPE_CIRCLE = 2
+
         @JvmField
         val CREATOR: Parcelable.Creator<RecordImageView> = object : Parcelable.Creator<RecordImageView> {
             override fun createFromParcel(source: Parcel): RecordImageView = RecordImageView(source)

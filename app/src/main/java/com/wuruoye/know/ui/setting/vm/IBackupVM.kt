@@ -11,7 +11,7 @@ import com.wuruoye.know.util.model.beans.NetResult
 interface IBackupVM {
     val backupInfo: MutableLiveData<BackupInfo>
     val loadingTitle: MutableLiveData<String>
-    val result: MutableLiveData<NetResult>
+    val backupResult: MutableLiveData<NetResult>
 
     fun updateInfo()
     fun backup()

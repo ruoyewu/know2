@@ -23,16 +23,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.vm.IRecordShowVM
 import com.wuruoye.know.ui.edit.vm.RecordShowViewModel
+import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
+import com.wuruoye.know.util.model.beans.ImagePath
 import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.orm.table.Record
+import com.wuruoye.know.util.orm.table.RecordImageView
+import com.wuruoye.know.util.orm.table.RecordItem
+import com.wuruoye.know.util.orm.table.RecordView
 
 /**
  * Created at 2019-04-24 18:26 by wuruoye
  * Description:
  */
-class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
+class RecordShowActivity : AppCompatActivity(),
+    View.OnClickListener, ViewFactory.OnClickListener{
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var flContent: FrameLayout
@@ -152,10 +158,10 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
             val next = if (it.size > 1) it[1] else null
 
             llCur.tag = cur.record
-            ViewFactory.generateView(this, cur, llCur, isShow = true)
+            ViewFactory.generateView(this, cur, llCur, listener = this, isShow = true)
             if (next != null) {
                 llNext.tag = next.record
-                ViewFactory.generateView(this, next, llNext, isShow = true)
+                ViewFactory.generateView(this, next, llNext, listener = this, isShow = true)
             } else {
                 flContent.removeView(llNext)
             }
@@ -165,7 +171,7 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
             llNext.visibility = View.VISIBLE
             flContent.addView(llNext, 0)
             llNext.tag = it.recordShow.record
-            ViewFactory.generateView(this, it.recordShow, llNext, isShow = true)
+            ViewFactory.generateView(this, it.recordShow, llNext, listener = this, isShow = true)
         })
     }
 
@@ -182,6 +188,19 @@ class RecordShowActivity : AppCompatActivity(), View.OnClickListener {
                 if (!isRunning && hasContent()) {
                     startAnimation(fabError)
                     vm.rememberRecord(llCur.tag as Record, false)
+                }
+            }
+        }
+    }
+
+    override fun onClick(recordView: RecordView, view: View) {
+        if (recordView is RecordImageView) {
+            val item = view.getTag(R.id.tag_image)
+            if (item != null && item is RecordItem) {
+                val path = GsonFactory.getInstance()
+                    .fromJson(item.content, ImagePath::class.java)
+                if (path.localPath.isNotEmpty() || path.remotePath.isNotEmpty()) {
+                    ImgShowActivity.show(this, path)
                 }
             }
         }

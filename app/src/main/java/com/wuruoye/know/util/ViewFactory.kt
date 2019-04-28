@@ -424,28 +424,45 @@ object ViewFactory {
         }
     }
 
-    fun loadImg(imagePath: ImagePath, iv: ImageView, options: BaseRequestOptions<*>) {
+    fun setLocalImgPath(filePath: String, view: RecordImageView, iv: ImageView) {
+        var item = iv.getTag(R.id.tag_image)
+        if (item == null) {
+            item = RecordItem(-1L, view.id!!, RecordTypeSelect.getType(view))
+        }
+        val path = GsonFactory.getInstance()
+            .fromJson((item as RecordItem).content, ImagePath::class.java)
+            ?: ImagePath("", "")
+        path.localPath = filePath
+        path.remotePath = ""
+        item.content = GsonFactory.getInstance().toJson(path)
+        iv.setTag(R.id.tag_image, item)
+        loadImg(path, iv, generateOption(view, iv))
+    }
+
+    private fun loadImg(imagePath: ImagePath, iv: ImageView, options: BaseRequestOptions<*>) {
         Glide.with(iv)
             .load(imagePath.localPath)
             .apply(options)
             .error(Glide.with(iv)
-                .load(imagePath.remotePath))
+                .load(imagePath.remotePath)
+                .apply(options))
             .into(iv)
     }
 
-    fun generateOption(view: RecordImageView, iv: ImageView): BaseRequestOptions<*> {
+    private fun generateOption(view: RecordImageView, iv: ImageView): BaseRequestOptions<*> {
         val default = RoundedCornersTransformation(0, 0)
         return RequestOptions.bitmapTransform(
             MultiTransformation<Bitmap>(
-                if (view.blur) BlurTransformation(25) else default,
-                if (view.tint != 0) ColorFilterTransformation(view.tint) else default,
+                if (view.blur) BlurTransformation(20) else default,
+//                if (view.tint != 0) ColorFilterTransformation(view.tint) else default,
+                ColorFilterTransformation(view.tint),
                 when (view.shape) {
-                    0 -> CenterCrop()
-                    1 -> MultiTransformation<Bitmap>(
+                    RecordImageView.SHAPE_RECTANGLE -> CenterCrop()
+                    RecordImageView.SHAPE_ROUND -> MultiTransformation<Bitmap>(
                         CenterCrop(),
                         RoundedCornersTransformation(25, 0)
                     )
-                    2 -> CircleCrop()
+                    RecordImageView.SHAPE_CIRCLE -> CircleCrop()
                     else -> default
                 }
             )

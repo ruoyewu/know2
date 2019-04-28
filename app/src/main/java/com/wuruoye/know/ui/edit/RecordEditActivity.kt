@@ -21,7 +21,6 @@ import com.wuruoye.know.ui.edit.vm.IRecordEditVM
 import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.home.adapter.RecordTagAdapter
 import com.wuruoye.know.util.DensityUtil
-import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
 import com.wuruoye.know.util.base.WConfig
@@ -29,10 +28,7 @@ import com.wuruoye.know.util.base.media.IWPhoto
 import com.wuruoye.know.util.base.media.WPhoto
 import com.wuruoye.know.util.base.permission.WPermission
 import com.wuruoye.know.util.model.RequestCode.RECORD_EDIT_FOR_TAG
-import com.wuruoye.know.util.model.beans.ImagePath
-import com.wuruoye.know.util.model.beans.RecordTypeSelect
 import com.wuruoye.know.util.orm.table.RecordImageView
-import com.wuruoye.know.util.orm.table.RecordItem
 import com.wuruoye.know.util.orm.table.RecordTag
 import com.wuruoye.know.util.orm.table.RecordView
 
@@ -174,19 +170,7 @@ class RecordEditActivity :
     }
 
     override fun onPhotoResult(result: String) {
-        var item = mView.getTag(R.id.tag_image)
-        if (item == null) {
-            item = RecordItem(-1L, mRecordView.id!!, RecordTypeSelect.getType(mRecordView))
-        }
-        val path = GsonFactory.getInstance()
-            .fromJson((item as RecordItem).content, ImagePath::class.java)
-            ?: ImagePath("", "")
-        path.localPath = result
-        path.remotePath = ""
-        item.content = GsonFactory.getInstance().toJson(path)
-        mView.setTag(R.id.tag_image, item)
-        ViewFactory.loadImg(path, mView, ViewFactory
-            .generateOption(mRecordView as RecordImageView, mView))
+        ViewFactory.setLocalImgPath(result, mRecordView as RecordImageView, mView)
     }
 
     override fun onPhotoError(error: String?) {
