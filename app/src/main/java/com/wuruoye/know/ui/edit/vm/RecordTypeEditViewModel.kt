@@ -9,6 +9,7 @@ import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RealRecordType
 import com.wuruoye.know.util.model.beans.RecordTypeItem
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
+import com.wuruoye.know.util.orm.dao.RecordItemDao
 import com.wuruoye.know.util.orm.dao.RecordTypeDao
 import com.wuruoye.know.util.orm.dao.RecordViewDao
 import com.wuruoye.know.util.orm.dao.ReviewStrategyDao
@@ -25,6 +26,7 @@ import org.json.JSONArray
 class RecordTypeEditViewModel(
     private val recordTypeDao: RecordTypeDao,
     private val recordViewDao: RecordViewDao,
+    private val recordItemDao: RecordItemDao,
     private val reviewStrategyDao: ReviewStrategyDao
 ) : ViewModel(), IRecordTypeEditVM {
     override var selectItems
@@ -133,6 +135,7 @@ class RecordTypeEditViewModel(
 
             if (view.id != null) {
                 recordViewDao.delete(RecordTypeSelect.getType(view), view.id!!)
+                recordItemDao.deleteByTypeId(view.id!!)
             }
         }
     }
@@ -212,10 +215,11 @@ class RecordTypeEditViewModel(
     class Factory(
         private val recordTypeDao: RecordTypeDao,
         private val recordViewDao: RecordViewDao,
+        private val recordItemDao: RecordItemDao,
         private val reviewStrategyDao: ReviewStrategyDao
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return RecordTypeEditViewModel(recordTypeDao, recordViewDao, reviewStrategyDao) as T
+            return RecordTypeEditViewModel(recordTypeDao, recordViewDao, recordItemDao, reviewStrategyDao) as T
         }
     }
 }

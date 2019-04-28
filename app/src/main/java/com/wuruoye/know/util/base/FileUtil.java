@@ -26,6 +26,14 @@ public class FileUtil {
         return checkFile(new File(filePath));
     }
 
+    public static boolean exit(String filePath) {
+        try {
+            return exit(new File(filePath));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static boolean checkFile(File file) {
         if (file.getAbsolutePath().endsWith("/")) {
             if (!file.exists()) {
@@ -37,6 +45,10 @@ public class FileUtil {
             }
         }
         return true;
+    }
+
+    public static boolean exit(File file) {
+        return file.exists();
     }
 
     public static boolean writeInputStream(String filePath, InputStream is)

@@ -20,6 +20,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -119,7 +120,7 @@ public class WPhoto implements IWPhoto<String> {
                                 }
                                 listener.onPhotoResult(filePath);
                             }
-                        }else {
+                        } else if (resultCode != RESULT_CANCELED) {
                             listener.onPhotoError("获取照片失败");
                         }
                     }
@@ -245,7 +246,7 @@ public class WPhoto implements IWPhoto<String> {
                                 Uri uri = FileProvider.getUriForFile(activity, WConfig.PROVIDER_AUTHORITY,
                                         new File(mFilePath));
                                 cropPhoto(uri, listener);
-                            }else {
+                            } else if (resultCode != RESULT_CANCELED) {
                                 listener.onPhotoResult(mFilePath);
                             }
                         }else {
@@ -319,7 +320,7 @@ public class WPhoto implements IWPhoto<String> {
                     if (requestCode == WConfig.CODE_CROP_PHOTO) {
                         if (resultCode == RESULT_OK) {
                             listener.onPhotoResult(mFilePath);
-                        }else {
+                        } else if (resultCode != RESULT_CANCELED){
                             listener.onPhotoError("剪裁图片失败");
                         }
                     }

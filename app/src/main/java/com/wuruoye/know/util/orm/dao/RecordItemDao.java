@@ -37,4 +37,7 @@ public interface RecordItemDao {
 
     @Query("DELETE FROM record_item WHERE recordId = :recordId")
     int deleteByRecord(long recordId);
+
+    @Query("DELETE FROM record_item WHERE typeId = :typeId")
+    int deleteByTypeId(long typeId);
 }

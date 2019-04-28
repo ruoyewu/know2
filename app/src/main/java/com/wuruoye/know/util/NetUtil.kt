@@ -1,7 +1,12 @@
 package com.wuruoye.know.util
 
 import android.util.ArrayMap
+import com.qiniu.android.common.AutoZone
+import com.qiniu.android.storage.Configuration
+import com.qiniu.android.storage.UploadManager
+import com.wuruoye.know.util.base.FileUtil
 import com.wuruoye.know.util.model.beans.NetResult
+import com.wuruoye.know.util.model.beans.TokenResult
 import okhttp3.*
 import org.json.JSONObject
 
@@ -11,6 +16,7 @@ import org.json.JSONObject
  */
 object NetUtil {
     private val HOST = "http://know.wuruoye.com/"
+    private const val FILE_PATH = "http://qiniu.wuruoye.com/"
     val LOGIN = HOST + "user/login"
     val LOGOUT = HOST + "/user/logout"
     val VERIFY_CODE = HOST + "user/verify_code"
@@ -32,6 +38,12 @@ object NetUtil {
 
         })
         .build()
+    private val uploadManager: UploadManager
+            = UploadManager(
+        Configuration.Builder()
+            .zone(AutoZone.autoZone)
+            .build()
+    )
 
     fun get(url: String, values: Map<String, String>): NetResult {
         val builder = StringBuilder(url)
@@ -74,6 +86,46 @@ object NetUtil {
             .build()
 
         return request(request)
+    }
+
+    fun uploadFile(file: String): NetResult {
+        val tokenResult = get(UPLOAD_TOKEN, mapOf())
+        if (tokenResult.successful) {
+            val token = GsonFactory.getInstance()
+                .fromJson(tokenResult.data!!, TokenResult::class.java)
+            val response = uploadManager
+                .syncPut(file, token.key, token.token, null)
+            if (response.isOK) {
+                return NetResult(200, "ok", "$FILE_PATH${token.key}")
+            } else {
+                return NetResult(response.statusCode, response.error)
+            }
+        } else {
+            return tokenResult
+        }
+    }
+
+    fun downloadFile(url: String, file: String): NetResult {
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        try {
+            val response = mClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                val inStream = response.body()!!.byteStream()
+                val result = FileUtil.writeInputStream(file, inStream)
+                if (result) {
+                    return NetResult(200, "ok")
+                } else {
+                    return NetResult(400, "error in write file")
+                }
+            } else {
+                return NetResult(400, "error in download file")
+            }
+        } catch (e: Exception) {
+            return NetResult(400, e.message!!)
+        }
     }
 
     private fun request(request: Request): NetResult {

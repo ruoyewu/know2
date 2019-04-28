@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.BackupUtil
 import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.NetUtil
-import com.wuruoye.know.util.model.beans.AllTable
-import com.wuruoye.know.util.model.beans.BackupInfo
-import com.wuruoye.know.util.model.beans.NetResult
+import com.wuruoye.know.util.base.FileUtil
+import com.wuruoye.know.util.base.WConfig
+import com.wuruoye.know.util.model.beans.*
 import com.wuruoye.know.util.orm.dao.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -39,6 +39,8 @@ class BackupViewModel(
     override val result: MutableLiveData<NetResult> =
         MutableLiveData()
 
+    private val gson = GsonFactory.getInstance()
+
     init {
         updateInfo()
     }
@@ -68,6 +70,28 @@ class BackupViewModel(
             val textView = textViewDao.queryAll()
             val imageView = imageViewDao.queryAll()
             val layoutView = layoutViewDao.queryAll()
+
+            loadingTitle.postValue("正在上传图片中")
+            delay(1000)
+            recordItem
+                .filter { it.type == RecordTypeSelect.TYPE_IMG }
+                .forEach {
+                    val path = gson.fromJson(it.content, ImagePath::class.java)
+                    if (path.remotePath.isEmpty() && path.localPath.isNotEmpty()) {
+                        if (FileUtil.exit(path.localPath)) {
+                            val result = NetUtil.uploadFile(path.localPath)
+                            if (result.successful) {
+                                path.remotePath = result.data!!
+                            }
+                        } else {
+                            path.localPath = ""
+                        }
+                        it.content = gson.toJson(path)
+                        insertDao.runInTransaction {
+                            insertDao.insertRecordItem(it)
+                        }
+                    }
+                }
 
             val allTable = AllTable(record, recordType, recordItem, recordTag,
                 reviewStrategy, textView, imageView, layoutView)
@@ -107,6 +131,22 @@ class BackupViewModel(
                     table.recordItem.forEach {
                         val exit = recordItemDao.query(it.id!!)
                         if (exit == null || it.updateTime > exit.updateTime) {
+                            if (it.type == RecordTypeSelect.TYPE_IMG) {
+                                val path = gson.fromJson(it.content, ImagePath::class.java)
+                                if (path.remotePath.isNotEmpty() && !FileUtil.exit(path.localPath)) {
+                                    val filePath = generateImgPath()
+                                    val downloadResult = NetUtil
+                                        .downloadFile(path.remotePath, filePath)
+                                    if (downloadResult.successful) {
+                                        path.localPath = filePath
+                                    } else {
+                                        this@BackupViewModel.result.postValue(downloadResult)
+                                        return@launch
+                                    }
+                                }
+                                it.content = gson.toJson(path)
+                            }
+
                             insertDao.insertRecordItem(it)
                         }
                     }
@@ -144,7 +184,8 @@ class BackupViewModel(
                     insertDao.setTransactionSuccessful()
                     this@BackupViewModel.result.postValue(NetResult(200, "ok"))
                 } catch (e : Exception) {
-                    this@BackupViewModel.result.postValue(NetResult(400, "error in insertion"))
+                    this@BackupViewModel.result.postValue(NetResult(400,
+                        "error in insertion"))
                 } finally {
                     insertDao.endTransaction()
                 }
@@ -152,6 +193,10 @@ class BackupViewModel(
                 this@BackupViewModel.result.postValue(result)
             }
         }
+    }
+
+    private fun generateImgPath(): String {
+        return WConfig.IMAGE_PATH + System.currentTimeMillis() + ".jpg"
     }
 
     class Factory(

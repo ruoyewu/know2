@@ -3,11 +3,8 @@ package com.wuruoye.know.ui.setting.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.NetUtil
-import com.wuruoye.know.util.UploadUtil
 import com.wuruoye.know.util.model.beans.NetResult
-import com.wuruoye.know.util.model.beans.TokenResult
 import com.wuruoye.know.util.model.beans.UserInfo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,22 +31,12 @@ class UserInfoViewModel : ViewModel(), IUserInfoVM{
             with(userInfo.value!!) {
                 // 首先上传头像文件
                 if (!avatar.startsWith("http")) {
-                    loadingTitle.postValue("获取上传文件token中")
-                    val tokenResult = NetUtil.get(NetUtil.UPLOAD_TOKEN, mapOf())
-                    if (tokenResult.successful) {
-                        val token = GsonFactory.getInstance()
-                            .fromJson(tokenResult.data, TokenResult::class.java)
-
-                        loadingTitle.postValue("上传头像中")
-                        val uploadResult =
-                            UploadUtil.uploadFile(avatar, token.key, token.token)
-                        if (uploadResult.successful) {
-                            avatar = generateAvatarPath(token.key)
-                        } else {
-                            updateUserInfoResult.postValue(uploadResult)
-                        }
+                    loadingTitle.postValue("上传头像中")
+                    val uploadResult = NetUtil.uploadFile(avatar)
+                    if (uploadResult.successful) {
+                        avatar = uploadResult.data!!
                     } else {
-                        updateUserInfoResult.postValue(tokenResult)
+                        updateUserInfoResult.postValue(uploadResult)
                     }
                 }
 
@@ -91,10 +78,6 @@ class UserInfoViewModel : ViewModel(), IUserInfoVM{
     override fun setSign(sign: String) {
         userInfo.value?.sign = sign
         userInfo.value = userInfo.value
-    }
-
-    private fun generateAvatarPath(key: String): String {
-        return "http://qiniu.wuruoye.com/$key"
     }
 
     @Suppress("UNCHECKED_CAST")

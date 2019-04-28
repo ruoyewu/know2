@@ -20,6 +20,7 @@ import com.wuruoye.know.R
 import com.wuruoye.know.ui.edit.vm.IRecordEditVM
 import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.home.adapter.RecordTagAdapter
+import com.wuruoye.know.util.DensityUtil
 import com.wuruoye.know.util.GsonFactory
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
@@ -34,6 +35,7 @@ import com.wuruoye.know.util.orm.table.RecordImageView
 import com.wuruoye.know.util.orm.table.RecordItem
 import com.wuruoye.know.util.orm.table.RecordTag
 import com.wuruoye.know.util.orm.table.RecordView
+
 
 /**
  * Created at 2019/4/11 18:40 by wuruoye
@@ -147,12 +149,8 @@ class RecordEditActivity :
             AlertDialog.Builder(this)
                 .setItems(ITEM_PHOTO) { _, which ->
                     when(which) {
-                        0 -> mPhotoGet.choosePhoto(this)
-                        1 -> mPhotoGet.takePhoto(generateImgPath(), this)
-                        2 -> mPhotoGet.choosePhoto(generateImgPath(), 1, 1,
-                            500, 500, this)
-                        3 -> mPhotoGet.takePhoto(generateImgPath(), 1, 1,
-                            500, 500, this)
+                        0 -> getImg(recordView, false)
+                        1 -> getImg(recordView, true)
                     }
                 }
                 .show()
@@ -187,7 +185,8 @@ class RecordEditActivity :
         path.remotePath = ""
         item.content = GsonFactory.getInstance().toJson(path)
         mView.setTag(R.id.tag_image, item)
-        ViewFactory.loadImg(path, mView, ViewFactory.generateOption(mRecordView as RecordImageView, mView))
+        ViewFactory.loadImg(path, mView, ViewFactory
+            .generateOption(mRecordView as RecordImageView, mView))
     }
 
     override fun onPhotoError(error: String?) {
@@ -210,7 +209,8 @@ class RecordEditActivity :
         if (resultCode == Activity.RESULT_OK) {
             when(requestCode) {
                 RECORD_EDIT_FOR_TAG -> {
-                    val tag = data!!.getParcelableExtra<RecordTag>(RecordTagEditActivity.RECORD_TAG)
+                    val tag = data!!
+                        .getParcelableExtra<RecordTag>(RecordTagEditActivity.RECORD_TAG)
                     vm.setRecordTag(tag.id!!)
                     vm.updateRecordTagList()
                 }
@@ -225,8 +225,73 @@ class RecordEditActivity :
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    private fun getImg(view: RecordImageView, isTake: Boolean) {
+        if (view.width > 0 && view.height > 0) {
+            val aX: Float
+            val aY: Float
+            val oX: Int
+            val oY: Int
+            val x = DensityUtil.dp2px(this, view.width.toFloat()).toInt()
+            val y = DensityUtil.dp2px(this, view.height.toFloat()).toInt()
+            if (x > y) {
+                aY = 1F
+                aX = 1F * x / y
+                oY = 500
+                oX = (oY * aX).toInt()
+            } else {
+                aX = 1F
+                aY = 1F * y / x
+                oX = 500
+                oY = (oX * aY).toInt()
+            }
+            val arr = getIntFromFloat(aX/aY)
+            if (isTake) {
+                mPhotoGet.takePhoto(generateImgPath(), arr[0], arr[1], oX, oY, this)
+            } else {
+                mPhotoGet.choosePhoto(generateImgPath(), arr[0], arr[1], oX, oY, this)
+            }
+        } else {
+            if (isTake) {
+                mPhotoGet.takePhoto(generateImgPath(), -1, -1, -1, -1, this)
+            } else {
+                mPhotoGet.choosePhoto(generateImgPath(), -1, -1, -1, -1, this)
+            }
+        }
+    }
+
     private fun generateImgPath(): String {
-        return WConfig.IMAGE_PATH + System.currentTimeMillis()
+        return WConfig.IMAGE_PATH + System.currentTimeMillis() + ".jpg"
+    }
+
+    private fun getIntFromFloat(num: Float): IntArray {
+        var num = num
+        val split = num.toString().split(".")
+        return if (split.size > 1) {
+            val a = split[1]
+            var c = (num * Math.pow(10.0, a.length.toDouble())).toInt()
+            var b = 1 * Math.pow(10.0, a.length.toDouble()).toInt()
+            var max = getMax(b, c)
+            intArrayOf(c/max, b/max)
+        } else {
+            intArrayOf(num.toInt(), 1)
+        }
+    }
+
+    private fun getMax(a: Int, b: Int): Int {
+        var a = a
+        var b = b
+        var t = 0
+        if (a < b) {
+            t = a
+            a = b
+            b = t
+        }
+        val c = a % b
+        return if (c == 0) {
+            b
+        } else {
+            getMax(b, c)
+        }
     }
 
     companion object {
@@ -234,6 +299,6 @@ class RecordEditActivity :
         const val RECORD = "record"
         const val RECORD_TAG = "record_tag"
 
-        val ITEM_PHOTO = arrayOf("相册选择", "相机拍照", "相册选择&剪裁", "相机拍照&剪裁")
+        val ITEM_PHOTO = arrayOf("相册选择", "相机拍照")
     }
 }

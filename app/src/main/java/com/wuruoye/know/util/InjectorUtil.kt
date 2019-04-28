@@ -27,8 +27,9 @@ object InjectorUtil {
     fun recordTypeEditViewModelFactory(context: Context): ViewModelProvider.Factory {
         val recordTypeDao = Repository.getRecordType(context)
         val recordViewDao = Repository.getRecordView(context)
+        val recordItemDao = Repository.getRecordItem(context)
         val reviewStrategyDao = Repository.getReviewStrategy(context)
-        return RecordTypeEditViewModel.Factory(recordTypeDao, recordViewDao, reviewStrategyDao)
+        return RecordTypeEditViewModel.Factory(recordTypeDao, recordViewDao, recordItemDao, reviewStrategyDao)
     }
 
     fun recordEdiViewModelFactory(context: Context): ViewModelProvider.Factory {
