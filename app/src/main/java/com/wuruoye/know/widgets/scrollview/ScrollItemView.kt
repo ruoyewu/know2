@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import com.wuruoye.know.R
-import com.wuruoye.know.util.log
 
 /**
  * Created at 2019/4/19 09:02 by wuruoye
@@ -118,6 +117,11 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
         if (rv != 0) {
             mRightView = LayoutInflater.from(context).inflate(rv, this, false)
             addView(mRightView)
+            if (isMeizu()) {
+                mRightView!!.setOnLongClickListener {
+                    true
+                }
+            }
         }
         arr.recycle()
 
@@ -224,7 +228,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
                 } else {
                     when {
                         offsetX < -mMaxRight -> {
-                            log("review do pre right")
                             mVmMain.moveTo(-mDeleteLength)
                             mScrollListener?.onPreRight()
                         }
@@ -240,16 +243,16 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     override fun onChanged(last: Float, cur: Float) {
         if (!mOnePass) {
             if (last <= mMaxLeft && cur > mMaxLeft) {
-                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                performHaptic()
                 mVmLeft?.moveTo(mMaxLeft - mMoveLeft)
             } else if (last > mMaxLeft && cur <= mMaxLeft) {
-                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                performHaptic()
                 mVmLeft?.moveTo(0F)
             } else if (last >= -mMaxRight && cur < -mMaxRight) {
-                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                performHaptic()
                 mVmRight?.moveTo(mDeleteLength-mMaxRight)
             } else if (last < -mMaxRight && cur >= -mMaxRight) {
-                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                performHaptic()
                 mVmRight?.moveTo(mDeleteLength - mMoveRight)
             }
 
@@ -292,6 +295,18 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
         } else {
             cur
         }
+    }
+
+    private fun performHaptic() {
+        if (isMeizu()) {
+            mRightView?.performLongClick()
+        } else {
+            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        }
+    }
+
+    private fun isMeizu(): Boolean {
+        return true
     }
 
     interface OnClickListener {

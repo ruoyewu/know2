@@ -332,10 +332,14 @@ public class WPhoto implements IWPhoto<String> {
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.setDataAndType(uri, "image/*");
             intent.putExtra("crop", true);
-            intent.putExtra("aspectX", mAspectX);
-            intent.putExtra("aspectY", mAspectY);
-            intent.putExtra("outputX", mOutputX);
-            intent.putExtra("outputY", mOutputY);
+            if (mAspectX > 0 && mAspectY > 0) {
+                intent.putExtra("aspectX", mAspectX);
+                intent.putExtra("aspectY", mAspectY);
+            }
+            if (mOutputX > 0 && mOutputY > 0) {
+                intent.putExtra("outputX", mOutputX);
+                intent.putExtra("outputY", mOutputY);
+            }
             intent.putExtra("return-date", false);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outUri);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
