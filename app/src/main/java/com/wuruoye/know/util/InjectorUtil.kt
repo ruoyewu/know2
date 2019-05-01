@@ -121,4 +121,9 @@ object InjectorUtil {
         return BackupViewModel.Factory(recordDao, recordTypeDao, recordItemDao,
             recordTagDao, reviewStrategyDao, textViewDao, imageViewDao, layoutViewDao, insertDao)
     }
+
+    fun settingViewModelFactory(context: Context): ViewModelProvider.Factory {
+        val cache = AppCache.getInstance(context)
+        return SettingViewModel.Factory(cache)
+    }
 }

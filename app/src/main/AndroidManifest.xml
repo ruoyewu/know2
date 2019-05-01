@@ -36,6 +36,8 @@
         <activity android:name=".ui.edit.RecordShowActivity"/>
         <activity android:name=".ui.setting.BackupActivity"/>
         <activity android:name=".ui.edit.ImgShowActivity"/>
+        <activity android:name=".ui.DemoActivity"/>
+        <activity android:name=".ui.setting.SettingActivity"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"

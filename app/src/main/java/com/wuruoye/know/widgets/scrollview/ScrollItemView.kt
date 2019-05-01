@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.util.model.AppCache
 
 /**
  * Created at 2019/4/19 09:02 by wuruoye
@@ -44,6 +45,11 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     private var mTouchDownListener: OnTouchDownListener? = null
 
     var isScrollable = true
+    var isHaptic = true
+
+    init {
+        isHaptic = AppCache.getInstance(context!!).haptic
+    }
 
     constructor(context: Context) : super(context) {
         initAttr(context, null)
@@ -298,10 +304,12 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
     }
 
     private fun performHaptic() {
-        if (isMeizu()) {
-            mRightView?.performLongClick()
-        } else {
-            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        if (isHaptic) {
+            if (isMeizu()) {
+                mRightView?.performLongClick()
+            } else {
+                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            }
         }
     }
 

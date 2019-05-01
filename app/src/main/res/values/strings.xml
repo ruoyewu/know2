@@ -65,6 +65,7 @@
     <string name="set_record_type">编辑记录类型</string>
     <string name="set_record_tag">编辑标签</string>
     <string name="backup">备份</string>
+    <string name="more_setting">更多设置</string>
     <string name="set_review_strategy">编辑复习策略</string>
     <string name="delete_record_type">删除</string>
     <string name="remember">记住了</string>
@@ -95,6 +96,8 @@
     <string name="download_backup">下载备份</string>
 
     <string name="no_more">没有更多内容了呢</string>
+
+    <string name="haptic">震动反馈</string>
 
     <string name="default_date">2019–04–01 19:00</string>
 </resources>

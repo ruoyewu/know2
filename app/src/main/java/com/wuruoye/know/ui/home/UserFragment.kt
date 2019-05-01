@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.DemoActivity
 import com.wuruoye.know.ui.home.vm.IUserVM
 import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.*
@@ -25,6 +26,7 @@ import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_RECORD
 import com.wuruoye.know.util.model.RequestCode.RECORD_FOR_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_BACKUP
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_LOGIN
+import com.wuruoye.know.util.model.RequestCode.USER_FOR_MORE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TAG
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_RECORD_TYPE
 import com.wuruoye.know.util.model.RequestCode.USER_FOR_REVIEW_STRATEGY
@@ -56,6 +58,7 @@ class UserFragment : Fragment(), View.OnClickListener {
     private lateinit var llEditReviewStrategy: LinearLayout
     private lateinit var llEditRecordTag: LinearLayout
     private lateinit var llBackup: LinearLayout
+    private lateinit var llMoreSetting: LinearLayout
 
     private lateinit var vm: IUserVM
 
@@ -98,6 +101,7 @@ class UserFragment : Fragment(), View.OnClickListener {
             llEditReviewStrategy = findViewById(R.id.ll_edit_review_strategy_user)
             llEditRecordTag = findViewById(R.id.ll_edit_record_tag_user)
             llBackup = findViewById(R.id.ll_backup_user)
+            llMoreSetting = findViewById(R.id.ll_more_setting_user)
         }
     }
 
@@ -117,6 +121,7 @@ class UserFragment : Fragment(), View.OnClickListener {
         llEditReviewStrategy.setOnClickListener(this)
         llEditRecordTag.setOnClickListener(this)
         llBackup.setOnClickListener(this)
+        llMoreSetting.setOnClickListener(this)
     }
 
     private fun initView() {
@@ -151,7 +156,7 @@ class UserFragment : Fragment(), View.OnClickListener {
         when(v?.id) {
             R.id.civ_user -> {
                 if (vm.login) {
-
+                    startActivity(Intent(context, DemoActivity::class.java))
                 } else {
                     startActivityForResult(Intent(context, UserLoginActivity::class.java),
                         USER_FOR_LOGIN)
@@ -193,6 +198,10 @@ class UserFragment : Fragment(), View.OnClickListener {
                     context?.toast("请先登录")
                 }
             }
+            R.id.ll_more_setting_user -> {
+                startActivityForResult(Intent(context, SettingActivity::class.java),
+                    USER_FOR_MORE)
+            }
         }
     }
 
@@ -227,6 +236,9 @@ class UserFragment : Fragment(), View.OnClickListener {
                 }
                 USER_FOR_BACKUP -> {
                     vm.updateInfo()
+                }
+                USER_FOR_MORE -> {
+
                 }
             }
         }

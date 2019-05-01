@@ -1,5 +1,6 @@
 package com.wuruoye.know.util.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -9,38 +10,45 @@ import android.content.SharedPreferences
  */
 class AppCache private constructor(context: Context) {
     private var sp: SharedPreferences
+    private var edit: SharedPreferences.Editor
 
     init {
         sp = context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
+        @SuppressLint("CommitPrefEdits")
+        edit = sp.edit()
     }
 
     var typeTimeLimit: Int
         get() = sp.getInt(TYPE_LIMIT_TIME, 0)
-        set(value) = sp.edit().putInt(TYPE_LIMIT_TIME, value).apply()
+        set(value) = edit.putInt(TYPE_LIMIT_TIME, value).apply()
 
     var typeTypeLimit: Long
         get() = sp.getLong(TYPE_LIMIT_TYPE, -1)
-        set(value) = sp.edit().putLong(TYPE_LIMIT_TYPE, value).apply()
+        set(value) = edit.putLong(TYPE_LIMIT_TYPE, value).apply()
 
     var typeTagLimit: Long
         get() = sp.getLong(TYPE_LIMIT_TAG, -1)
-        set(value) = sp.edit().putLong(TYPE_LIMIT_TAG, value).apply()
+        set(value) = edit.putLong(TYPE_LIMIT_TAG, value).apply()
 
     var initRecordTag: Boolean
         get() = sp.getBoolean(TAG_INIT, false)
-        set(value) = sp.edit().putBoolean(TAG_INIT, value).apply()
+        set(value) = edit.putBoolean(TAG_INIT, value).apply()
 
     var userLogin: Boolean
         get() = sp.getBoolean(USER_LOGIN, false)
-        set(value) = sp.edit().putBoolean(USER_LOGIN, value).apply()
+        set(value) = edit.putBoolean(USER_LOGIN, value).apply()
 
     var userId: String
         get() = sp.getString(USER_ID, "") ?: ""
-        set(value) = sp.edit().putString(USER_ID, value).apply()
+        set(value) = edit.putString(USER_ID, value).apply()
 
     var userPwd: String
         get() = sp.getString(USER_PWD, "") ?: ""
-        set(value) = sp.edit().putString(USER_PWD, value).apply()
+        set(value) = edit.putString(USER_PWD, value).apply()
+
+    var haptic: Boolean
+        get() = sp.getBoolean(HAPTIC, true)
+        set(value) = edit.putBoolean(HAPTIC, value).apply()
 
     companion object {
         private const val NAME = "com.wuruoye.know.sp"
@@ -51,6 +59,7 @@ class AppCache private constructor(context: Context) {
         private const val USER_LOGIN = "user_login"
         val USER_ID = "user_id"
         val USER_PWD = "user_pwd"
+        val HAPTIC = "haptic"
 
         @Volatile
         private var sInstance: AppCache? = null
