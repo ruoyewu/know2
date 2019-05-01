@@ -9,14 +9,17 @@ import com.google.gson.Gson
 object GsonFactory {
     private var gson: Gson? = null
 
-    fun getInstance(): Gson {
+    val sInstance: Gson =
         if (gson == null) {
             synchronized(this) {
                 if (gson == null) {
                     gson = Gson()
+                    gson!!
+                } else {
+                    gson!!
                 }
             }
+        } else {
+            gson!!
         }
-        return gson!!
-    }
 }

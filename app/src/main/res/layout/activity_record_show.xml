@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -7,16 +7,17 @@
     <include
         layout="@layout/toolbar"/>
     
-    <FrameLayout
+    <RelativeLayout
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp">
 
         <TextView
                 android:text="@string/no_more"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/light_slate_gray"
-                android:layout_gravity="center"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
         <FrameLayout
@@ -46,18 +47,39 @@
                 android:id="@+id/fab_error_record_show"
                 android:src="@drawable/ic_error"
                 android:backgroundTint="@color/monsoon"
-                android:layout_gravity="end|bottom"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:layout_margin="16dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" tools:ignore="UnusedAttribute"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_review_record_show"
+                android:src="@drawable/ic_eye"
+                android:backgroundTint="@color/platinum"
+                android:layout_margin="16dp"
+                android:layout_above="@id/fab_error_record_show"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" tools:ignore="UnusedAttribute"/>
         
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_ok_record_show"
                 android:src="@drawable/ic_ok"
-                android:layout_gravity="end|bottom"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="100dp"
+                android:layout_margin="16dp"
+                android:layout_above="@id/fab_review_record_show"
+                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-    </FrameLayout>
+
+        <TextView
+                android:id="@+id/tv_info_record_show"
+                android:textSize="12sp"
+                android:textColor="@color/mountain_mist"
+                android:layout_gravity="center"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
 </LinearLayout>

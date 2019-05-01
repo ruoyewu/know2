@@ -152,7 +152,7 @@ class RecordEditViewModel(
         val array = JSONArray(text)
         for (i in 0 until array.length()) {
             result.add(
-                GsonFactory.getInstance()
+                GsonFactory.sInstance
                     .fromJson(array.getString(i), RecordTypeItem::class.java))
         }
         return result

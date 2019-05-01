@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.GsonFactory
+import com.wuruoye.know.util.ReviewUtil
 import com.wuruoye.know.util.model.beans.ImagePath
 import com.wuruoye.know.util.model.beans.RecordListItem
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
@@ -63,7 +64,7 @@ class ReviewViewModel(
                 val imgPath = if (path == null) {
                     null
                 } else {
-                    GsonFactory.getInstance().fromJson(path, ImagePath::class.java)
+                    GsonFactory.sInstance.fromJson(path, ImagePath::class.java)
                 }
                 recordListItems.add(RecordListItem(record, title, tag, content, imgPath))
             }
@@ -73,7 +74,7 @@ class ReviewViewModel(
 
     private fun filterRecord(recordList: List<Record>): ArrayList<Record> {
         val result = ArrayList<Record>()
-        val current = System.currentTimeMillis()
+        System.currentTimeMillis()
         for (record in recordList) {
             val type =
                     if (recordTypeMap[record.type] == null) {
@@ -92,7 +93,7 @@ class ReviewViewModel(
                     reviewStrategyMap[type.strategy]!!
                 }
 
-            if (shouldShow(record, strategy, current)) {
+            if (ReviewUtil.isShow(record, strategy)) {
                 result.add(record)
             }
         }

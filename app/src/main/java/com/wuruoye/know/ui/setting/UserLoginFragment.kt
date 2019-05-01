@@ -84,7 +84,7 @@ class UserLoginFragment : Fragment(), View.OnClickListener {
             dlgLoading.dismiss()
             with(it) {
                 if (successful) {
-                    val userInfo = GsonFactory.getInstance()
+                    val userInfo = GsonFactory.sInstance
                         .fromJson(data, UserInfo::class.java)
                     (activity as UserLoginActivity).setResult(userInfo)
                 } else {

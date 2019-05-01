@@ -89,7 +89,7 @@ class RecordTypeEditViewModel(
                 for (item in items) {
                     itemList.add(saveRecordView(item))
                 }
-                val recordType = RecordType(type, GsonFactory.getInstance().toJson(itemList))
+                val recordType = RecordType(type, GsonFactory.sInstance.toJson(itemList))
                 recordType.update()
                 val id = recordTypeDao.insert(recordType)
                 submitResult.postValue(id >= 0)
@@ -193,7 +193,7 @@ class RecordTypeEditViewModel(
                     itemList.add(saveRecordView(item))
                 }
                 val layoutView = RecordLayoutView(recordView,
-                    GsonFactory.getInstance().toJson(itemList))
+                    GsonFactory.sInstance.toJson(itemList))
                 val id = recordViewDao.insert(layoutView)
                 return RecordTypeItem(type, id)
             }
@@ -205,7 +205,7 @@ class RecordTypeEditViewModel(
         val result = ArrayList<RecordTypeItem>()
         val array = JSONArray(text)
         for (i in 0 until array.length()) {
-            result.add(GsonFactory.getInstance()
+            result.add(GsonFactory.sInstance
                 .fromJson(array.getString(i), RecordTypeItem::class.java))
         }
         return result

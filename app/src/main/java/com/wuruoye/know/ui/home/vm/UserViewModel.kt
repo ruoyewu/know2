@@ -70,7 +70,7 @@ class UserViewModel(
                 Pair("pwd", pwd))
             val result = NetUtil.get(NetUtil.LOGIN, values)
             if (result.successful) {
-                val userInfo = GsonFactory.getInstance()
+                val userInfo = GsonFactory.sInstance
                     .fromJson(result.data!!, UserInfo::class.java)
                 this@UserViewModel.userInfo.postValue(userInfo)
             } else {

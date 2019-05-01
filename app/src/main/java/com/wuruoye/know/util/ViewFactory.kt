@@ -1,6 +1,7 @@
 package com.wuruoye.know.util
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.text.method.ScrollingMovementMethod
 import android.util.ArrayMap
@@ -97,7 +98,7 @@ object ViewFactory {
                     .inflate(R.layout.view_edit, parent, false) as TextInputLayout
 
                 viewLayout.hint = hint
-                // TODO set hint size and color using reflect
+                setHintColor(viewLayout, hintColor)
                 viewLayout.setBackgroundColor(bgColor)
 
                 viewLayout.setPadding(DensityUtil.dp2px(context, paddingLeft.toFloat()).toInt(),
@@ -215,7 +216,7 @@ object ViewFactory {
             if (map != null) {
                 val item = map[getKey(imageView)]
                 if (item != null) {
-                    val path = GsonFactory.getInstance()
+                    val path = GsonFactory.sInstance
                         .fromJson(item.content, ImagePath::class.java)
                     loadImg(path, view, generateOption(imageView, view))
                     view.setTag(R.id.tag_image, item)
@@ -406,6 +407,10 @@ object ViewFactory {
     }
 
 
+    private fun setHintColor(layout: TextInputLayout, color: Int) {
+        layout.defaultHintTextColor = ColorStateList.valueOf(color)
+    }
+
     private fun getKey(view: RecordView): String {
         val type = RecordTypeSelect.getType(view)
         return "${type}_${view.id}"
@@ -429,12 +434,12 @@ object ViewFactory {
         if (item == null) {
             item = RecordItem(-1L, view.id!!, RecordTypeSelect.getType(view))
         }
-        val path = GsonFactory.getInstance()
+        val path = GsonFactory.sInstance
             .fromJson((item as RecordItem).content, ImagePath::class.java)
             ?: ImagePath("", "")
         path.localPath = filePath
         path.remotePath = ""
-        item.content = GsonFactory.getInstance().toJson(path)
+        item.content = GsonFactory.sInstance.toJson(path)
         iv.setTag(R.id.tag_image, item)
         loadImg(path, iv, generateOption(view, iv))
     }

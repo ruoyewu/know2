@@ -142,7 +142,7 @@ class RecordViewModel(
                 val imgPath = if (path == null) {
                     null
                 } else {
-                    GsonFactory.getInstance().fromJson(path, ImagePath::class.java)
+                    GsonFactory.sInstance.fromJson(path, ImagePath::class.java)
                 }
                 recordListItems.add(RecordListItem(record, title, tag, content, imgPath))
             }

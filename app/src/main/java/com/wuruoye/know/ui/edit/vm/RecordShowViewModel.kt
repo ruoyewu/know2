@@ -79,14 +79,21 @@ class RecordShowViewModel(
         }
     }
 
-    override fun rememberRecord(record: Record, remember: Boolean) {
+    override fun rememberRecord(record: Record, remember: Boolean?) {
         GlobalScope.launch {
-            if (remember) {
-                record.remNum++
-                record.lastReview = System.currentTimeMillis()
-            } else {
-                record.failNum++
-                record.lastFailReview = System.currentTimeMillis()
+            when {
+                remember == null -> {
+                    record.reviewNum++
+                    record.lastReview
+                }
+                remember -> {
+                    record.remNum++
+                    record.lastReview = System.currentTimeMillis()
+                }
+                else -> {
+                    record.failNum++
+                    record.lastFailReview = System.currentTimeMillis()
+                }
             }
 
             recordDao.insert(record)
@@ -156,7 +163,7 @@ class RecordShowViewModel(
         val array = JSONArray(text)
         for (i in 0 until array.length()) {
             result.add(
-                GsonFactory.getInstance()
+                GsonFactory.sInstance
                     .fromJson(array.getString(i), RecordTypeItem::class.java))
         }
         return result

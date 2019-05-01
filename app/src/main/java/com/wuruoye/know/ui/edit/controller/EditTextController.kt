@@ -200,7 +200,8 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
             TYPE_HINT_SIZE -> {
                 mView.hintSize = value
                 tvHintSize.text = value.toString()
-                // TODO set hint size in TextInputLayout
+
+                updateView()
             }
             TYPE_TEXT_STYLE -> {
                 mView.textStyle = TEXT_STYLE_VALUE[value]
@@ -246,9 +247,10 @@ class EditTextController(private val mView: RecordTextView) : AbstractEditorCont
             }
             TYPE_HINT_COLOR -> {
                 mView.hintColor = color
-                // TODO set hint color in TextInputLayout
                 tvHintColor.setTextColor(color)
                 tvHintColor.text = ColorUtil.color2hex(color)
+
+                updateView()
             }
             TYPE_BG_COLOR -> {
                 mView.bgColor = color

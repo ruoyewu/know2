@@ -39,7 +39,7 @@ class BackupViewModel(
     override val backupResult: MutableLiveData<NetResult> =
         MutableLiveData()
 
-    private val gson = GsonFactory.getInstance()
+    private val gson = GsonFactory.sInstance
 
     init {
         updateInfo()
@@ -49,7 +49,7 @@ class BackupViewModel(
         GlobalScope.launch {
             val result = NetUtil.get(NetUtil.BACKUP_INFO, mapOf())
             if (result.successful) {
-                val info = GsonFactory.getInstance()
+                val info = GsonFactory.sInstance
                     .fromJson(result.data!!, BackupInfo::class.java)
                 backupInfo.postValue(info)
             } else {

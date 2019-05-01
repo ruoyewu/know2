@@ -17,5 +17,5 @@ interface IRecordShowVM {
 
     fun setItemList(itemList: ArrayList<RecordListItem>, cur: Int)
     fun showInViewGroup(viewGroup: ViewGroup)
-    fun rememberRecord(record: Record, remember: Boolean)
+    fun rememberRecord(record: Record, remember: Boolean? = null)
 }

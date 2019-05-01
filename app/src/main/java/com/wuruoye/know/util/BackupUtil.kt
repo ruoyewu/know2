@@ -137,7 +137,7 @@ object BackupUtil {
     private fun <T> loadTables(tableList: JSONArray, clz: Class<T>): ArrayList<T> {
         val result = ArrayList<T>()
         for (i in 0 until tableList.length()) {
-            result.add(GsonFactory.getInstance()
+            result.add(GsonFactory.sInstance
                 .fromJson(
                     decodeBase64(tableList.getJSONObject(i).getString(CONTENT)),
                     clz
@@ -148,7 +148,7 @@ object BackupUtil {
     }
 
     private fun gsonDump(obj: Any): String {
-        return encodeBase64(GsonFactory.getInstance().toJson(obj))
+        return encodeBase64(GsonFactory.sInstance.toJson(obj))
     }
 
     private fun encodeBase64(s: String): String {

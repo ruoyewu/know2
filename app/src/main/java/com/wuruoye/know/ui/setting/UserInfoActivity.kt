@@ -165,7 +165,7 @@ class UserInfoActivity :
             dlgLoading.dismiss()
             with(it) {
                 if (successful) {
-                    val userInfo = GsonFactory.getInstance()
+                    val userInfo = GsonFactory.sInstance
                         .fromJson(data, UserInfo::class.java)
                     val intent = Intent()
                     intent.putExtra(USER_INFO, userInfo)

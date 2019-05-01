@@ -1,10 +1,13 @@
 package com.wuruoye.know.util
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.util.ArrayMap
 import com.qiniu.android.common.AutoZone
 import com.qiniu.android.storage.Configuration
 import com.qiniu.android.storage.UploadManager
 import com.wuruoye.know.util.base.FileUtil
+import com.wuruoye.know.util.base.WConfig
 import com.wuruoye.know.util.model.beans.NetResult
 import com.wuruoye.know.util.model.beans.TokenResult
 import okhttp3.*
@@ -91,7 +94,7 @@ object NetUtil {
     fun uploadFile(file: String): NetResult {
         val tokenResult = get(UPLOAD_TOKEN, mapOf())
         if (tokenResult.successful) {
-            val token = GsonFactory.getInstance()
+            val token = GsonFactory.sInstance
                 .fromJson(tokenResult.data!!, TokenResult::class.java)
             val response = uploadManager
                 .syncPut(file, token.key, token.token, null)
@@ -129,7 +132,7 @@ object NetUtil {
     }
 
     private fun request(request: Request): NetResult {
-        if (!NetworkUtil.isAvailable()) {
+        if (!isAvailable()) {
             return NetResult(-1, "no network available")
         }
 
@@ -143,5 +146,17 @@ object NetUtil {
         } else {
             return NetResult(400, response.message())
         }
+    }
+
+    fun isAvailable(): Boolean {
+        val manager = WConfig.getAppContext()
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager ?: return false
+
+        val info = manager.activeNetworkInfo
+        if (info == null || !info.isConnected) {
+            return false
+        }
+
+        return true
     }
 }

@@ -46,20 +46,22 @@ public class InsertDao {
                     stmt.bindLong(1, value.getId());
                 }
                 stmt.bindLong(2, value.getType());
-                stmt.bindLong(3, value.getRemNum());
-                stmt.bindLong(4, value.getFailNum());
-                stmt.bindLong(5, value.getLastReview());
-                stmt.bindLong(6, value.getLastFailReview());
-                stmt.bindLong(7, value.getTag());
-                stmt.bindLong(8, value.getCreateTime());
-                stmt.bindLong(9, value.getUpdateTime());
+                stmt.bindLong(3, value.getReviewNum());
+                stmt.bindLong(4, value.getRemNum());
+                stmt.bindLong(5, value.getFailNum());
+                stmt.bindLong(6, value.getLastReview());
+                stmt.bindLong(7, value.getLastRemReview());
+                stmt.bindLong(8, value.getLastFailReview());
+                stmt.bindLong(9, value.getTag());
+                stmt.bindLong(10, value.getCreateTime());
+                stmt.bindLong(11, value.getUpdateTime());
             }
 
             @Override
             protected String createQuery() {
-                return "INSERT OR REPLACE INTO `record`(`id`,`type`,`remNum`,`failNum`," +
-                        "`lastReview`,`lastFailReview`,`tag`,`createTime`,`updateTime`)" +
-                        " VALUES (?,?,?,?,?,?,?,?,?)";
+                return "INSERT OR REPLACE INTO `record`(`id`,`type`,`reviewNum`,`remNum`,`failNum`," +
+                        "`lastReview`,`lastRemReview`,`lastFailReview`,`tag`,`createTime`,`updateTime`)" +
+                        " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             }
         };
         recordImageViewInsert = new EntityInsertionAdapter<RecordImageView>(db) {

@@ -18,9 +18,11 @@ class Record(
     @PrimaryKey(autoGenerate = true)
     override var id: Long?,
     var type: Long,
+    var reviewNum: Int,
     var remNum: Int,
     var failNum: Int,
     var lastReview: Long,
+    var lastRemReview: Long,
     var lastFailReview: Long,
     var tag: Long,
     override var createTime: Long,
@@ -28,16 +30,17 @@ class Record(
 ) : BaseTable, Parcelable {
     constructor(type: Long) :
             this(
-                null, type, 0, 0,
-                -1, -1, 0, -1, -1
+                null, type, 0, 0, 0,
+                -1, -1, -1, 0, -1, -1
             )
-
 
     constructor(source: Parcel) : this(
         source.readValue(Long::class.java.classLoader) as Long?,
         source.readLong(),
         source.readInt(),
         source.readInt(),
+        source.readInt(),
+        source.readLong(),
         source.readLong(),
         source.readLong(),
         source.readLong(),
@@ -50,9 +53,11 @@ class Record(
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeValue(id)
         writeLong(type)
+        writeInt(reviewNum)
         writeInt(remNum)
         writeInt(failNum)
         writeLong(lastReview)
+        writeLong(lastRemReview)
         writeLong(lastFailReview)
         writeLong(tag)
         writeLong(createTime)
@@ -67,9 +72,11 @@ class Record(
 
         if (id != other.id) return false
         if (type != other.type) return false
+        if (reviewNum != other.reviewNum) return false
         if (remNum != other.remNum) return false
         if (failNum != other.failNum) return false
         if (lastReview != other.lastReview) return false
+        if (lastRemReview != other.lastRemReview) return false
         if (lastFailReview != other.lastFailReview) return false
         if (tag != other.tag) return false
         if (createTime != other.createTime) return false
@@ -81,9 +88,11 @@ class Record(
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + type.hashCode()
+        result = 31 * result + reviewNum
         result = 31 * result + remNum
         result = 31 * result + failNum
         result = 31 * result + lastReview.hashCode()
+        result = 31 * result + lastRemReview.hashCode()
         result = 31 * result + lastFailReview.hashCode()
         result = 31 * result + tag.hashCode()
         result = 31 * result + createTime.hashCode()
