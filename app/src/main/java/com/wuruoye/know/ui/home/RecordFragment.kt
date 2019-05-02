@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakFragment
 import com.wuruoye.know.ui.edit.RecordEditActivity
 import com.wuruoye.know.ui.edit.RecordTypeEditActivity
 import com.wuruoye.know.ui.home.adapter.RecordListAdapter
@@ -40,7 +40,7 @@ import com.wuruoye.know.util.orm.table.RecordType
  * Created at 2019/4/9 21:16 by wuruoye
  * Description:
  */
-class RecordFragment : Fragment(),
+class RecordFragment : LeakFragment(),
     View.OnClickListener,
     RecordTypeAdapter.OnClickListener,
     RecordTypeAdapter.OnLongClickListener,
@@ -280,10 +280,5 @@ class RecordFragment : Fragment(),
                 }
             }
         }
-    }
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        var newInstance: RecordFragment = RecordFragment()
     }
 }

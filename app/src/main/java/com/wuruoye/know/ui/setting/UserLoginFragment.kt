@@ -9,11 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakFragment
 import com.wuruoye.know.ui.setting.vm.IUserLoginVM
 import com.wuruoye.know.ui.setting.vm.UserLoginViewModel
 import com.wuruoye.know.util.GsonFactory
@@ -24,7 +24,7 @@ import com.wuruoye.know.util.model.beans.UserInfo
  * Created at 2019-04-22 22:42 by wuruoye
  * Description:
  */
-class UserLoginFragment : Fragment(), View.OnClickListener {
+class UserLoginFragment : LeakFragment(), View.OnClickListener {
     private lateinit var tilId: TextInputLayout
     private lateinit var etId: EditText
     private lateinit var tilPwd: TextInputLayout
@@ -112,10 +112,5 @@ class UserLoginFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        val newInstance = UserLoginFragment()
     }
 }

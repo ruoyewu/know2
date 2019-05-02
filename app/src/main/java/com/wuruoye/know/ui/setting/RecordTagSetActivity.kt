@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.RecordTagEditActivity
 import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
 import com.wuruoye.know.ui.setting.adapter.BaseSelectAdapter
@@ -34,7 +34,7 @@ import com.wuruoye.know.util.toast
  * Description:
  */
 class RecordTagSetActivity :
-    AppCompatActivity(),
+    LeakActivity(),
     View.OnClickListener,
     PopupMenu.OnMenuItemClickListener, BaseSelectAdapter.OnClickListener<RecordTag>,
     BaseAdapter.OnActionListener<RecordTag> {

@@ -11,13 +11,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IReviewStrategyEditVM
 import com.wuruoye.know.ui.edit.vm.ReviewStrategyEditViewModel
 import com.wuruoye.know.util.DateUtil
@@ -28,7 +28,7 @@ import com.wuruoye.know.widgets.BottomAlertDialog
  * Created at 2019-04-20 15:49 by wuruoye
  * Description:
  */
-class ReviewStrategyEditActivity : AppCompatActivity(), View.OnClickListener {
+class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var tilTitle: TextInputLayout

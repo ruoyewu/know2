@@ -1,6 +1,5 @@
 package com.wuruoye.know.ui.home
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakFragment
 import com.wuruoye.know.ui.edit.RecordShowActivity
 import com.wuruoye.know.ui.home.adapter.ReviewListAdapter
 import com.wuruoye.know.ui.home.adapter.scroll.BaseAdapter
@@ -32,7 +31,7 @@ import java.util.*
  * Created at 2019/4/9 21:11 by wuruoye
  * Description:
  */
-class ReviewFragment : Fragment(), BaseAdapter.OnActionListener<RecordListItem>,
+class ReviewFragment : LeakFragment(), BaseAdapter.OnActionListener<RecordListItem>,
     ReviewListAdapter.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var rv: RecyclerView
@@ -113,10 +112,5 @@ class ReviewFragment : Fragment(), BaseAdapter.OnActionListener<RecordListItem>,
                 USER_FOR_BACKUP -> vm.updateRecordList()
             }
         }
-    }
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        val newInstance = ReviewFragment()
     }
 }

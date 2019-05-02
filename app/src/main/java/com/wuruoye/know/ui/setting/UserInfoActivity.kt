@@ -8,12 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.setting.vm.IUserInfoVM
 import com.wuruoye.know.ui.setting.vm.UserInfoViewModel
 import com.wuruoye.know.util.GsonFactory
@@ -32,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView
  * Description:
  */
 class UserInfoActivity :
-    AppCompatActivity(),
+    LeakActivity(),
     View.OnClickListener,
     IWPhoto.OnWPhotoListener<String> {
 

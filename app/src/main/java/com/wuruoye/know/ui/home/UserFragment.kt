@@ -1,6 +1,5 @@
 package com.wuruoye.know.ui.home
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
@@ -11,13 +10,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.wuruoye.know.R
-import com.wuruoye.know.ui.DemoActivity
+import com.wuruoye.know.ui.base.LeakFragment
 import com.wuruoye.know.ui.home.vm.IUserVM
 import com.wuruoye.know.ui.home.vm.UserViewModel
 import com.wuruoye.know.ui.setting.*
@@ -39,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView
  * Created at 2019/4/9 21:17 by wuruoye
  * Description:
  */
-class UserFragment : Fragment(), View.OnClickListener {
+class UserFragment : LeakFragment(), View.OnClickListener {
     private lateinit var cl: CoordinatorLayout
     private lateinit var abl: AppBarLayout
     private lateinit var ivBack: ImageView
@@ -156,7 +154,7 @@ class UserFragment : Fragment(), View.OnClickListener {
         when(v?.id) {
             R.id.civ_user -> {
                 if (vm.login) {
-                    startActivity(Intent(context, DemoActivity::class.java))
+
                 } else {
                     startActivityForResult(Intent(context, UserLoginActivity::class.java),
                         USER_FOR_LOGIN)
@@ -242,10 +240,5 @@ class UserFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        val newInstance = UserFragment()
     }
 }

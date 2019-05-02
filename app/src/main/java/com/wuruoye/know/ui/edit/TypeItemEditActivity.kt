@@ -8,8 +8,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.controller.*
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RecordTypeSelect
@@ -22,7 +22,7 @@ import com.wuruoye.know.util.orm.table.RecordView
  * Created at 2019/4/11 09:24 by wuruoye
  * Description:
  */
-class TypeItemEditActivity : AppCompatActivity(), View.OnClickListener {
+class TypeItemEditActivity : LeakActivity(), View.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var ivMore: ImageView

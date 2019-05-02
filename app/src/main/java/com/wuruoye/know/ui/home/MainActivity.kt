@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity(),
     private lateinit var vpMain: ViewPager
     private lateinit var bnvBottom: BottomNavigationView
     private var fragments = arrayListOf<Fragment>(
-        ReviewFragment.newInstance,
-        RecordFragment.newInstance,
-        UserFragment.newInstance
+        ReviewFragment(),
+        RecordFragment(),
+        UserFragment()
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

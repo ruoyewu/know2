@@ -5,16 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.util.model.beans.ImagePath
 
 /**
  * Created at 2019-04-28 10:42 by wuruoye
  * Description:
  */
-class ImgShowActivity : AppCompatActivity() {
+class ImgShowActivity : LeakActivity() {
     private lateinit var iv: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {

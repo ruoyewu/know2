@@ -7,12 +7,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IRecordTagEditVM
 import com.wuruoye.know.ui.edit.vm.RecordTagEditViewModel
 import com.wuruoye.know.util.InjectorUtil
@@ -23,7 +23,7 @@ import com.wuruoye.know.util.toast
  * Created at 2019/4/12 16:08 by wuruoye
  * Description:
  */
-class RecordTagEditActivity : AppCompatActivity(), View.OnClickListener {
+class RecordTagEditActivity : LeakActivity(), View.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var tilTitle: TextInputLayout

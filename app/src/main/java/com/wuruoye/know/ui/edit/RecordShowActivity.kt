@@ -14,7 +14,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
@@ -22,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IRecordShowVM
 import com.wuruoye.know.ui.edit.vm.RecordShowViewModel
 import com.wuruoye.know.util.GsonFactory
@@ -38,7 +38,7 @@ import com.wuruoye.know.util.orm.table.RecordView
  * Created at 2019-04-24 18:26 by wuruoye
  * Description:
  */
-class RecordShowActivity : AppCompatActivity(),
+class RecordShowActivity : LeakActivity(),
     View.OnClickListener, ViewFactory.OnClickListener{
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView

@@ -9,10 +9,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.setting.vm.BackupViewModel
 import com.wuruoye.know.ui.setting.vm.IBackupVM
 import com.wuruoye.know.util.DateUtil
@@ -23,7 +23,7 @@ import com.wuruoye.know.util.toast
  * Created at 2019-04-25 17:11 by wuruoye
  * Description:
  */
-class BackupActivity : AppCompatActivity(), View.OnClickListener {
+class BackupActivity : LeakActivity(), View.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var tvRecordSize: TextView

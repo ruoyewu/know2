@@ -10,13 +10,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IRecordEditVM
 import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.home.adapter.RecordTagAdapter
@@ -38,7 +38,7 @@ import com.wuruoye.know.util.orm.table.RecordView
  * Description:
  */
 class RecordEditActivity :
-    AppCompatActivity(),
+    LeakActivity(),
     View.OnClickListener,
     ViewFactory.OnClickListener,
     IWPhoto.OnWPhotoListener<String>,

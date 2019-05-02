@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.home.adapter.FragmentAdapter
 import com.wuruoye.know.util.model.beans.UserInfo
 
@@ -17,7 +17,7 @@ import com.wuruoye.know.util.model.beans.UserInfo
  * Created at 2019-04-22 22:21 by wuruoye
  * Description:
  */
-class UserLoginActivity : AppCompatActivity(), View.OnClickListener {
+class UserLoginActivity : LeakActivity(), View.OnClickListener {
     private lateinit var tvTitle: TextView
     private lateinit var ivBack: ImageView
     private lateinit var tl: TabLayout
@@ -48,7 +48,7 @@ class UserLoginActivity : AppCompatActivity(), View.OnClickListener {
         ivBack.setImageResource(R.drawable.ic_left)
 
         val adapter = FragmentAdapter(supportFragmentManager,
-            arrayOf(UserLoginFragment.newInstance,
+            arrayOf(UserLoginFragment(),
                 UserRegisterFragment()),
             arrayOf(getString(R.string.login), getString(R.string.register)))
         vp.adapter = adapter

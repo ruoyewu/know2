@@ -1,15 +1,14 @@
 package com.wuruoye.know.ui.edit
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakFragment
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
@@ -18,7 +17,7 @@ import com.wuruoye.know.util.ViewFactory
  * Created at 2019-04-22 16:17 by wuruoye
  * Description:
  */
-class RecordTypeEditShowFragment : Fragment() {
+class RecordTypeEditShowFragment : LeakFragment() {
     private lateinit var llShow: LinearLayout
     private lateinit var vm: RecordTypeEditViewModel
 
@@ -52,10 +51,5 @@ class RecordTypeEditShowFragment : Fragment() {
                 ViewFactory.generateView(context!!, view, llShow, isShow = true)
             }
         })
-    }
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        val newInstance = RecordTypeEditShowFragment()
     }
 }

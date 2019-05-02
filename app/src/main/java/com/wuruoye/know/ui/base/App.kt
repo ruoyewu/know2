@@ -1,4 +1,4 @@
-package com.wuruoye.know.ui
+package com.wuruoye.know.ui.base
 
 import android.app.Application
 import com.wuruoye.know.util.base.WConfig

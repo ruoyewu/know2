@@ -9,13 +9,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IRecordTypeEditVM
 import com.wuruoye.know.ui.edit.vm.RecordTypeEditViewModel
 import com.wuruoye.know.ui.home.adapter.FragmentAdapter
@@ -27,7 +27,7 @@ import com.wuruoye.know.widgets.BottomAlertDialog
  * Description:
  */
 class RecordTypeEditActivity :
-    AppCompatActivity(),
+    LeakActivity(),
     View.OnClickListener {
 
     private lateinit var dlgTitle: BottomAlertDialog
@@ -101,8 +101,8 @@ class RecordTypeEditActivity :
         ivMore.setImageResource(R.drawable.ic_check)
 
         val adapter = FragmentAdapter(supportFragmentManager,
-            arrayOf(RecordTypeEditFragment.newInstance,
-                RecordTypeEditShowFragment.newInstance),
+            arrayOf(RecordTypeEditFragment(),
+                RecordTypeEditShowFragment()),
             arrayOf("编辑", "预览"))
         vp.adapter = adapter
         tl.visibility = View.VISIBLE

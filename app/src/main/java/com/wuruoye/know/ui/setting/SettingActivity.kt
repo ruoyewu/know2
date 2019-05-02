@@ -3,10 +3,10 @@ package com.wuruoye.know.ui.setting
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.wuruoye.know.R
+import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.setting.vm.ISettingVM
 import com.wuruoye.know.ui.setting.vm.SettingViewModel
 import com.wuruoye.know.util.InjectorUtil
@@ -16,7 +16,7 @@ import com.wuruoye.know.util.InjectorUtil
  * Description:
  */
 class SettingActivity :
-    AppCompatActivity(),
+    LeakActivity(),
     View.OnClickListener,
     CompoundButton.OnCheckedChangeListener {
     private lateinit var tvTitle: TextView
