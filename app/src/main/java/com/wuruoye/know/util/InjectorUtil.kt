@@ -38,8 +38,9 @@ object InjectorUtil {
         val recordItemDao = Repository.getRecordItem(context)
         val recordViewDao = Repository.getRecordView(context)
         val recordTagDao = Repository.getRecordTag(context)
+        val reviewStrategyDao = Repository.getReviewStrategy(context)
         return RecordEditViewModel.Factory(recordTypeDao, recordDao,
-            recordItemDao, recordViewDao, recordTagDao)
+            recordItemDao, recordViewDao, recordTagDao, reviewStrategyDao)
     }
 
     fun recordTagEditViewModelFactory(context: Context): ViewModelProvider.Factory {

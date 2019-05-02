@@ -91,6 +91,7 @@ class BackupActivity : LeakActivity(), View.OnClickListener {
 
     private fun subscribeUI() {
         vm.backupInfo.observe(this, Observer {
+            dlgLoading.dismiss()
             with(it) {
                 tvRecordSize.text = record.toString()
                 tvRecordTypeSize.text = record_type.toString()

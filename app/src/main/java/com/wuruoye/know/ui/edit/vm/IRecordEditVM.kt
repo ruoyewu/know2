@@ -17,6 +17,7 @@ interface IRecordEditVM {
     val recordType: RealRecordType
     val recordTagTitle: MutableLiveData<String>
     val submitResult: MutableLiveData<Boolean>
+    val nextReviewTime: MutableLiveData<Long>
 
     fun setRecordTypeId(id: Long)
     fun setRecordId(id: Long)

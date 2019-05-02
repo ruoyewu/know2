@@ -19,19 +19,26 @@ object ReviewUtil {
         if (isDebug) return true
 
         val current = System.currentTimeMillis()
-        val remTime = record.remNum * 2 + record.reviewNum
+        val nextReviewTime = nextReviewTime(record, strategy)
 
-        if (remTime < strategy.rememberTime) {
-            val reviewTime = remTime - record.failNum
-            val gapTime = realGapTime(strategy.gapTime, reviewTime+1)
-            val lastReview =
-                Math.max(Math.max(record.lastRemReview, record.lastReview),
-                    Math.max(record.lastFailReview, record.createTime))
-            if (gapTime + lastReview <= current) {
-                return true
-            }
-        }
+        if (nextReviewTime in 1..current)
+            return true
         return false
+    }
+
+    fun nextReviewTime(record: Record, strategy: ReviewStrategy): Long {
+        val remTime = record.remNum * 2 + record.reviewNum
+        if (remTime >= strategy.rememberTime) {
+            return -1
+        }
+
+        val reviewTime = remTime - record.failNum
+        val gapTime = realGapTime(strategy.gapTime * ONE_MINUTE, reviewTime+1)
+        log("gap time : $gapTime")
+        val lastReview =
+            Math.max(Math.max(record.lastRemReview, record.lastReview),
+                Math.max(record.lastFailReview, record.createTime))
+        return lastReview + gapTime
     }
 
     private fun realGapTime(gapTime: Long, remTime: Int): Long {
@@ -39,11 +46,15 @@ object ReviewUtil {
         if (gapTime < ONE_MINUTE) gapTime = ONE_MINUTE
 
         gapTime *= remTime
-        if (remTime > 1 && gapTime < ONE_HOUR) {
-            gapTime *= gapTime
-        } else if (remTime > 2 && gapTime < ONE_DAY) {
+
+        if (remTime > 2)
             gapTime *= 2
-        }
+
+        if (remTime > 1)
+            gapTime *= gapTime / ONE_MINUTE
+
+        if (gapTime > ONE_DAY)
+            gapTime = Math.sqrt((gapTime * ONE_DAY).toDouble()).toLong()
 
         return gapTime
     }

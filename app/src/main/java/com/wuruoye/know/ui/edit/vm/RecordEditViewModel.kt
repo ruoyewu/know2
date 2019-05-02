@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.wuruoye.know.util.GsonFactory
+import com.wuruoye.know.util.ReviewUtil
+import com.wuruoye.know.util.log
 import com.wuruoye.know.util.model.beans.RealRecordLayoutView
 import com.wuruoye.know.util.model.beans.RealRecordType
 import com.wuruoye.know.util.model.beans.RecordShow
@@ -25,7 +27,8 @@ class RecordEditViewModel(
     private val recordDao: RecordDao,
     private val recordItemDao: RecordItemDao,
     private val recordViewDao: RecordViewDao,
-    private val recordTagDao: RecordTagDao
+    private val recordTagDao: RecordTagDao,
+    private val reviewStrategyDao: ReviewStrategyDao
 ) : ViewModel(), IRecordEditVM {
 
     override val recordTagList: MutableLiveData<List<RecordTag>> =
@@ -41,6 +44,9 @@ class RecordEditViewModel(
         MutableLiveData()
 
     override val recordTagTitle: MutableLiveData<String> =
+        MutableLiveData()
+
+    override val nextReviewTime: MutableLiveData<Long> =
         MutableLiveData()
 
     private var recordId: Long? = null
@@ -88,6 +94,11 @@ class RecordEditViewModel(
             }
 
             recordShow.postValue(RecordShow(realRecordType, map, record))
+
+            val strategy = reviewStrategyDao.query(realRecordType.strategy)
+            log("${strategy.id} + ${strategy.gapTime}")
+            val nextReview = ReviewUtil.nextReviewTime(record, strategy)
+            nextReviewTime.postValue(nextReview)
 
             setRecordTag(record.tag)
             recordId = id
@@ -164,11 +175,12 @@ class RecordEditViewModel(
         private val recordDao: RecordDao,
         private val recordItemDao: RecordItemDao,
         private val recordViewDao: RecordViewDao,
-        private val recordTagDao: RecordTagDao
+        private val recordTagDao: RecordTagDao,
+        private val reviewStrategyDao: ReviewStrategyDao
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return RecordEditViewModel(recordTypeDao, recordDao,
-                recordItemDao, recordViewDao, recordTagDao) as T
+                recordItemDao, recordViewDao, recordTagDao, reviewStrategyDao) as T
         }
     }
 }

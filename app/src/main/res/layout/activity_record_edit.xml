@@ -15,8 +15,9 @@
                 layout="@layout/toolbar"/>
 
         <ScrollView
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="0dp">
 
             <LinearLayout
                     android:id="@+id/ll_record_edit"
@@ -26,6 +27,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
         </ScrollView>
+
+        <TextView
+                android:id="@+id/tv_next_review_record_edit"
+                android:textSize="12sp"
+                android:textColor="@color/mountain_mist"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <androidx.cardview.widget.CardView

@@ -25,7 +25,7 @@ class ReviewStrategyEditViewModel(
 
     private lateinit var strategy: ReviewStrategy
 
-    override val gapTime: Long
+    override val gapTime: Int
         get() = strategy.gapTime
 
     override val remTime: Int
@@ -53,7 +53,7 @@ class ReviewStrategyEditViewModel(
         }
     }
 
-    override fun setGapTime(time: Long) {
+    override fun setGapTime(time: Int) {
         strategy.gapTime = time
         reviewStrategy.value = strategy
     }

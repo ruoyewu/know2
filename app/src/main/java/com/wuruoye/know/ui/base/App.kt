@@ -35,7 +35,7 @@ class App : Application() {
                     ) == 0L &&
                     reviewStrategyDao.insert(
                         ReviewStrategy(0L, "默认",
-                            3, 86400000, System.currentTimeMillis(), -1)
+                            6, 5, System.currentTimeMillis(), -1)
                     ) == 0L
 
             }

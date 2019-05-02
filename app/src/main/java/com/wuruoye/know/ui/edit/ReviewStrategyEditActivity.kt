@@ -20,7 +20,6 @@ import com.wuruoye.know.R
 import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IReviewStrategyEditVM
 import com.wuruoye.know.ui.edit.vm.ReviewStrategyEditViewModel
-import com.wuruoye.know.util.DateUtil
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.widgets.BottomAlertDialog
 
@@ -44,9 +43,7 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
     private lateinit var etEdit: EditText
 
     private lateinit var dlgGap: Dialog
-    private lateinit var npDay: NumberPicker
-    private lateinit var npHour: NumberPicker
-    private lateinit var npMinute: NumberPicker
+    private lateinit var npGap: NumberPicker
 
     private lateinit var vm: IReviewStrategyEditVM
 
@@ -89,7 +86,7 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
         tilEdit = LayoutInflater.from(this)
             .inflate(R.layout.dlg_edit, null) as TextInputLayout
         etEdit = tilEdit.editText!!
-        tilEdit.hint = "输入记忆成功次数"
+        tilEdit.hint = "输入记忆成功次数（ 3～20 ）"
         etEdit.inputType = InputType.TYPE_CLASS_NUMBER
         dlgEdit = BottomAlertDialog.Builder(this)
             .setContentView(tilEdit)
@@ -97,23 +94,14 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
             .setConfirmListener(this)
             .build()
 
-        val gapView = LayoutInflater.from(this)
-            .inflate(R.layout.dlg_gap_time, null)
-        npDay = gapView.findViewById(R.id.np_day_dlg_gap)
-        npHour = gapView.findViewById(R.id.np_hour_dlg_gap)
-        npMinute = gapView.findViewById(R.id.np_minute_dlg_gap)
-        npDay.minValue = 0
-        npDay.maxValue = 30
-        npHour.minValue = 0
-        npHour.maxValue = 23
-        npMinute.minValue = 0
-        npMinute.maxValue = MINUTE_VALUE.size-1
-        npMinute.displayedValues = MINUTE_VALUE
-        changePickerDivider(npDay)
-        changePickerDivider(npHour)
-        changePickerDivider(npMinute)
+        npGap = LayoutInflater.from(this)
+            .inflate(R.layout.dlg_number_picker, null) as NumberPicker
+        changePickerDivider(npGap)
+        npGap.minValue = 0
+        npGap.maxValue = GAP_NAME.size-1
+        npGap.displayedValues = GAP_NAME
         dlgGap = BottomAlertDialog.Builder(this)
-            .setContentView(gapView)
+            .setContentView(npGap)
             .setConfirmListener(this, Gravity.TOP)
             .build()
     }
@@ -131,7 +119,7 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
                 etTitle.setText(it.title)
             }
             tvRemTime.text = it.rememberTime.toString()
-            tvGapTime.text = getGapTime(it.gapTime)
+            tvGapTime.text = GAP_NAME[it.gapTime - START_GAP_VALUE]
         })
 
         vm.submitResult.observe(this, Observer {
@@ -157,10 +145,11 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
             R.id.btn_confirm_dlg_bottom_alert -> {
                 try {
                     val time = etEdit.text.toString().toInt()
-                    if (time <= 0) {
-                        tilEdit.error = "次数需要大于 0"
+                    if (time < 3 || time > 20) {
+                        tilEdit.error = "输入次数不规范"
                     } else {
                         vm.setRemTime(time)
+                        tilEdit.isErrorEnabled = false
                         etEdit.text.clear()
                         dlgEdit.dismiss()
                     }
@@ -170,11 +159,8 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
             }
             R.id.btn_confirm_top_dlg_bottom_alert -> {
                 dlgGap.dismiss()
-                val day = npDay.value
-                val hour = npHour.value
-                val minute = MINUTE_VALUE[npMinute.value].toInt()
-                val milli = getMilli(day, hour, minute)
-                vm.setGapTime(milli)
+                val gapTime = GAP_VALUE[npGap.value]
+                vm.setGapTime(gapTime)
             }
             R.id.ll_remember_time_review_strategy_edit -> {
                 etEdit.setText(vm.remTime.toString())
@@ -182,10 +168,7 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
                 dlgEdit.show()
             }
             R.id.ll_gap_time_review_strategy_edit -> {
-                val date = getDate(vm.gapTime)
-                npDay.value = date.day
-                npHour.value = date.hour
-                npMinute.value = MINUTE_VALUE.indexOf(date.minute.toString())
+                npGap.value = GAP_VALUE.indexOf(vm.gapTime)
                 dlgGap.show()
             }
             R.id.btn_review_strategy_edit -> {
@@ -215,44 +198,12 @@ class ReviewStrategyEditActivity : LeakActivity(), View.OnClickListener {
         } catch (e: Exception) {}
     }
 
-    private fun getDate(milli: Long): Date {
-        val minute = milli / 60000
-        val hour = minute / 60
-        val day = hour / 24
-
-        val realHour = hour - day * 24
-        val realMinute = minute - hour * 60
-        return Date(day.toInt(), realHour.toInt(), realMinute.toInt())
-    }
-
-    private fun getMilli(day: Int, hour: Int, minute: Int): Long {
-        return 1L * day * 86400000 + hour * 3600000 + minute * 60000
-    }
-
-    private fun getGapTime(milli: Long): String {
-        val date = getDate(milli)
-
-        val builder = StringBuilder()
-        if (date.day > 0) builder.append(
-            DateUtil.num2cn(date.day.toLong())).append(getString(R.string.day))
-        if (date.hour > 0) builder.append(
-            DateUtil.num2cn(date.hour.toLong())).append(getString(R.string.hour))
-        if (date.minute > 0) builder.append(
-            DateUtil.num2cn(date.minute.toLong())).append(getString(R.string.minute))
-        return builder.toString()
-    }
-
-    class Date(
-        var day: Int,
-        var hour: Int,
-        var minute: Int
-    )
-
     companion object {
         const val REVIEW_STRATEGY = "review_strategy"
 
-        val MINUTE_VALUE = arrayOf("0", "5", "10", "15", "20",
-            "25", "30", "35", "40", "45", "50", "55")
+        val START_GAP_VALUE = 3
+        val GAP_NAME = arrayOf("短", "较短", "中", "较长", "长")
+        val GAP_VALUE = arrayOf(3, 4, 5, 6, 7)
 
     }
 }

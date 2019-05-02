@@ -20,6 +20,7 @@ import com.wuruoye.know.ui.base.LeakActivity
 import com.wuruoye.know.ui.edit.vm.IRecordEditVM
 import com.wuruoye.know.ui.edit.vm.RecordEditViewModel
 import com.wuruoye.know.ui.home.adapter.RecordTagAdapter
+import com.wuruoye.know.util.DateUtil
 import com.wuruoye.know.util.DensityUtil
 import com.wuruoye.know.util.InjectorUtil
 import com.wuruoye.know.util.ViewFactory
@@ -52,6 +53,7 @@ class RecordEditActivity :
     private lateinit var ivMore: ImageView
     private lateinit var llContent: LinearLayout
     private lateinit var tvTag: TextView
+    private lateinit var tvNextReview: TextView
 
     private lateinit var mPhotoGet: WPhoto
     private lateinit var mView: ImageView
@@ -92,6 +94,7 @@ class RecordEditActivity :
         ivMore = findViewById(R.id.iv_more_toolbar)
         llContent = findViewById(R.id.ll_record_edit)
         tvTag = findViewById(R.id.tv_tag_record_edit)
+        tvNextReview = findViewById(R.id.tv_next_review_record_edit)
     }
 
     private fun bindListener() {
@@ -118,6 +121,7 @@ class RecordEditActivity :
         ivMore.setImageResource(R.drawable.ic_check)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun subscribeUI() {
         vm.recordShow.observe(this, Observer {
             tvTitle.text = it.recordType.title
@@ -134,6 +138,13 @@ class RecordEditActivity :
             if (it) {
                 setResult(Activity.RESULT_OK)
                 finish()
+            }
+        })
+        vm.nextReviewTime.observe(this, Observer {
+            if (it > 0) {
+                tvNextReview.text = "下次复习时间: ${DateUtil.milli2Date(it)}"
+            } else {
+                tvNextReview.visibility = View.GONE
             }
         })
     }

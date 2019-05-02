@@ -15,35 +15,15 @@ class ReviewStrategy(
     override var id: Long?,
     var title: String,
     var rememberTime: Int,
-    var gapTime: Long,
+    var gapTime: Int,
     override var createTime: Long,
     override var updateTime: Long
 ) : BaseTable, Parcelable {
     constructor() :
-            this(null, "", 3, 86400000, -1, -1)
+            this(null, "", 3, 5, -1, -1)
 
-    constructor(title: String):
+    constructor(title: String) :
             this(null, title, 0, 0, -1, -1)
-
-    constructor(source: Parcel) : this(
-        source.readValue(Long::class.java.classLoader) as Long?,
-        source.readString(),
-        source.readInt(),
-        source.readLong(),
-        source.readLong(),
-        source.readLong()
-    )
-
-    override fun describeContents() = 0
-
-    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeValue(id)
-        writeString(title)
-        writeInt(rememberTime)
-        writeLong(gapTime)
-        writeLong(createTime)
-        writeLong(updateTime)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -69,6 +49,26 @@ class ReviewStrategy(
         result = 31 * result + createTime.hashCode()
         result = 31 * result + updateTime.hashCode()
         return result
+    }
+
+    constructor(source: Parcel) : this(
+        source.readValue(Long::class.java.classLoader) as Long?,
+        source.readString(),
+        source.readInt(),
+        source.readInt(),
+        source.readLong(),
+        source.readLong()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeValue(id)
+        writeString(title)
+        writeInt(rememberTime)
+        writeInt(gapTime)
+        writeLong(createTime)
+        writeLong(updateTime)
     }
 
     companion object {

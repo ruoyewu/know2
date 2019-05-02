@@ -100,7 +100,13 @@ class BackupViewModel(
             loadingTitle.postValue("正在上传数据中")
             delay(1000)
             val res = NetUtil.post(NetUtil.BACKUP, mapOf(Pair("data", result)))
-            backupResult.postValue(res)
+            if (res.successful) {
+                val info = GsonFactory.sInstance
+                    .fromJson(res.data!!, BackupInfo::class.java)
+                backupInfo.postValue(info)
+            } else {
+                backupResult.postValue(res)
+            }
         }
     }
 

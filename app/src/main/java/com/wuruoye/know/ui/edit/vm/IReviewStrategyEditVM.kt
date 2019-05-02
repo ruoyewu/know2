@@ -12,10 +12,10 @@ interface IReviewStrategyEditVM {
     val reviewStrategy: MutableLiveData<ReviewStrategy>
     val submitResult: MutableLiveData<Result<ReviewStrategy>>
     val remTime: Int
-    val gapTime: Long
+    val gapTime: Int
 
     fun saveReviewStrategy(title: String)
     fun setReviewStrategyId(id: Long)
     fun setRemTime(time: Int)
-    fun setGapTime(time: Long)
+    fun setGapTime(time: Int)
 }
