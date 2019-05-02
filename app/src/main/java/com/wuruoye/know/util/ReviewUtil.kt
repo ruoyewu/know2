@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.wuruoye.know.util
 
 import com.wuruoye.know.util.orm.table.Record
@@ -8,6 +10,9 @@ import com.wuruoye.know.util.orm.table.ReviewStrategy
  * Description:
  */
 object ReviewUtil {
+    private const val ONE_MINUTE = 60000L
+    private const val ONE_HOUR = 3600000L
+    private const val ONE_DAY = 86400000L
     private var isDebug = false
 
     fun isShow(record: Record, strategy: ReviewStrategy): Boolean {
@@ -30,6 +35,16 @@ object ReviewUtil {
     }
 
     private fun realGapTime(gapTime: Long, remTime: Int): Long {
-        return gapTime * remTime
+        var gapTime = gapTime
+        if (gapTime < ONE_MINUTE) gapTime = ONE_MINUTE
+
+        gapTime *= remTime
+        if (remTime > 1 && gapTime < ONE_HOUR) {
+            gapTime *= gapTime
+        } else if (remTime > 2 && gapTime < ONE_DAY) {
+            gapTime *= 2
+        }
+
+        return gapTime
     }
 }

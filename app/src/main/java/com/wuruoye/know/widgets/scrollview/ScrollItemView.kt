@@ -124,9 +124,7 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
             mRightView = LayoutInflater.from(context).inflate(rv, this, false)
             addView(mRightView)
             if (isMeizu()) {
-                mRightView!!.setOnLongClickListener {
-                    true
-                }
+                mRightView!!.setOnLongClickListener { true }
             }
         }
         arr.recycle()
@@ -282,7 +280,6 @@ class ScrollItemView : FrameLayout, ViewMoveAdapter.OnScrollChangedListener {
                 mVmRight?.moveTo(mDeleteLength+cur)
             }
         }
-
 
         if (last <= mDeleteLength && cur == mDeleteLength) {
             mOnePass = false

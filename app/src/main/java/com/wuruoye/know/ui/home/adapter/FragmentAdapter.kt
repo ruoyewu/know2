@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
  * Description:
  */
 class FragmentAdapter(
-    private val fm: FragmentManager,
+    private var fm: FragmentManager,
     private val fragments: Array<Fragment>,
     private val titles: Array<String>? = null
 ) : FragmentStatePagerAdapter(fm) {
@@ -34,6 +34,6 @@ class FragmentAdapter(
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         val fragment = fragments[position]
-        fm.beginTransaction().hide(fragment).commit()
+        fragment.fragmentManager?.beginTransaction()?.hide(fragment)?.commit()
     }
 }
