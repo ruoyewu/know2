@@ -84,11 +84,11 @@ class RecordShowViewModel(
             when {
                 remember == null -> {
                     record.reviewNum++
-                    record.lastReview
+                    record.lastReview = System.currentTimeMillis()
                 }
                 remember -> {
                     record.remNum++
-                    record.lastReview = System.currentTimeMillis()
+                    record.lastRemReview = System.currentTimeMillis()
                 }
                 else -> {
                     record.failNum++

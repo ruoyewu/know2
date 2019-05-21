@@ -16,7 +16,8 @@
             android:supportsRtl="true"
             android:networkSecurityConfig="@xml/network_config"
             android:theme="@style/AppTheme" tools:targetApi="n">
-        <activity android:name=".ui.home.MainActivity">
+        <activity android:name=".ui.home.MainActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -22,6 +22,7 @@ import com.wuruoye.know.widgets.scrollview.ScrollItemView
 abstract class BaseSelectAdapter<T : BaseTable> :
     BaseAdapter<T, BaseSelectAdapter.ViewHolder>(Callback<T>()) {
     private var mOnClickListener: OnClickListener<T>? = null
+
     private var mSelectable: Boolean = false
     private var mVHs: ArrayList<ViewHolder> = ArrayList()
     private var mSelectSet: HashSet<T> = HashSet()
@@ -44,6 +45,8 @@ abstract class BaseSelectAdapter<T : BaseTable> :
         with(holder) {
             setContent(holder, item)
             tvTitle.setOnClickListener { mOnClickListener?.onClick(item) }
+            tvTitle.setOnLongClickListener { mOnClickListener?.onLongClick(item)
+                true }
 
             rbSelect.setOnClickListener {
                 val contain = mSelectSet.contains(item)
@@ -154,5 +157,6 @@ abstract class BaseSelectAdapter<T : BaseTable> :
 
     interface OnClickListener<T> {
         fun onClick(item: T)
+        fun onLongClick(item: T)
     }
 }

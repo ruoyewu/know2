@@ -107,6 +107,18 @@ class ReviewStrategySetActivity :
         })
     }
 
+    private fun setSelectable(selectable: Boolean) {
+        if (selectable) {
+            mMoreType = MORE_TYPE_DELETE
+            fab.setImageResource(R.drawable.ic_check)
+            (rv.adapter as ReviewStrategySetAdapter).setSelectable(true)
+        } else {
+            mMoreType = MORE_TYPE_ADD
+            fab.setImageResource(R.drawable.ic_add)
+            (rv.adapter as ReviewStrategySetAdapter).setSelectable(false)
+        }
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.fab_setting -> {
@@ -136,6 +148,12 @@ class ReviewStrategySetActivity :
         startActivityForResult(intent, REVIEW_STRATEGY_SET_FOR_UPDATE)
     }
 
+    override fun onLongClick(item: ReviewStrategy) {
+        if (mMoreType == MORE_TYPE_ADD) {
+            setSelectable(true)
+        }
+    }
+
     override fun onLeft(item: ReviewStrategy) {}
 
     override fun onRight(item: ReviewStrategy) {
@@ -150,14 +168,10 @@ class ReviewStrategySetActivity :
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_add_record_type_set -> {
-                mMoreType = MORE_TYPE_ADD
-                fab.setImageResource(R.drawable.ic_add)
-                (rv.adapter as ReviewStrategySetAdapter).setSelectable(false)
+                setSelectable(false)
             }
             R.id.menu_delete_record_type_set -> {
-                mMoreType = MORE_TYPE_DELETE
-                fab.setImageResource(R.drawable.ic_check)
-                (rv.adapter as ReviewStrategySetAdapter).setSelectable(true)
+                setSelectable(true)
             }
         }
         return super.onOptionsItemSelected(item)

@@ -107,6 +107,18 @@ class RecordTagSetActivity :
         })
     }
 
+    private fun setSelectable(selectable: Boolean) {
+        if (selectable) {
+            mMoreType = MORE_TYPE_DELETE
+            fab.setImageResource(R.drawable.ic_check)
+            (rv.adapter as RecordTagSetAdapter).setSelectable(true)
+        } else {
+            mMoreType = MORE_TYPE_ADD
+            fab.setImageResource(R.drawable.ic_add)
+            (rv.adapter as RecordTagSetAdapter).setSelectable(false)
+        }
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.fab_setting -> {
@@ -136,6 +148,12 @@ class RecordTagSetActivity :
         startActivityForResult(intent, RECORD_TAG_SET_FOR_UPDATE)
     }
 
+    override fun onLongClick(item: RecordTag) {
+        if (mMoreType == MORE_TYPE_ADD) {
+            setSelectable(true)
+        }
+    }
+
     override fun onLeft(item: RecordTag) {}
 
     override fun onRight(item: RecordTag) {
@@ -150,14 +168,10 @@ class RecordTagSetActivity :
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_add_record_type_set -> {
-                mMoreType = MORE_TYPE_ADD
-                fab.setImageResource(R.drawable.ic_add)
-                (rv.adapter as RecordTagSetAdapter).setSelectable(false)
+                setSelectable(false)
             }
             R.id.menu_delete_record_type_set -> {
-                mMoreType = MORE_TYPE_DELETE
-                fab.setImageResource(R.drawable.ic_check)
-                (rv.adapter as RecordTagSetAdapter).setSelectable(true)
+                setSelectable(true)
             }
         }
         return super.onOptionsItemSelected(item)

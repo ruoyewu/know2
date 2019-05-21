@@ -43,18 +43,19 @@ object ReviewUtil {
 
     private fun realGapTime(gapTime: Long, remTime: Int): Long {
         var gapTime = gapTime
-        if (gapTime < ONE_MINUTE) gapTime = ONE_MINUTE
 
         gapTime *= remTime
 
+        if (remTime > 3)
+            gapTime = (1.5 * gapTime).toLong()
+
         if (remTime > 2)
-            gapTime *= 2
+            gapTime = (1.5 * gapTime).toLong()
 
-        if (remTime > 1)
-            gapTime *= gapTime / ONE_MINUTE
+        gapTime *= gapTime / ONE_MINUTE
 
-        if (gapTime > ONE_DAY)
-            gapTime = Math.sqrt((gapTime * ONE_DAY).toDouble()).toLong()
+        if (remTime > 3 && gapTime > ONE_DAY)
+            gapTime = Math.sqrt((gapTime * ONE_DAY * 3).toDouble()).toLong()
 
         return gapTime
     }
